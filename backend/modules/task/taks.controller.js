@@ -23,8 +23,20 @@ export const getTaskController=(req,res)=>{
 export const updateTaskController=(req,res)=>{
  try{
    const { id } = req.params
-
+   const result = await updateTask(id,req.user.userId,req,body)
+   res.json(result)
  }catch(e){
-
+  res.status(400).json({message:e.message})
  }
+}
+
+export const deleteTaskController=(req,res)=>{
+   try{
+    const {id} = req.params
+    const result = deleteTask(id,req.user.userId)
+    res.json(result)
+   }catch(e){
+     res.status(400).json({ message: e.message })
+
+   }
 }

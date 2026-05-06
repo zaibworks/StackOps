@@ -17,6 +17,8 @@ model User {
   name  String?
   password String?
   tasks Task[] 
+  memberships Membership[]
+
 }
 
 model Task{
@@ -24,6 +26,29 @@ model Task{
   title String
   content String?
   completed Boolean @default(false)
+
   userId Int
   user      User     @relation(fields: [userId], references: [id])
+
+  workspaceId Int
+  workspace Workspace @relation(fields: [workspaceId],references: [id])
+
+}
+
+model Workspace{
+  id Int @id @default(autoincrement())
+  name String
+
+  members Membership[]
+  tasks Task[]
+}
+
+model Membership{
+id Int @id @default(autoincrement())
+userId Int
+workspaceId Int
+role String
+
+user User @relation(fields: [userId],references: [id])
+workspace Workspace @relation(fields: [workspaceId],references: [id])
 }
