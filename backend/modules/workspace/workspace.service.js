@@ -1,18 +1,22 @@
-import prisma from '../../src/db.js'
+import prisma from '../../src/db.js';
 
-export const createWorkspace= async(name,userId)=>{
-return await prisma.workspace.create({
-    name,
-    members:{
-        create:[{
+export const createWorkspace = async (name, userId) => {
+  return await prisma.workspace.create({
+    data: {
+      name,
+
+      members: {
+        create: [
+          {
             userId,
-            role:'admin'
-
-        }
+            role: 'admin'
+          }
         ]
+      }
     },
-    includes:{
-        members:true
+
+    include: {
+      members: true
     }
-})
+  })
 }
