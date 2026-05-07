@@ -1,6 +1,6 @@
 import { createWorkspace } from "./workspace.service.js";
 
-export const createWorkspaceController=(req,res)=>{
+export const createWorkspaceController= async(req,res)=>{
     try{
          const userId = req.user.userId
         const {name} = req.body

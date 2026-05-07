@@ -1,6 +1,6 @@
 import prisma from '../../src/db.js'
 
-export const createWorkspace=(name,userId)=>{
+export const createWorkspace= async(name,userId)=>{
 return await prisma.workspace.create({
     name,
     members:{

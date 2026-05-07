@@ -11,7 +11,7 @@ export const createTaskController=async(req,res)=>{
     }
 }
 
-export const getTaskController=(req,res)=>{
+export const getTaskController= async(req,res)=>{
    try{
         const tasks = await getTask(req.user.userId)
          res.json(tasks)
@@ -20,7 +20,7 @@ export const getTaskController=(req,res)=>{
    }
 }
 
-export const updateTaskController=(req,res)=>{
+export const updateTaskController= async(req,res)=>{
  try{
    const { id } = req.params
    const result = await updateTask(id,req.user.userId,req,body)

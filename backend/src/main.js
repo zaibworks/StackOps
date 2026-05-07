@@ -12,7 +12,7 @@ app.use(express.json())
 app.use('/auth', authRoutes)
 app.use('user',userRoutes)
 app.use('/task',taskRoutes)
-app.user('/workspace',workspaceRoutes)
+app.use('/workspace',workspaceRoutes)
 
 app.get('/',(req,res)=>{
   res.send('Hey bro app is running')

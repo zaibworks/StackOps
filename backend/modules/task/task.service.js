@@ -10,7 +10,7 @@ export const createTask = async ({ title, content, userId }) => {
   })
 }
 
-export const getTask=({userId})=>{
+export const getTask= async({userId})=>{
     return await prisma.task.findUnique({
         where:{userId},
         orderBy:{id:'desc'}

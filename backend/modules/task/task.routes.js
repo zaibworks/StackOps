@@ -5,11 +5,11 @@ import { createTaskController,
     getTaskController,
     updateTaskController,
     deleteTaskController 
-} from './taks.controller'
+} from './task.controller.js'
 
 router.get('./',authMiddleware,getTaskController)
 router.post('/',authMiddleware,createTaskController)
 router.put('/:id',authMiddleware,updateTaskController)
-router.deletet('/:id',authMiddleware,deleteTaskController)
+router.delete('/:id',authMiddleware,deleteTaskController)
 
 export default router 
