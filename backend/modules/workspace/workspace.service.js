@@ -20,3 +20,18 @@ export const createWorkspace = async (name, userId) => {
     }
   })
 }
+
+export const getMyWorkspace = async (userId)=>{
+  return await prisma.workspace.findMany({
+    where:{
+        members:{
+            some:{
+                userId:userId
+            }
+        }
+    },
+    include:{
+        members:true
+    }
+  })
+}
