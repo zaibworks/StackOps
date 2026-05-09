@@ -35,3 +35,7 @@ export const getMyWorkspace = async (userId)=>{
     }
   })
 }
+
+export const inviteMember = async(workspaceId,email,currentUserId)=>{
+
+}
