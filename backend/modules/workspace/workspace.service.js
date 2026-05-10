@@ -52,4 +52,28 @@ export const inviteMember = async(userId, workspaceId, email, role)=>{
         email
        }
      })
+     if (!invitedUser) {
+  throw new Error("User do not exist")
+}
+
+const existingMember = await prisma.membership.findUnique({
+  where:{
+    userId_workspaceId:{
+      userId:invitedUser.id,
+      workspaceId:workspaceId
+    }
+  }
+})
+if (existingMember) {
+ throw new Error("User is already a member")
+}
+
+const newMember = await prisma.membership.create({
+  data:{
+   userId:invitedUser.id,
+   workspaceId,
+   role
+  }
+})
+return newMember
 }

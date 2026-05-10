@@ -51,6 +51,8 @@ role String
 
 user User @relation(fields: [userId],references: [id])
 workspace Workspace @relation(fields: [workspaceId],references: [id])
+
+  @@unique([userId, workspaceId])
 }
 
 
