@@ -37,5 +37,16 @@ export const getMyWorkspace = async (userId)=>{
 }
 
 export const inviteMember = async(inviterUserId, workspaceId, email, role)=>{
-     
+     const  admin = await prisma.membership.findFirst({
+      where:{
+        userId,
+        workspace,
+        role:'Admin'
+      }
+     })
+     const invitedUser = await prisma.user.findUnique({
+       where:{
+        email
+       }
+     })
 }
