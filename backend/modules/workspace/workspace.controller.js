@@ -1,4 +1,5 @@
-import { createWorkspace,getMyWorkspace } from "./workspace.service.js";
+import prisma from "../../src/db.js";
+import { createWorkspace,getMyWorkspace,inviteMember } from "./workspace.service.js";
 
 export const createWorkspaceController= async(req,res)=>{
     try{
@@ -24,4 +25,17 @@ try{
 }catch(e){
     res.status(500).json({message:e.message})
 }
+}
+
+export const inviteMemberController= async(req,res)=>{
+    try{
+        const {role,email} = req.body
+        const {workspaceId} = req.params
+        const adminId = req.user.userId
+        const invite = await inviteMember(adminId,workspaceId,email,role)
+       res.status(201).json({message:"Invitation sent successfully ",data:invite})
+    }catch(e){
+         res.status(500).json({message:e.message})
+    }
+
 }
