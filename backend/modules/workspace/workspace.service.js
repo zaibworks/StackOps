@@ -37,10 +37,12 @@ export const getMyWorkspace = async (userId)=>{
 }
 
 export const inviteMember = async(userId, workspaceId, email, role)=>{
+  const parsedWorkspaceId = parseInt(workspaceId)
+
      const  admin = await prisma.membership.findFirst({
       where:{
         userId,
-        workspaceId,
+       workspaceId: parsedWorkspaceId,
         role:'admin'
       }
      })
@@ -60,7 +62,7 @@ const existingMember = await prisma.membership.findUnique({
   where:{
     userId_workspaceId:{
       userId:invitedUser.id,
-      workspaceId:workspaceId
+      workspaceId: parsedWorkspaceId
     }
   }
 })
@@ -71,7 +73,7 @@ if (existingMember) {
 const newMember = await prisma.membership.create({
   data:{
    userId:invitedUser.id,
-   workspaceId,
+   workspaceId:parsedWorkspaceId,
    role
   }
 })
