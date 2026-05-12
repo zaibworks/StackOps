@@ -79,3 +79,7 @@ const newMember = await prisma.membership.create({
 })
 return newMember
 }
+
+export const getMembers =async ()=>{
+
+}
