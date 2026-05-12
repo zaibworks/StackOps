@@ -96,3 +96,35 @@ const allUsers = await prisma.membership.findMany({
 
 return allUsers
 }
+
+export const removeMember = async(adminId,workspaceId,membershipId)=>{
+  const admin = await prisma.membership.findFirst({
+    where:{
+      userId:adminId,
+      workspaceId:workspaceId,
+      role:'admin'
+    }
+  })
+  if(!admin){
+    throw new Error('Not allowed: You are not the admin')
+  }
+  const member = await prisma.membership.findUnique({
+    where:{
+      id: membershipId
+    }
+  })
+  if(!member){
+    throw new Error('Member do not exist')
+  }
+  
+  if(member.userId ===adminId){
+    throw new Error ('Can not remove yourself')
+  }
+  const deleteMember = await prisma.membership.delete({
+    where:{
+      id:membershipId
+    }
+  })
+
+  return deleteMember
+}
