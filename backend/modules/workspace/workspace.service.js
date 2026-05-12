@@ -81,5 +81,18 @@ return newMember
 }
 
 export const getWorkspaceMembers =async (workspaceId)=>{
+const allUsers = await prisma.membership.findMany({
+  where:{workspaceId},
+  include:{
+    user:{
+      select:{
+        id:true,
+        name:true,
+        email:true
+      }
+    }
+  }
+})
 
+return allUsers
 }
