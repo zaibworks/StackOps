@@ -50,3 +50,15 @@ export const getWorkspaceMembersController= async (req,res)=>{
         res.status(500).json({message:e.message})
     }
 }
+
+export const removeMemberController = async (req,res)=>{
+    try {
+        const workspaceId = parseInt(req.params.workspaceId)
+        const memberId =  parseInt(req.params.memberId)
+        const adminId = req.user.userId
+         const deleteMember = await removeMember(adminId,workspaceId,memberId)
+         res.json({ message: 'Member removed successfully' })
+    } catch (e) {
+        res.status(500).json({message:e.message})
+    }
+}
