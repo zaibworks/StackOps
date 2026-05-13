@@ -2,13 +2,32 @@ import prisma from "../../src/db.js";
 
 export const createTask = async (userId,workspaceId,taskData) => {
 
-  taskData = {title,content,priotity,status,dueDate,assignedToId}
-  
+  const {title,content,priority,status,dueDate,assignedToId} = taskData
+
+  if(assignedToId){
+ const isMember = await prisma.membership.findFirst({
+where:{
+  userId:assignedToId,
+  workspaceId:workspaceId
+}
+  })
+
+  if (!isMember) {
+  throw new Error("Member do not exist")
+}
+  }
+ 
+
   return await prisma.task.create({
     data: {
       title,
       content,
-      userId
+      userId,
+      priority,
+      status,
+      assignedToId,
+      dueDate,
+      workspaceId
     }
   })
 }
