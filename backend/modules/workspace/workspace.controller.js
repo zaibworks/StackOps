@@ -70,7 +70,7 @@ export const updateWorkspaceController = async (req,res)=>{
          const {name} = req.body
      const updated = await updateWorkspace(adminId,workspaceId,name)
 
-        res.json(updated)
+        res.json({message:'Workspace name changed successfully',data:updated})
     }catch(e){
         res.status(500).json({message:e.message})
     }
