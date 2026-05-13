@@ -17,7 +17,7 @@ router.get('/',authMiddlware,getMyWorkspaceController)
 router.post('/:workspaceId/invite',authMiddlware,inviteMemberController)
 router.get('/:workspaceId/members',authMiddlware,workspaceMemberMiddlware,getWorkspaceMembersController)
 router.delete('/:workspaceId/members/:memberId',authMiddlware,workspaceMemberMiddlware,removeMemberController)
-router.put('/:workspaceId/update',authMiddlware,workspaceMemberMiddlware,updateWorkspaceController)
+router.put('/:workspaceId', authMiddlware, workspaceMemberMiddlware, updateWorkspaceController)
 
 
 export default router
