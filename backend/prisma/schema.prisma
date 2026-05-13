@@ -16,9 +16,21 @@ model User {
   email String   @unique
   name  String?
   password String?
-  tasks Task[] 
+  createdTask   Task[]  @relation("CreatedTask")
+  assignedTask  Task[]  @relation("AssignedTask")
   memberships Membership[]
 
+}
+enum Priority{
+  low
+  medium
+  high
+}
+
+enum Status{
+  todo
+  inprogress
+  done
 }
 
 model Task{
@@ -27,11 +39,15 @@ model Task{
   content String?
   completed Boolean @default(false)
 
-priority String
-status String
+dueDate DateTime?
+priority Priority
+status Status
 
   userId Int
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation("CreatedTask",fields: [userId], references: [id])
+
+assignedToId Int?
+  assignedTo User? @relation("AssignedTask",fields: [assignedToId],references: [id])
 
   workspaceId Int
   workspace Workspace @relation(fields: [workspaceId],references: [id])
