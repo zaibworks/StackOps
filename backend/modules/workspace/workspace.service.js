@@ -128,3 +128,27 @@ export const removeMember = async(adminId,workspaceId,membershipId)=>{
 
   return deleteMember
 }
+
+export const updateWorkspace = async(adminId,workspaceId,name)=>{
+      const admin = await prisma.membership.findFirst({
+    where:{
+      userId:adminId,
+      workspaceId:workspaceId,
+      role:'admin'
+    }
+  })
+
+  if(!admin){
+    throw new Error('Not allowed: You are not the admin')
+  }
+
+  const updateName = await prisma.workspace.update({
+  where:{
+    id:workspaceId
+  },data:{
+    name:name
+  }
+  })
+
+  return updateName
+}

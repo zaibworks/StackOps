@@ -1,5 +1,5 @@
 import prisma from "../../src/db.js";
-import { createWorkspace,getMyWorkspace,inviteMember,getWorkspaceMembers,removeMember } from "./workspace.service.js";
+import { createWorkspace,getMyWorkspace,inviteMember,getWorkspaceMembers,removeMember,updateWorkspace } from "./workspace.service.js";
 
 export const createWorkspaceController= async(req,res)=>{
     try{
@@ -59,6 +59,19 @@ export const removeMemberController = async (req,res)=>{
          const deleteMember = await removeMember(adminId,workspaceId,memberId)
          res.json({ message: 'Member removed successfully' })
     } catch (e) {
+        res.status(500).json({message:e.message})
+    }
+}
+
+export const updateWorkspaceController = async (req,res)=>{
+    try{
+          const workspaceId = parseInt(req.params.workspaceId)
+          const adminId = req.user.userId
+         const {name} = req.body
+     const updated = await updateWorkspace(adminId,workspaceId,name)
+
+        res.json(updated)
+    }catch(e){
         res.status(500).json({message:e.message})
     }
 }
