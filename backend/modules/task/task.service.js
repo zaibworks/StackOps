@@ -32,9 +32,18 @@ where:{
   })
 }
 
-export const getTask = async(userId,workspaceId,taskId)=>{
-    return await prisma.task.findUnique({
-      
+export const getTasks= async(userId,workspaceId)=>{
+    return await prisma.task.findMany({
+        where:{workspaceId:workspaceId},
+        orderBy:{id:'desc'},
+        include:{
+          user:{
+            select:{id:true,name:true,email:true}
+          },
+          assignedTo:{
+            select:{id:true,name:true,email:true}
+          }
+        }
     })
 }
 
