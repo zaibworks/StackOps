@@ -1,4 +1,4 @@
-import { createTask,getTask,updateTask,deleteTask } from "./task.service.js";
+import { createTask,getTasks,updateTask,deleteTask } from "./task.service.js";
 
 export const createTaskController=async(req,res)=>{
     try{
@@ -12,10 +12,11 @@ export const createTaskController=async(req,res)=>{
     }
 }
 
-export const getTaskController= async(req,res)=>{
-   try{
-        const tasks = await getTask(req.user.userId)
-         res.json(tasks)
+export const getTasksController= async(req,res)=>{
+  try{
+     const workspaceId = parseInt(req.params.workspaceId)
+        const tasks = await getTasks(workspaceId)
+         res.json({ message:"Workspace Tasks",data:tasks})
    }catch(e){
     res.status(500).json({message:e.message})
    }

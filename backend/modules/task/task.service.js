@@ -32,7 +32,7 @@ where:{
   })
 }
 
-export const getTasks= async(userId,workspaceId)=>{
+export const getTasks= async(workspaceId)=>{
     return await prisma.task.findMany({
         where:{workspaceId:workspaceId},
         orderBy:{id:'desc'},
