@@ -11,7 +11,7 @@ const PORT = 3000;
 app.use(express.json())
 
 app.use('/auth', authRoutes)
-app.use('user',userRoutes)
+app.use('/user',userRoutes)
 app.use('/task',taskRoutes)
 app.use('/workspace',workspaceRoutes)
 

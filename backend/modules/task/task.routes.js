@@ -7,8 +7,10 @@ import { createTaskController,
     deleteTaskController 
 } from './task.controller.js'
 
+import {workspaceMemberMiddlware} from '../middleware/workspace.middleware.js'
+
 router.get('./',authMiddleware,getTaskController)
-router.post('/',authMiddleware,createTaskController)
+router.post('/:workspaceId',authMiddleware,workspaceMemberMiddlware,createTaskController)
 router.put('/:id',authMiddleware,updateTaskController)
 router.delete('/:id',authMiddleware,deleteTaskController)
 

@@ -3,8 +3,9 @@ import { createTask,getTask,updateTask,deleteTask } from "./task.service.js";
 export const createTaskController=async(req,res)=>{
     try{
         const userId = req.user.userId
-        const task = createTask({...req.body,userId})
-        res.status(201).json(task)
+        const workspaceId = parseInt(req.params.workspaceId)
+        const task = await createTask(userId,workspaceId,req.body)
+        res.json({message:"Task created successfully",data:task})
 
     }catch(e){
         res.status(400).json({message:e.message})
