@@ -47,18 +47,19 @@ export const getTasks= async(workspaceId)=>{
     })
 }
 
-export const updateTask= async(taskId,userId,data)=>{
+export const updateTask= async(taskId,userId,taskData,workspaceId)=>{
     const result = await prisma.task.updateMany({
-        where:{ id: Number(taskId), userId },data
+        where:{ id: Number(taskId), userId, workspaceId:workspaceId },
+        data:taskData
     })
 
     if (result.count === 0) throw new Error('Task not found or not yours')
   return result
 }
 
-export const deleteTask = async (taskId, userId) => {
+export const deleteTask = async (taskId,userId,workspaceId) => {
   const result = await prisma.task.deleteMany({
-    where: { id: Number(taskId), userId }
+    where: { id: Number(taskId), userId,workspaceId:workspaceId }
   })
   if (result.count === 0) throw new Error('Task not found or not yours')
   return result
