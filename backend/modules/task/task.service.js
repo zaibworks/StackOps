@@ -32,10 +32,9 @@ where:{
   })
 }
 
-export const getTask= async({userId})=>{
+export const getTask = async(userId,workspaceId,taskId)=>{
     return await prisma.task.findUnique({
-        where:{userId},
-        orderBy:{id:'desc'}
+      
     })
 }
 
