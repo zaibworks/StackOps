@@ -28,7 +28,7 @@ export const updateTaskController= async(req,res)=>{
    const userId = req.user.userId
    const workspaceId = parseInt(req.params.workspaceId)
    const result = await updateTask(taskId,userId,req.body,workspaceId)
-   res.json(result)
+   res.json({message:"Task updated successfully",data:result})
  }catch(e){
   res.status(400).json({message:e.message})
  }
