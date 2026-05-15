@@ -7,3 +7,5 @@ import authMiddleware from "../middleware/auth.middleware.js";
 router.post('/:taskId',authMiddleware,workspaceMemberMiddlware,addCommentController)
 router.get('/:taskId',authMiddleware,workspaceMemberMiddlware,getCommentsController)
 router.delete('/:workspaceId/:commentId',authMiddleware,workspaceMemberMiddlware,deleteCommentController)
+
+export default router

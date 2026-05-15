@@ -3,6 +3,7 @@ import authRoutes from '../modules/auth/auth.routes.js'
 import userRoutes from '../modules/user/user.routes.js'
 import taskRoutes from '../modules/task/task.routes.js'
 import workspaceRoutes from '../modules/workspace/workspace.routes.js'
+import commentRoutes from '../modules/comment/comment.routes.js'
 import prisma from './db.js'
 
 const app = express()
@@ -14,6 +15,7 @@ app.use('/auth', authRoutes)
 app.use('/user',userRoutes)
 app.use('/task',taskRoutes)
 app.use('/workspace',workspaceRoutes)
+app.use('/comment',commentRoutes)
 
 app.get('/', async(req,res)=>{
  const allUsers = await prisma.user.findMany({
