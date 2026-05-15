@@ -19,6 +19,7 @@ model User {
   createdTask   Task[]  @relation("CreatedTask")
   assignedTask  Task[]  @relation("AssignedTask")
   memberships Membership[]
+  comments Comment[]
 
 }
 enum Priority{
@@ -52,6 +53,8 @@ assignedToId Int?
   workspaceId Int
   workspace Workspace @relation(fields: [workspaceId],references: [id])
 
+  comments Comment[]
+
 }
 
 model Workspace{
@@ -74,5 +77,16 @@ workspace Workspace @relation(fields: [workspaceId],references: [id])
   @@unique([userId, workspaceId])
 }
 
+model Comment{
+  id Int @id @default(autoincrement())
+  content String
+
+  taskId Int
+  userId Int
+  task Task @relation(fields: [taskId],references: [id])
+  user User @relation(fields: [userId],references: [id])
+
+  createdAt DateTime @default(now())
+}
 
 
