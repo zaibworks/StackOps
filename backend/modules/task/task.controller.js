@@ -24,18 +24,22 @@ export const getTasksController= async(req,res)=>{
 
 export const updateTaskController= async(req,res)=>{
  try{
-   const { id } = req.params
-   const result = await updateTask(id,req.user.userId,req,body)
+   const { taskId } = req.params
+   const userId = req.user.userId
+   const workspaceId = parseInt(req.params.workspaceId)
+   const result = await updateTask(taskId,userId,req.body,workspaceId)
    res.json(result)
  }catch(e){
   res.status(400).json({message:e.message})
  }
 }
 
-export const deleteTaskController=(req,res)=>{
+export const deleteTaskController= async(req,res)=>{
    try{
-    const {id} = req.params
-    const result = deleteTask(id,req.user.userId)
+    const {taskId} = req.params
+    const userId = req.user.userId
+    const workspaceId = parseInt(req.params.workspaceId)
+    const result = await deleteTask(userId,workspaceId,taskId)
     res.json(result)
    }catch(e){
      res.status(400).json({ message: e.message })

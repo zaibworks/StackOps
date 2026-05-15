@@ -57,7 +57,7 @@ export const updateTask= async(taskId,userId,taskData,workspaceId)=>{
   return result
 }
 
-export const deleteTask = async (taskId,userId,workspaceId) => {
+export const deleteTask = async (userId,workspaceId,taskId) => {
   const result = await prisma.task.deleteMany({
     where: { id: Number(taskId), userId,workspaceId:workspaceId }
   })

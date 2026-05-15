@@ -11,7 +11,7 @@ import {workspaceMemberMiddlware} from '../middleware/workspace.middleware.js'
 
 router.get('/:workspaceId',authMiddleware,workspaceMemberMiddlware,getTasksController)
 router.post('/:workspaceId',authMiddleware,workspaceMemberMiddlware,createTaskController)
-router.put('/:id',authMiddleware,updateTaskController)
-router.delete('/:id',authMiddleware,deleteTaskController)
+router.put('/:workspaceId/:taskId',authMiddleware,workspaceMemberMiddlware,updateTaskController)
+router.delete('/:workspaceId/:taskId',authMiddleware,workspaceMemberMiddlware,deleteTaskController)
 
 export default router 
