@@ -32,19 +32,41 @@ where:{
   })
 }
 
-export const getTasks= async(workspaceId)=>{
-    return await prisma.task.findMany({
-        where:{workspaceId:workspaceId},
-        orderBy:{id:'desc'},
-        include:{
-          user:{
-            select:{id:true,name:true,email:true}
-          },
-          assignedTo:{
-            select:{id:true,name:true,email:true}
-          }
-        }
-    })
+export const getTasks = async (workspaceId, filters, pagination) => {
+  const { status, priority, assignedToId } = filters
+  const { page, limit } = pagination
+  const skip = (page - 1) * limit
+
+  const tasks = await prisma.task.findMany({
+    where: {
+      workspaceId,
+      status,
+      priority,
+      assignedToId
+    },
+    orderBy: { id: 'desc' },
+    skip,
+    take: limit,
+    include: {
+      user: {
+        select: { id: true, name: true, email: true }
+      },
+      assignedTo: {
+        select: { id: true, name: true, email: true }
+      }
+    }
+  })
+
+  const total = await prisma.task.count({
+    where: { workspaceId, status, priority }
+  })
+
+  return {
+    tasks,
+    total,
+    page,
+    totalPages: Math.ceil(total / limit)
+  }
 }
 
 export const updateTask= async(taskId,userId,taskData,workspaceId)=>{

@@ -15,7 +15,11 @@ export const createTaskController=async(req,res)=>{
 export const getTasksController= async(req,res)=>{
   try{
      const workspaceId = parseInt(req.params.workspaceId)
-        const tasks = await getTasks(workspaceId)
+      const { status, priority, assignedToId, page = 1, limit = 10 } = req.query
+       const tasks = await getTasks(workspaceId,
+        { status, priority, assignedToId: assignedToId ? parseInt(assignedToId) : undefined },
+  { page: parseInt(page), limit: parseInt(limit) }
+)
          res.json({ message:"Workspace Tasks",data:tasks})
    }catch(e){
     res.status(500).json({message:e.message})
