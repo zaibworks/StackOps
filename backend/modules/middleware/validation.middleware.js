@@ -9,7 +9,7 @@ export const validate =(schema)=>{
                 message:"Validation failed",
                 error: result.error.issues.map(issue=> ({
                     field: issue.path[0],
-                    message: issue.message
+                    message: issues.message
                 }))
             })
         }
