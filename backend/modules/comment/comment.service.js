@@ -1,4 +1,4 @@
-import prisma from "../../src/db"
+import prisma from "../../src/db.js"
 
 export const addComment = async(userId,taskId,content)=>{
     return await prisma.comment.create({
