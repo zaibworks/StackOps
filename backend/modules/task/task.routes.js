@@ -8,9 +8,11 @@ import { createTaskController,
 } from './task.controller.js'
 
 import {workspaceMemberMiddlware} from '../middleware/workspace.middleware.js'
+import { taskCheck } from '../middleware/validation.middleware.js'
+import { taskSchema } from './task.schema.js'
 
-router.get('/:workspaceId',authMiddleware,workspaceMemberMiddlware,getTasksController)
-router.post('/:workspaceId',authMiddleware,workspaceMemberMiddlware,createTaskController)
+router.get('/:workspaceId',authMiddleware,taskCheck(taskSchema),workspaceMemberMiddlware,getTasksController)
+router.post('/:workspaceId',authMiddleware,taskCheck(taskSchema),workspaceMemberMiddlware,createTaskController)
 router.put('/:workspaceId/:taskId',authMiddleware,workspaceMemberMiddlware,updateTaskController)
 router.delete('/:workspaceId/:taskId',authMiddleware,workspaceMemberMiddlware,deleteTaskController)
 

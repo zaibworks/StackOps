@@ -48,7 +48,7 @@ export const taskCheck = (schema)=>{
                 }))
             })
         }
-        req.body = result.body
+        req.body = result.data
         next()
     }
 }
