@@ -3,6 +3,7 @@ import { addComment,getComments,deleteComment } from "./comment.service.js";
 
 export const addCommentController = async(req,res)=>{
     try{
+          const workspaceId = parseInt(req.params.workspaceId)
   const {taskId,content} = req.body
   const userId = req.user.userId
     const comment = await addComment(userId,taskId,content)
@@ -14,6 +15,7 @@ export const addCommentController = async(req,res)=>{
 
 export const getCommentsController = async( req,res)=>{
     try {
+          const workspaceId = parseInt(req.params.workspaceId)
          const taskId = parseInt(req.params.taskId)
          const comments = await getComments(taskId)
          res.json({message:"Task comments",data:comments})
