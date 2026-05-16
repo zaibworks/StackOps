@@ -3,8 +3,9 @@ import { addComment,getComments,deleteComment } from "./comment.service.js";
 
 export const addCommentController = async(req,res)=>{
     try{
-  const {taskId,content} = req.body
-  const userId = req.user.userId
+  const {content} = req.body
+  const taskId = parseInt(req.params.taskId)
+  const userId = parseInt(req.user.userId)
     const comment = await addComment(userId,taskId,content)
     res.json({message:"Added Comment",data:comment})
     }catch(e){
