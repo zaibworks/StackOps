@@ -1,10 +1,10 @@
 import express from 'express'
+import prisma from './db.js'
 import authRoutes from '../modules/auth/auth.routes.js'
 import userRoutes from '../modules/user/user.routes.js'
 import taskRoutes from '../modules/task/task.routes.js'
 import workspaceRoutes from '../modules/workspace/workspace.routes.js'
 import commentRoutes from '../modules/comment/comment.routes.js'
-import prisma from './db.js'
 
 const app = express()
 const PORT = 3000;
