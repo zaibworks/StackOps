@@ -1,8 +1,10 @@
+import axios from 'axios'
 
-
-fetch('http://localhost:3000/auth/login',{
-    headers:{
-        'Authorization':`Bearer ${token}`,
-        'Content-Type': `Applicatoin/json`
-    }
+const api = axios.create({
+    baseURL:'http://localhost:3000'
 })
+
+//interceptor
+
+
+export default api
