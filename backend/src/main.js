@@ -5,11 +5,17 @@ import userRoutes from '../modules/user/user.routes.js'
 import taskRoutes from '../modules/task/task.routes.js'
 import workspaceRoutes from '../modules/workspace/workspace.routes.js'
 import commentRoutes from '../modules/comment/comment.routes.js'
+import cors from 'cors'
 
 const app = express()
 const PORT = 3000;
 
+app.use(cors({
+  origin: 'http://localhost:5173'  
+}))
+
 app.use(express.json())
+
 
 app.use('/auth', authRoutes)
 app.use('/user',userRoutes)
