@@ -15,12 +15,23 @@ const Login = () => {
     setLoading(true)
     setError('')
     try{
-      const
+      const response = await api.post('/auth/login',{
+        email,
+        password
+      })
+      const token = response.data.token
+        localStorage.setItem('token', token)
+         navigate('/dashboard')
+    }catch(e){
+      setError(e.response?.message ||'Login failed')
+    }finally{
+      setLoading(false)
     }
   }
   return (
     <div>
-
+   <h1>Login to StackOps</h1>
+   {error && <p>{error}</p>}
     </div>
   )
 }
