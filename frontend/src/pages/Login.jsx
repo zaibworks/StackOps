@@ -32,6 +32,11 @@ const Login = () => {
     <div>
    <h1>Login to StackOps</h1>
    {error && <p>{error}</p>}
+   <form onSubmit={handleSubmit}>
+    <input type="email" placeholder='Email' value={email} onChange={(e)=>setEmail(e.target.value)} />
+    <input type="password" placeholder='Password' value={password} onChange={(e)=>setPassword(e.target.value)} />
+    <button type='submit' disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
+   </form>
     </div>
   )
 }
