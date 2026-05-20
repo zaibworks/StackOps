@@ -21,8 +21,8 @@ const Signup = () => {
           email,
           password
         })
-          const token = response.data.token
-          localStorage.setItem('token',token)
+          // const token = response.data.token
+          // localStorage.setItem('token',token)
           navigate('/login')
        }catch(e){
        setError(e.response?.message ||'Signup failed')
