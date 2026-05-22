@@ -7,6 +7,8 @@ const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
   const [loading, setLoading] = useState(true)
   const [newworkspace, setNewworkspace] = useState([])
+  const [error, setError] = useState('')
+  const [name, setName] = useState('')
 
   const navigate = useNavigate()
 
@@ -23,6 +25,18 @@ const Dashboard = () => {
     localStorage.removeItem('token')
     navigate('/login')
   }
+
+  const addWorkspace = async(e)=>{
+    e.preventDefault()
+    setError('')
+    try {
+      const response = await api.post('/workspace/',{
+        name
+      })
+    } catch (err) {
+       setError(e.response?.message || 'Something went wrong')
+    }
+  }
   
   return (
     <div>
@@ -32,8 +46,12 @@ const Dashboard = () => {
         <p>{w.name}</p>
       </div>
      ))}
-
      <button onClick={handleLogout} className="bg-red-600 rounded-2xl p-2 font-bold">Logout</button>
+     <div>
+     <input type="text" value={name} onChange={(e)=> setName(e.target.value)}/>
+     <button onClick={addWorkspace}>Create</button>
+
+     </div>
     </div>
   )
 }
