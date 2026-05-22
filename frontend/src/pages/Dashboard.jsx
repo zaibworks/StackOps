@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom"
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
   const [loading, setLoading] = useState(true)
-  const [newworkspace, setNewworkspace] = useState([])
   const [error, setError] = useState('')
   const [name, setName] = useState('')
 
@@ -14,9 +13,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchWorkspaces = async()=>{
-       const response = await api.get('/workspace')
-       setWorkspaces(response.data)
-       setLoading(false)
+      try{
+        const response = await api.get('/workspace')
+        setWorkspaces(response.data)
+
+      }catch(e){
+         setError(e.response?.data?.message || "Failed to get workspaces")
+      }finally{
+        setLoading(false)
+      }
     }
     fetchWorkspaces()
   }, [])
@@ -28,31 +33,43 @@ const Dashboard = () => {
 
   const addWorkspace = async(e)=>{
     e.preventDefault()
+     if (!name.trim()) {
+   setError('Workspace name required')
+     return
+     }
     setError('')
     try {
-      const response = await api.post('/workspace/',{
+      const response = await api.post('/workspace',{
         name
       })
+      setWorkspaces((prev)=>[
+        ...prev,response.data
+      ])
+      setName('')
     } catch (err) {
-       setError(e.response?.message || 'Something went wrong')
+       setError(err.response?.data?.message || 'Something went wrong')
     }
   }
-  
+
+  if (loading) return <h1>Loading...</h1>
   return (
     <div>
       <h1>DashBoard</h1>
+      {error && <p>{error}</p>}
      {workspaces.map((w)=>(
       <div key={w.id}>
         <p>{w.name}</p>
       </div>
      ))}
      <button onClick={handleLogout} className="bg-red-600 rounded-2xl p-2 font-bold">Logout</button>
-     <div>
-     <input type="text" value={name} onChange={(e)=> setName(e.target.value)}/>
-     <button onClick={addWorkspace}>Create</button>
-
-     </div>
+     <form onSubmit={addWorkspace}>
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
+        <button type="submit">
+          Create
+        </button>
+      </form>
     </div>
+
   )
 }
 
