@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
   const [loading, setLoading] = useState(true)
+  const [newworkspace, setNewworkspace] = useState([])
 
   const navigate = useNavigate()
 
