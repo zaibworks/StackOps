@@ -1,6 +1,19 @@
 import prisma from '../../src/db.js';
 
 export const createWorkspace = async (name, userId) => {
+  const existingWorkspace =
+  await prisma.workspace.findFirst({
+    where: {
+      name,
+      userId
+    }
+  })
+
+if (existingWorkspace) {
+  throw new Error(
+    'Workspace already exists'
+  )
+}
   return await prisma.workspace.create({
     data: {
       name,

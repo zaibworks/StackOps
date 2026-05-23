@@ -8,6 +8,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [name, setName] = useState('')
+  const [creating, setCreating] = useState(false)
 
   const navigate = useNavigate()
 
@@ -37,7 +38,9 @@ const Dashboard = () => {
    setError('Workspace name required')
      return
      }
+     if (creating) return
     setError('')
+    setCreating(true)
     try {
       const response = await api.post('/workspace',{
         name
@@ -48,6 +51,8 @@ const Dashboard = () => {
       setName('')
     } catch (err) {
        setError(err.response?.data?.message || 'Something went wrong')
+    }finally{
+      setCreating(false)
     }
   }
 
@@ -64,8 +69,8 @@ const Dashboard = () => {
      <button onClick={handleLogout} className="bg-red-600 rounded-2xl p-2 font-bold">Logout</button>
      <form onSubmit={addWorkspace}>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-        <button type="submit">
-          Create
+        <button type="submit" disabled={creating} className="bg-yellow-500 rounded-2xl p-2 font-bold">
+         {creating ? 'Creating...' : 'Create'}
         </button>
       </form>
     </div>
