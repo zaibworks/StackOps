@@ -5,10 +5,12 @@ import api from '../api/axios.js'
 
 
 const Workspace = () => {
- const {workspaceId} = useParams()
   const [workspace, setWorkspace] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [task, settask] = useState([])
+  const [task, setTask] = useState([])
+  const [error, setError] = useState(false)
+  
+  const {workspaceId} = useParams()
 
 useEffect(() => {
 const fetchWorkspace = async () => {
@@ -23,6 +25,21 @@ const fetchWorkspace = async () => {
 }
 fetchWorkspace()
 }, [])
+
+const addTask = async()=>{
+  e.preventDefault()
+  setError('')
+  try {
+     const response = await api.post(`/task/${workspaceId}`)
+  setTask(response.data.data)
+  } catch (err) {
+     if(error){
+      setError(err?.response?.message ||'Task creation failed')
+     }
+  }finally{
+     setLoading(false)
+  }
+}
 
   if(loading) return <h1>Loading...</h1>
   return (
