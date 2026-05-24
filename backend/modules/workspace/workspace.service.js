@@ -5,7 +5,11 @@ export const createWorkspace = async (name, userId) => {
   await prisma.workspace.findFirst({
     where: {
       name,
-      userId
+      members:{
+        some:{
+          userId
+        }
+      }
     }
   })
 
@@ -39,7 +43,7 @@ export const getMyWorkspace = async (userId)=>{
     where:{
         members:{
             some:{
-                userId:userId
+                userId
             }
         }
     },

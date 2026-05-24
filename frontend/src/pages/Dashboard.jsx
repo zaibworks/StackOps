@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react"
 import api from '../api/axios.js'
-import { useNavigate} from "react-router-dom"
+import { useNavigate,useParams} from "react-router-dom"
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [creating, setCreating] = useState(false)
 
   const navigate = useNavigate()
+  // const {workspaceId }= useParams()
 
   useEffect(() => {
     const fetchWorkspaces = async()=>{
@@ -48,6 +49,7 @@ const Dashboard = () => {
         ...prev,response.data
       ])
       setName('')
+      navigate(`/workspace/${response?.data?.id}`)
     } catch (err) {
        setError(err.response?.data?.message || 'Something went wrong')
     }finally{

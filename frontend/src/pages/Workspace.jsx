@@ -28,7 +28,7 @@ fetchWorkspace()
     <div>
        <h1>{workspace?.name}</h1>
        <h2>Members</h2>
-       {workspace?.members?.map=((m)=>(
+       {workspace?.members?.map((m)=>(
         <div key={m.id}>
           <p>{m.user.name}</p>
           <p>{m.role}</p>
