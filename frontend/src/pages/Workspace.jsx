@@ -8,6 +8,7 @@ const Workspace = () => {
  const {workspaceId} = useParams()
   const [workspace, setWorkspace] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [task, settask] = useState([])
 
 useEffect(() => {
 const fetchWorkspace = async () => {
