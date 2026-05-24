@@ -5,7 +5,8 @@ import { createWorkspaceController,
     inviteMemberController,
     getWorkspaceMembersController,
     removeMemberController,
-    updateWorkspaceController
+    updateWorkspaceController,
+    getWorkspacebyIdController
 } from './workspace.controller.js'
 
 import { workspaceMemberMiddlware } from '../middleware/workspace.middleware.js'
@@ -20,6 +21,7 @@ router.post('/:workspaceId/invite',authMiddlware,inviteMemberController)
 router.get('/:workspaceId/members',authMiddlware,workspaceMemberMiddlware,getWorkspaceMembersController)
 router.delete('/:workspaceId/members/:memberId',authMiddlware,workspaceMemberMiddlware,removeMemberController)
 router.put('/:workspaceId', authMiddlware,validate(updateWorkspaceSchema,"Workspace updation failed") ,workspaceMemberMiddlware, updateWorkspaceController)
+router.get('/:workspaceId',authMiddlware,workspaceMemberMiddlware,getWorkspacebyIdController)
 
 
 export default router

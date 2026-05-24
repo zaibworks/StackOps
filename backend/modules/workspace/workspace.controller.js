@@ -1,5 +1,5 @@
 import prisma from "../../src/db.js";
-import { createWorkspace,getMyWorkspace,inviteMember,getWorkspaceMembers,removeMember,updateWorkspace } from "./workspace.service.js";
+import { createWorkspace,getMyWorkspace,inviteMember,getWorkspaceMembers,removeMember,updateWorkspace,getWorkspacebyId } from "./workspace.service.js";
 
 export const createWorkspaceController= async(req,res)=>{
     try{
@@ -71,6 +71,17 @@ export const updateWorkspaceController = async (req,res)=>{
      const updated = await updateWorkspace(adminId,workspaceId,name)
 
         res.json({message:'Workspace name changed successfully',data:updated})
+    }catch(e){
+        res.status(500).json({message:e.message})
+    }
+}
+
+export const getWorkspacebyIdController =async(req,res)=>{
+    try{
+    const workspaceId = parseInt(req.params.workspaceId)
+    const userId = req.user.userId
+    const workspace = await getWorkspacebyId(userId,workspaceId)
+    res.json({message:"Workspace fetched successfully",data:workspace})
     }catch(e){
         res.status(500).json({message:e.message})
     }
