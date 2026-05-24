@@ -165,3 +165,16 @@ export const updateWorkspace = async(adminId,workspaceId,name)=>{
 
   return updateName
 }
+
+export const getWorkspacebyId = async(userId,workspaceId)=>{
+ return await  prisma.workspace.findUnique({
+  where:{id:workspaceId},
+  include: {
+  members: {
+    include: {
+      user: {select: { id: true, name: true, email: true }}
+    }},
+  tasks: {select: { id: true, title: true, status: true }}
+}
+ })
+}
