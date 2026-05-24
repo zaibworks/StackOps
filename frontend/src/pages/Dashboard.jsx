@@ -1,7 +1,6 @@
 import { useState,useEffect } from "react"
 import api from '../api/axios.js'
-import { useNavigate } from "react-router-dom"
-
+import { useNavigate} from "react-router-dom"
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
@@ -62,7 +61,7 @@ const Dashboard = () => {
       <h1>DashBoard</h1>
       {error && <p>{error}</p>}
      {workspaces.map((w)=>(
-      <div key={w.id}>
+      <div key={w.id} onClick={()=>navigate(`/workspace/${w.id}`)}>
         <p>{w.name}</p>
       </div>
      ))}
