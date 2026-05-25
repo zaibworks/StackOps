@@ -23,13 +23,13 @@ const Login = () => {
         localStorage.setItem('token', token)
          navigate('/dashboard')
     }catch(e){
-      setError(e.response?.message ||'Login failed')
+      setError(e.response?.data?.message ||'Login failed')
     }finally{
       setLoading(false)
     }
   }
   return (
-    <div>
+    <div className='h-100 w-100 flex justify-center items-center bg-zinc-950'>
    <h1>Login to StackOps</h1>
    {error && <p>{error}</p>}
    <form onSubmit={handleSubmit}>
