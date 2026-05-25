@@ -2,12 +2,12 @@ import React from 'react'
 import { useParams,useNavigate } from 'react-router-dom'
 import { useEffect,useState } from 'react'
 import api from '../api/axios.js'
+import TaskCard from '../components/TaskCard.jsx'
 
 
 const Workspace = () => {
   const [workspace, setWorkspace] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [task, setTask] = useState([])
   const [error, setError] = useState(false)
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -18,8 +18,7 @@ const Workspace = () => {
   
   const {workspaceId} = useParams()
 
-useEffect(() => {
-const fetchWorkspace = async () => {
+  const fetchWorkspace = async () => {
   try {
     const response = await api.get(`/workspace/${workspaceId}`)
     setWorkspace(response.data.data)
@@ -29,10 +28,12 @@ const fetchWorkspace = async () => {
     setLoading(false)
   }
 }
+
+useEffect(() => {
 fetchWorkspace()
 }, [])
 
-const addTask = async()=>{
+const addTask = async(e)=>{
   e.preventDefault()
   setError('')
   try {
@@ -40,19 +41,19 @@ const addTask = async()=>{
         title,
         content,
         priority,
-        satus,
+        status,
         dueDate:dueDate ? new Date(dueDate).toISOString() : undefined,
         assignedToId:assignedToId ? parseInt(assignedToId) : undefined,
      })
-  setTask(response.data.data)
+  await fetchWorkspace()
   } catch (err) {
-     if(error){
-      setError(err?.response?.message ||'Task creation failed')
-     }
+     setError(err?.response?.data?.message || 'Task creation failed')
   }finally{
      setLoading(false)
   }
 }
+
+
 
   if(loading) return <h1>Loading...</h1>
   return (
@@ -68,10 +69,7 @@ const addTask = async()=>{
 
          <h2>Tasks</h2>
     {workspace?.tasks?.map((t) => (
-      <div key={t.id}>
-        <p>{t.title}</p>
-        <p>{t.status}</p>
-      </div>
+      <TaskCard task={t} workspaceId={workspaceId} onTaskUpdate={fetchWorkspace}/>
     ))}
 
     <div>
@@ -83,19 +81,20 @@ const addTask = async()=>{
           <option value="medium">Medium</option>
           <option value="high">High</option>
          </select>
-         <select value={status} onChange={(e)=>e.target.value}>
-          <option value="todo"></option>
-          <option value="inprogress"></option>
-          <option value="completed"></option>
+         <select value={status} onChange={(e)=>setStatus(e.target.value)}>
+          <option value="todo">Todo</option>
+          <option value="inprogress">In-Progress</option>
+          <option value="done">Done</option>
+         </select>
 
-          <input type="date" value={dueDate} onChange={(e) => setdueDate(e.target.value)}/>
+         <input type="date" value={dueDate} onChange={(e) => setdueDate(e.target.value)} />
 
-          <select value={assignedToId} onChange={(e)=>setAssignedToId(e.target.value)}></select>
-           <option value="">Unassigned</option>
+         <select value={assignedToId} onChange={(e)=>setAssignedToId(e.target.value)}>
+          <option value="">Unassigned</option>
            {workspace?.members?.map((m)=>(
             <option key={m.user.id} value={m.user.id}>{m.user.name}</option>
            ))}
-         </select>
+          </select>
           <button type='submit' className='bg-red-700'>Add Task</button>
       </form>
     </div>
