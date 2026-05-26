@@ -31,7 +31,7 @@ const Signup = () => {
        }
   }
   return (
-    <div>
+    <div className='relative min-h-screen flex justify-center items-center bg-zinc-950 overflow-hidden px-4'>
       <h1>Signup in StackOps</h1>
       {error&& <p>{error}</p> }
       <form onSubmit={handleSignup}>
