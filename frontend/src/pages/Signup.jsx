@@ -39,6 +39,7 @@ const Signup = () => {
            <div className='absolute top-[-10rem] left-[-10rem] h-[30rem] w-[30rem] rounded-full bg-cyan-400/20 blur-[100px]'/>
            <div className='absolute bottom-[-10rem] right-[-10rem] h-[25rem] w-[25rem] rounded-full bg-cyan-500/20 blue-[100px]'/>
       </div>
+      <div className='z-10 w-full max-w-md rounded-3xl border border-zinc-800 border-zinc-900/70 px-8 py-10 backdrop-blur-xl shadow-[0_0_50px_rgba(0,0,0,0.4) transition-all duration-300 hover:border-zinc-700'>
       <h1>Signup in StackOps</h1>
       {error&& <p>{error}</p> }
       <form onSubmit={handleSignup}>
@@ -47,6 +48,8 @@ const Signup = () => {
         <input type="password" placeholder='Password' value={password} onChange={(e)=>setPassword(e.target.value)} />
         <button type='submit' disabled={loading}>{loading?'Signing In...':'Signup'}</button>
       </form>
+
+      </div>
     </div>
   )
 }
