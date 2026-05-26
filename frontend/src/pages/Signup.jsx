@@ -41,15 +41,15 @@ const Signup = () => {
       </div>
       <div className='z-10 w-full max-w-md rounded-3xl border border-zinc-800 border-zinc-900/70 px-8 py-10 backdrop-blur-xl shadow-[0_0_50px_rgba(0,0,0,0.4) transition-all duration-300 hover:border-zinc-700'>
       <div className='mb-8 text-center'>
-      <h1>Signup in StackOps</h1>
-      <h2></h2>
-      <p></p>
+      <h1 className='text-xl font-semibold text-zinc-100 tracking-tight'>Stack<span className='text-orange-400'>Ops</span></h1>
+      <h2 className='mt-4 text-3xl font-semibold text-zinc-100 tracking-tight'>Create your account</h2>
+      <p className='text-zinc-400 mt-2 text-sm'>Start organizing work and collaborating smarter.</p>
       </div>
-      {error&& <p>{error}</p> }
       <form onSubmit={handleSignup}>
         <input type="text" placeholder='Name' value={name} onChange={(e)=>setName(e.target.value)} />
         <input type="email" placeholder='Email' value={email} onChange={(e)=>setEmail(e.target.value)} />
         <input type="password" placeholder='Password' value={password} onChange={(e)=>setPassword(e.target.value)} />
+         {error&& <p>{error}</p> }
         <button type='submit' disabled={loading}>{loading?'Signing In...':'Signup'}</button>
       </form>
 
