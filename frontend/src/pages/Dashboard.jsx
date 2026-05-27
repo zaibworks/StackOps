@@ -10,7 +10,6 @@ const Dashboard = () => {
   const [creating, setCreating] = useState(false)
 
   const navigate = useNavigate()
-  // const {workspaceId }= useParams()
 
   useEffect(() => {
     const fetchWorkspaces = async()=>{
@@ -59,8 +58,22 @@ const Dashboard = () => {
 
   if (loading) return <h1>Loading...</h1>
   return (
-    <div>
-      <h1>DashBoard</h1>
+    <div className="min-h-screen  bg-zinc-950 text-zinc-100">
+      <div className="flex">
+     <aside className="h-screen w-64 border-r border-zinc-800 bg-zinc-900/50 p-5">
+          <div className="mb-8">
+             <h1 className="font-semibold text-2xl tracking-tight text-zinc-100">
+              Stack<span className="text-orange-400">Ops</span></h1>
+              <p className="mt-1  text-sm text-zinc-500">
+                Productivity workspace
+                </p>
+          </div>
+     </aside>
+     <main className="flex-1 p-8">
+
+     </main>
+      </div>
+      {/* <h1>DashBoard</h1>
       {error && <p>{error}</p>}
      {workspaces.map((w)=>(
       <div key={w.id} onClick={()=>navigate(`/workspace/${w.id}`)}>
@@ -73,7 +86,7 @@ const Dashboard = () => {
         <button type="submit" disabled={creating} className="bg-yellow-500 rounded-2xl p-2 font-bold">
          {creating ? 'Creating...' : 'Create'}
         </button>
-      </form>
+      </form> */}
     </div>
 
   )
