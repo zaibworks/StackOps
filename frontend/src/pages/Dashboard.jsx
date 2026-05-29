@@ -75,9 +75,9 @@ const Dashboard = () => {
   </p>
 </div>
      </aside>
-     <main className="flex-1 p-8">
-
-     </main>
+     <nav className="space-y-2">
+        <button><span>Workspaces</span><span>¥</span></button>
+     </nav>
       </div>
       {/* <h1>DashBoard</h1>
       {error && <p>{error}</p>}

@@ -15,7 +15,6 @@ const Workspace = () => {
   const [status, setStatus] = useState('todo')
   const [dueDate, setdueDate] = useState('')
   const [assignedToId, setAssignedToId] = useState('')
-  const [showWokspaces, setShowWokspaces] = useState(false)
   
   const {workspaceId} = useParams()
 
