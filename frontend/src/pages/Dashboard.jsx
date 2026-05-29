@@ -76,7 +76,8 @@ const Dashboard = () => {
 </div>
      </aside>
      <nav className="space-y-2">
-        <button><span>Workspaces</span><span>¥</span></button>
+        <button className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-zinc-300 transition-all hover:bg-zinc-800"
+        ><span>Workspaces</span><span>⌄</span></button>
      </nav>
       </div>
       {/* <h1>DashBoard</h1>
