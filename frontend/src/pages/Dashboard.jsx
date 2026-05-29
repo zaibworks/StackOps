@@ -59,7 +59,7 @@ const Dashboard = () => {
 
   if (loading) return <h1>Loading...</h1>
   return (
-    <div className="min-h-screen  bg-zinc-950 text-zinc-100 overflow-y-auto">
+    <div className="min-h-screen  bg-zinc-950 text-zinc-100 overflow-hidden">
       <div className="flex">
      <aside className="h-screen w-64 border-r border-zinc-800 bg-zinc-900/50 p-5">
           <div className="mb-8 border-b border-zinc-800 pb-6">
@@ -84,7 +84,7 @@ const Dashboard = () => {
 </button>
 {
   shoWorkspace && (
-      <div className="mt-2 space-y-1 pl-3 transition-">
+      <div className="mt-2 space-y-1 pl-3 h-[300px] overflow-scroll bg-zinc-600/10 rounded-xl scrollbar-hide">
 <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-500 transition-colors hover:text-zinc-300">
   All Workspaces
 </button>
