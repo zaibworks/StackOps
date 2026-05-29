@@ -63,11 +63,11 @@ const Dashboard = () => {
      <aside className="h-screen w-64 border-r border-zinc-800 bg-zinc-900/50 p-5">
           <div className="mb-8 border-b border-zinc-800 pb-6">
   <p className="text-sm text-zinc-500">
-    Welcome back
+    Welcome,
   </p>
 
-  <h2 className="mt-1 text-xl font-semibold tracking-tight text-zinc-100">
-    User Name
+  <h2 className="mt-1 text-xl font-semibold tracking-tight text-cyan-400">
+    UserName
   </h2>
 
   <p className="mt-2 text-sm text-zinc-500">
