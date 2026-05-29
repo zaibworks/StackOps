@@ -8,6 +8,7 @@ const Dashboard = () => {
   const [error, setError] = useState('')
   const [name, setName] = useState('')
   const [creating, setCreating] = useState(false)
+  const [shoWorkspace, setshoWorkspace] = useState(false)
 
   const navigate = useNavigate()
 
@@ -58,7 +59,7 @@ const Dashboard = () => {
 
   if (loading) return <h1>Loading...</h1>
   return (
-    <div className="min-h-screen  bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen  bg-zinc-950 text-zinc-100 overflow-y-auto">
       <div className="flex">
      <aside className="h-screen w-64 border-r border-zinc-800 bg-zinc-900/50 p-5">
           <div className="mb-8 border-b border-zinc-800 pb-6">
@@ -74,19 +75,34 @@ const Dashboard = () => {
     Manage your workspaces efficiently
   </p>
 </div>
-     </aside>
-     <nav className="space-y-2">
-        <button className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-medium text-zinc-300 transition-all hover:bg-zinc-800"
-        ><span>Workspaces</span><span>⌄</span></button>
+
+<nav className="space-y-2">
+       <button onClick={()=>setshoWorkspace((prev)=>!prev)}
+  className="flex w-full items-center justify-between rounded-xl px-3 py-1.5 text-sm text-zinc-300 transition-colors hover:bg-zinc-800/60 hover:text-zinc-200"
+>
+  <span className="font-medium">Workspaces</span><span className={`text-xs text-zinc-500 transition-transform duration-200 ${shoWorkspace?"rotate-180":""}`}>▾</span>
+</button>
+{
+  shoWorkspace && (
+      <div className="mt-2 space-y-1 pl-3 transition-">
+<button className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-500 transition-colors hover:text-zinc-300">
+  All Workspaces
+</button>
+ {workspaces.map((w)=>(
+      <button  className="w-full truncate rounded-lg px-3 py-2 text-left text-zinc-500 transition-colors hover:text-zinc-300"
+      key={w.id} 
+      onClick={()=>navigate(`/workspace/${w.id}`)}>
+       {w.name}
+      </button>
+     ))}
+</div>
+  )
+}
      </nav>
+     </aside> 
       </div>
       {/* <h1>DashBoard</h1>
       {error && <p>{error}</p>}
-     {workspaces.map((w)=>(
-      <div key={w.id} onClick={()=>navigate(`/workspace/${w.id}`)}>
-        <p>{w.name}</p>
-      </div>
-     ))}
      <button onClick={handleLogout} className="bg-red-600 rounded-2xl p-2 font-bold">Logout</button>
      <form onSubmit={addWorkspace}>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
