@@ -4,11 +4,13 @@ import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import Workspace from './pages/Workspace'
 import ProtectedRoute from './components/ProtectedRoute'
+import { AuthProvider } from './context/AuthContext.jsx'
 
 
 function App() {
   return (
-    <BrowserRouter>
+    <AuthProvider>
+       <BrowserRouter>
     <Routes>
       <Route path='/login' element={<Login/>}/>
       <Route path='/signup' element={<Signup/>}/>
@@ -22,6 +24,7 @@ function App() {
         </ProtectedRoute>}/>
     </Routes>
     </BrowserRouter>
+    </AuthProvider>
 
   )
 }

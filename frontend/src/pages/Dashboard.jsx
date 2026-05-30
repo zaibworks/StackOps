@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react"
 import api from '../api/axios.js'
 import { useNavigate,useParams} from "react-router-dom"
+import { useAuth } from "../context/AuthContext.jsx"
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
