@@ -61,7 +61,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen  bg-zinc-950 text-zinc-100 overflow-hidden">
       <div className="flex">
-     <aside className="h-screen w-64 border-r border-zinc-800 bg-zinc-900/50 p-5">
+     <aside className="h-screen w-64 border-r flex-col border-zinc-800 bg-zinc-900/50 p-5">
           <div className="mb-8 border-b border-zinc-800 pb-6">
   <p className="text-sm text-zinc-500">
     Welcome,
@@ -84,12 +84,12 @@ const Dashboard = () => {
 </button>
 {
   shoWorkspace && (
-      <div className="mt-2 space-y-1 pl-3 h-[300px] overflow-scroll bg-zinc-600/10 rounded-xl scrollbar-hide">
+      <div className="mt-2 space-y-1 pl-3 h-[300px] overflow-y-auto transition-colors duration-300 hover:bg-zinc-900/30 rounded-xl scrollbar-hide">
 <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-500 transition-colors hover:text-zinc-300">
   All Workspaces
 </button>
  {workspaces.map((w)=>(
-      <button  className="w-full truncate rounded-lg px-3 py-2 text-left text-zinc-500 transition-colors hover:text-zinc-300"
+      <button  className="w-full truncate rounded-sm px-3 py-1.5 text-left text-zinc-500 transition-colors hover:text-zinc-300"
       key={w.id} 
       onClick={()=>navigate(`/workspace/${w.id}`)}>
        {w.name}
@@ -98,6 +98,15 @@ const Dashboard = () => {
 </div>
   )
 }
+   <div className="mt-4 space-y-1">
+  <button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200">
+  My Tasks
+</button>
+
+<button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200">
+  Activity
+</button>
+  </div>
      </nav>
      </aside> 
       </div>
