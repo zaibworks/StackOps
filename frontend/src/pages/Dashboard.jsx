@@ -61,54 +61,86 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen  bg-zinc-950 text-zinc-100 overflow-hidden">
       <div className="flex">
-     <aside className="h-screen w-64 border-r flex-col border-zinc-800 bg-zinc-900/50 p-5">
-          <div className="mb-8 border-b border-zinc-800 pb-6">
-  <p className="text-sm text-zinc-500">
-    Welcome,
-  </p>
+     <aside className="relative flex h-screen w-64 flex-col border-r border-zinc-800 bg-zinc-900/50">
 
-  <h2 className="mt-1 text-xl font-semibold tracking-tight text-cyan-400">
-    UserName
-  </h2>
+  {/* Fixed welcome */}
+  <div className="px-5 pt-5">
+    <div className="mb-6 border-b border-zinc-800 pb-6">
+      <p className="text-sm text-zinc-500">
+        Welcome,
+      </p>
 
-  <p className="mt-2 text-sm text-zinc-500">
-    Manage your workspaces efficiently
-  </p>
-</div>
+      <h2 className="mt-1 text-xl font-semibold tracking-tight text-cyan-400">
+        UserName
+      </h2>
 
-<nav className="space-y-2">
-       <button onClick={()=>setshoWorkspace((prev)=>!prev)}
-  className="flex w-full items-center justify-between rounded-xl px-3 py-1.5 text-sm text-zinc-300 transition-colors hover:bg-zinc-800/60 hover:text-zinc-200"
->
-  <span className="font-medium">Workspaces</span><span className={`text-xs text-zinc-500 transition-transform duration-200 ${shoWorkspace?"rotate-180":""}`}>▾</span>
-</button>
-{
-  shoWorkspace && (
-      <div className="mt-2 space-y-1 pl-3 h-[300px] overflow-y-auto transition-colors duration-300 hover:bg-zinc-900/30 rounded-xl scrollbar-hide">
-<button className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-500 transition-colors hover:text-zinc-300">
-  All Workspaces
-</button>
- {workspaces.map((w)=>(
-      <button  className="w-full truncate rounded-sm px-3 py-1.5 text-left text-zinc-500 transition-colors hover:text-zinc-300"
-      key={w.id} 
-      onClick={()=>navigate(`/workspace/${w.id}`)}>
-       {w.name}
-      </button>
-     ))}
-</div>
-  )
-}
-   <div className="mt-4 space-y-1">
-  <button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200">
-  My Tasks
-</button>
-
-<button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200">
-  Activity
-</button>
+      <p className="mt-2 text-sm text-zinc-500">
+        Manage your workspaces efficiently
+      </p>
+    </div>
   </div>
-     </nav>
-     </aside> 
+
+  {/* Scrollable nav */}
+  <nav className="flex-1 overflow-y-auto px-5 pb-28 scrollbar-hide">
+
+    <button
+      onClick={() => setshoWorkspace((prev) => !prev)}
+      className="flex w-full items-center justify-between rounded-xl px-3 py-1.5 text-sm text-zinc-300 transition-colors hover:bg-zinc-800/60 hover:text-zinc-200"
+    >
+      <span className="font-medium">Workspaces</span>
+
+      <span
+        className={`text-xs text-zinc-500 transition-transform duration-200 ${
+          shoWorkspace ? "rotate-180" : ""
+        }`}
+      >
+        ▾
+      </span>
+    </button>
+
+    {shoWorkspace && (
+      <div className="mt-2 h-[300px] space-y-1 overflow-y-auto rounded-xl scrollbar-hide pl-3 transition-colors duration-300 hover:bg-zinc-900/30">
+        <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-500 transition-colors hover:text-zinc-300">
+          All Workspaces
+        </button>
+
+        {workspaces.map((w) => (
+          <button
+            key={w.id}
+            onClick={() => navigate(`/workspace/${w.id}`)}
+            className="w-full truncate rounded-sm px-3 py-1.5 text-left text-zinc-500 transition-colors hover:text-zinc-300"
+          >
+            {w.name}
+          </button>
+        ))}
+      </div>
+    )}
+
+    <div className="mt-4 space-y-1">
+      <button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200">
+        My Tasks
+      </button>
+
+      <button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200">
+        Activity
+      </button>
+    </div>
+
+  </nav>
+
+  {/* Fixed logout */}
+  <div className="absolute bottom-0 left-0 right-0 px-5 pb-4 backdrop-blur-md">
+  <div className="border-t border-zinc-800/80 pt-4">
+    <button
+      onClick={handleLogout}
+      className="flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-medium text-zinc-400 transition-all hover:bg-zinc-800/50 hover:text-red-400 bg-zinc-900/70"
+    >
+      Logout
+    </button>
+  </div>
+</div>
+
+</aside>
       </div>
       {/* <h1>DashBoard</h1>
       {error && <p>{error}</p>}
