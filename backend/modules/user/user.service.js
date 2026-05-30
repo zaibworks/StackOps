@@ -1,6 +1,6 @@
 import prisma from "../../src/db.js";
 
-const getCurrenUser = async (userId)=>{
+export const getCurrentUser = async (userId)=>{
 
     const user = await prisma.user.findUnique({
         where:{
@@ -15,4 +15,3 @@ const getCurrenUser = async (userId)=>{
       return user
 }
 
-export default getCurrenUser

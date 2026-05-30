@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react"
 import api from '../api/axios.js'
 import { useNavigate,useParams} from "react-router-dom"
-import { useAuth } from "../context/AuthContext.jsx"
+import { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
@@ -12,6 +12,9 @@ const Dashboard = () => {
   const [shoWorkspace, setshoWorkspace] = useState(false)
 
   const navigate = useNavigate()
+  const {user} = useAuth()
+
+  console.log(user)
 
   useEffect(() => {
     const fetchWorkspaces = async()=>{
@@ -72,7 +75,7 @@ const Dashboard = () => {
       </p>
 
       <h2 className="mt-1 text-xl font-semibold tracking-tight text-cyan-400">
-        UserName
+        {user?.name || "User"}
       </h2>
 
       <p className="mt-2 text-sm text-zinc-500">

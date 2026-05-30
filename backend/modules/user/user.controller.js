@@ -1,6 +1,6 @@
-import getCurrenUser from "./user.service.js";
+import {getCurrentUser} from "./user.service.js";
 
-const getMe = async(req,res)=>{
+export const getMe = async(req,res)=>{
     try{
         const userId = req.user.userId;
 
@@ -11,4 +11,3 @@ const getMe = async(req,res)=>{
     }
 }
 
-export default getMe
