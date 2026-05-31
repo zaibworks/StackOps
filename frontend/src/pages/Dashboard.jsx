@@ -146,7 +146,14 @@ const Dashboard = () => {
 
 </aside>
  <main className="flex-1 p-8 overflow-y-auto">
-
+     <div className="mb-8">
+       <h1 className="text-3xl font-semibold tracking-tight text-zinc-100">
+           Dashboard
+       </h1>
+       <p className="mt-2 text-sm text-zinc-500">
+        Manage you workspaces and track your activity
+       </p>
+     </div>
  </main>
       </div>
       {/* <h1>DashBoard</h1>
