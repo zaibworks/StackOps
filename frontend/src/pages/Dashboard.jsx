@@ -145,6 +145,9 @@ const Dashboard = () => {
 </div>
 
 </aside>
+ <main className="flex-1 p-8 overflow-y-auto">
+
+ </main>
       </div>
       {/* <h1>DashBoard</h1>
       {error && <p>{error}</p>}
