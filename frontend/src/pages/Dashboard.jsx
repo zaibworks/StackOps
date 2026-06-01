@@ -2,6 +2,7 @@ import { useState,useEffect } from "react"
 import api from '../api/axios.js'
 import { useNavigate} from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
+import { Plus } from "lucide-react";
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
@@ -146,7 +147,8 @@ const Dashboard = () => {
 </div>
 </aside>
  <main className="flex-1 p-8 overflow-y-auto">
-     <div className="mb-8">
+  <div className="flex items-center justify-between px-2 mb-8">
+     <div>
        <h1 className="text-3xl font-semibold tracking-tight text-zinc-100">
            Dashboard
        </h1>
@@ -154,6 +156,9 @@ const Dashboard = () => {
         Manage you workspaces and track your activity
        </p>
      </div>
+<button className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 px-6 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-white"><Plus size={16}/> Create</button>
+  </div>
+
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 rounded-2xl border border-zinc-700">
   <div className="rounded-2xl p-5">
     <p className="text-sm text-zinc-500">Workspaces</p>
