@@ -39,18 +39,28 @@ if (existingWorkspace) {
 }
 
 export const getMyWorkspace = async (userId)=>{
-  return await prisma.workspace.findMany({
-    where:{
-        members:{
-            some:{
-                userId
-            }
-        }
-    },
-    include:{
-        members:true
+ return await prisma.workspace.findMany({
+  where:{
+    members:{
+      some:{ userId }
     }
-  })
+  },
+  include:{
+    _count:{
+      select:{
+        members:true
+      }
+    },
+    members:{
+      where:{
+        userId
+      },
+      select:{
+        role:true
+      }
+    }
+  }
+})
 }
 
 export const inviteMember = async(userId, workspaceId, email, role)=>{

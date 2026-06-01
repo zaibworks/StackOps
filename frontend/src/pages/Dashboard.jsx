@@ -1,14 +1,12 @@
 import { useState,useEffect } from "react"
 import api from '../api/axios.js'
-import { useNavigate,useParams} from "react-router-dom"
+import { useNavigate} from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [name, setName] = useState('')
-  const [creating, setCreating] = useState(false)
   const [shoWorkspace, setshoWorkspace] = useState(false)
 
   const navigate = useNavigate()
@@ -61,6 +59,10 @@ const Dashboard = () => {
     }
   }
 
+  const formatDate = (date) => {
+  return new Date(date).toLocaleDateString();
+};
+
   if (loading) return <h1>Loading...</h1>
   return (
     <div className="min-h-screen  bg-zinc-950 text-zinc-100 overflow-hidden">
@@ -103,11 +105,10 @@ const Dashboard = () => {
     </button>
 
     {shoWorkspace && (
-      <div className="mt-2 h-[300px] space-y-1 overflow-y-auto rounded-xl scrollbar-hide pl-3 transition-colors duration-300 hover:bg-zinc-900/30">
+      <div className={`mt-2  h-[300px]  space-y-1 overflow-y-auto rounded-xl scrollbar-hide pl-3 transition-colors duration-300 hover:bg-zinc-900/30`}>
         <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-500 transition-colors hover:text-zinc-300">
           All Workspaces
         </button>
-
         {workspaces.map((w) => (
           <button
             key={w.id}
@@ -143,7 +144,6 @@ const Dashboard = () => {
     </button>
   </div>
 </div>
-
 </aside>
  <main className="flex-1 p-8 overflow-y-auto">
      <div className="mb-8">
@@ -154,6 +154,70 @@ const Dashboard = () => {
         Manage you workspaces and track your activity
        </p>
      </div>
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 rounded-2xl border border-zinc-700">
+  <div className="rounded-2xl p-5">
+    <p className="text-sm text-zinc-500">Workspaces</p>
+    <h2 className="mt-2 text-3xl font-semibold">
+      {workspaces?.length}
+    </h2>
+  </div>
+
+  <div className="rounded-2xl p-5">
+    <p className="text-sm text-zinc-500">Owned</p>
+    <h2 className="mt-2 text-3xl font-semibold">0</h2>
+  </div>
+
+  <div className="rounded-2xl p-5">
+    <p className="text-sm text-zinc-500">Assigned Tasks</p>
+    <h2 className="mt-2 text-3xl font-semibold">0</h2>
+  </div>
+
+  <div className="rounded-2xl p-5">
+    <p className="text-sm text-zinc-500">Activity</p>
+    <h2 className="mt-2 text-3xl font-semibold">0</h2>
+  </div>
+</div>
+
+{/* Recent Workspaces */}
+<div className="mt-8">
+  <div className="mb-4 flex items-center justify-between">
+    <h2 className="text-xl font-semibold text-zinc-100">
+      Recent Workspaces
+    </h2>
+
+    <button className="text-sm text-zinc-500 transition-colors hover:text-zinc-300">
+      View all
+    </button>
+  </div>
+   <div className="max-h-[320px] overflow-y-auto scrollbar-hide space-y-3 pr-2">
+    {workspaces.slice(0, 6).map((workspace) => (
+      <div
+        key={workspace.id}
+        onClick={() => navigate(`/workspace/${workspace.id}`)}
+        className="flex w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-3 px-5 text-left transition-all hover:border-zinc-700 hover:bg-zinc-900/70"
+      >
+        <div className="flex items-center gap-10">
+         <h3 className="truncate text-lg font-medium text-zinc-100">
+          {workspace.name}
+        </h3>
+       <div className="flex items-center gap-4 text-sm text-zinc-500">
+      <span>{workspace.members?.[0]?.role?.charAt(0).toUpperCase()+workspace.members?.[0]?.role?.slice(1)}</span>
+      <span>•</span>
+      <span>{`${workspace._count.members} ${workspace._count.members<2?'Member':'Members'}`}</span>
+      <span>•</span>
+      <span>{`Updated at ${formatDate(workspace.updatedAt)}`}</span>
+    </div>
+        </div>
+
+        <button
+  className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
+>
+  ⋮
+</button>
+      </div>
+    ))}
+  </div>
+</div>
  </main>
       </div>
       {/* <h1>DashBoard</h1>
