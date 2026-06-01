@@ -105,7 +105,7 @@ const Dashboard = () => {
     </button>
 
     {shoWorkspace && (
-      <div className={`mt-2  h-[300px]  space-y-1 overflow-y-auto rounded-xl scrollbar-hide pl-3 transition-colors duration-300 hover:bg-zinc-900/30`}>
+      <div className={`mt-2  max-h-[300px]  space-y-1 overflow-y-auto rounded-xl scrollbar-hide pl-3 transition-colors duration-300 hover:bg-zinc-900/30`}>
         <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-500 transition-colors hover:text-zinc-300">
           All Workspaces
         </button>
