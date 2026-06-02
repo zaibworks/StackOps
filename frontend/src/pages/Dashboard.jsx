@@ -178,7 +178,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
 
   <div className="rounded-2xl p-5">
     <p className="text-sm text-zinc-500"><Users size={18}/>Owned</p>
-    <h2 className="mt-2 text-3xl font-semibold">0</h2>
+    <h2 className="mt-2 text-3xl font-semibold">{workspaces.filter(w=>w.members[0]?.role==='admin').length}</h2>
   </div>
 
   <div className="rounded-2xl p-5">
@@ -212,10 +212,10 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
         className="flex w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-3 px-5 text-left transition-all hover:bg-zinc-900/70 hover:border-orange-500/30 cursor-pointer"
       >
         <div className="flex items-center gap-10">
-         <h3 className="truncate font-semibold tracking-tight text-zinc-100">
+         <h3 className="truncate font-semibold text-base text-zinc-100">
           {workspace.name}
         </h3>
-       <div className="flex items-center gap-4 text-sm text-zinc-500">
+       <div className="flex items-center gap-4 text-xs text-zinc-500">
       <span>{workspace.members?.[0]?.role?.charAt(0).toUpperCase()+workspace.members?.[0]?.role?.slice(1)}</span>
       <span>•</span>
       <span>{`${workspace._count.members} ${workspace._count.members<2?'Member':'Members'}`}</span>
