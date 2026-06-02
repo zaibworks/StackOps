@@ -9,6 +9,9 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [shoWorkspace, setshoWorkspace] = useState(false)
+  const [showCreateModal, setshowCreateModal] = useState(true)
+  const [creating, setCreating] = useState(false)
+  const [name, setName] = useState('')
 
   const navigate = useNavigate()
   const {user} = useAuth()
@@ -30,10 +33,12 @@ const Dashboard = () => {
     fetchWorkspaces()
   }, [])
 
-  const handleLogout = ()=>{
-    localStorage.removeItem('token')
-    navigate('/login')
-  }
+  const handleLogout = () => {
+  localStorage.removeItem('token');
+  setUser(null);
+  setWorkspaces([]);
+  navigate('/login');
+};
 
   const addWorkspace = async(e)=>{
     e.preventDefault()
@@ -53,6 +58,8 @@ const Dashboard = () => {
       ])
       setName('')
       navigate(`/workspace/${response?.data?.id}`)
+      setShowCreateModal(false)
+      setError('')
     } catch (err) {
        setError(err.response?.data?.message || 'Something went wrong')
     }finally{
@@ -77,7 +84,7 @@ const Dashboard = () => {
         Welcome,
       </p>
 
-      <h2 className="mt-1 text-xl font-semibold tracking-tight text-cyan-400">
+      <h2 className="mt-1 text-xl font-semibold tracking-tight text-orange-400">
         {user?.name || "User"}
       </h2>
 
@@ -92,7 +99,7 @@ const Dashboard = () => {
 
     <button
       onClick={() => setshoWorkspace((prev) => !prev)}
-      className="flex w-full items-center justify-between rounded-xl px-3 py-1.5 text-sm text-zinc-300 transition-colors hover:bg-zinc-800/60 hover:text-zinc-200"
+      className="flex w-full items-center justify-between rounded-xl px-3 py-1.5 text-sm text-zinc-300 transition-colors hover:bg-zinc-800/60 hover:text-zinc-200 cursor-pointer"
     >
       <span className="font-medium">Workspaces</span>
 
@@ -107,14 +114,14 @@ const Dashboard = () => {
 
     {shoWorkspace && (
       <div className={`mt-2  max-h-[300px]  space-y-1 overflow-y-auto rounded-xl scrollbar-hide pl-3 transition-colors duration-300 hover:bg-zinc-900/30`}>
-        <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-500 transition-colors hover:text-zinc-300">
+        <button className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer">
           All Workspaces
         </button>
         {workspaces.map((w) => (
           <button
             key={w.id}
             onClick={() => navigate(`/workspace/${w.id}`)}
-            className="w-full truncate rounded-sm px-3 py-1.5 text-left text-zinc-500 transition-colors hover:text-zinc-300"
+            className="w-full truncate rounded-sm px-3 py-1.5 text-left text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer"
           >
             {w.name}
           </button>
@@ -123,11 +130,11 @@ const Dashboard = () => {
     )}
 
     <div className="mt-4 space-y-1">
-      <button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200">
+      <button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200 cursor-pointer">
         My Tasks
       </button>
 
-      <button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200">
+      <button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200 cursor-pointer">
         Activity
       </button>
     </div>
@@ -139,7 +146,7 @@ const Dashboard = () => {
   <div className="border-t border-zinc-800/80 pt-4">
     <button
       onClick={handleLogout}
-      className="flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-medium text-zinc-400 transition-all hover:bg-zinc-800/50 hover:text-red-400 bg-zinc-900/70"
+      className="flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-medium text-zinc-400 transition-all hover:bg-zinc-800/50 hover:text-red-400 bg-zinc-900/70 cursor-pointer"
     >
       Logout
     </button>
@@ -156,7 +163,8 @@ const Dashboard = () => {
         Manage you workspaces and track your activity
        </p>
      </div>
-<button className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 px-6 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-white"><Plus size={16}/> Create</button>
+<button  onClick={()=>setshowCreateModal(true)}
+className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 px-6 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-zinc-300/90 cursor-pointer"><Plus size={16}/> Create</button>
   </div>
 
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 rounded-2xl border border-zinc-700">
@@ -190,7 +198,7 @@ const Dashboard = () => {
       Recent Workspaces
     </h2>
 
-    <button className="text-sm text-zinc-500 transition-colors hover:text-zinc-300">
+    <button className="text-sm text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer">
       View all
     </button>
   </div>
@@ -198,8 +206,9 @@ const Dashboard = () => {
     {workspaces.slice(0, 6).map((workspace) => (
       <div
         key={workspace.id}
-        onClick={() => navigate(`/workspace/${workspace.id}`)}
-        className="flex w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-3 px-5 text-left transition-all hover:border-zinc-700 hover:bg-zinc-900/70"
+        onClick={(e) => 
+          navigate(`/workspace/${workspace.id}`)}
+        className="flex w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-3 px-5 text-left transition-all hover:border-zinc-700 hover:bg-zinc-900/70 cursor-pointer"
       >
         <div className="flex items-center gap-10">
          <h3 className="truncate text-lg font-medium text-zinc-100">
@@ -214,8 +223,8 @@ const Dashboard = () => {
     </div>
         </div>
 
-        <button
-  className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
+        <button onClick={(e)=>e.stopPropagation()}
+  className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300 cursor-pointer"
 >
   ⋮
 </button>
@@ -225,15 +234,100 @@ const Dashboard = () => {
 </div>
  </main>
       </div>
-      {/* <h1>DashBoard</h1>
-      {error && <p>{error}</p>}
-     <button onClick={handleLogout} className="bg-red-600 rounded-2xl p-2 font-bold">Logout</button>
-     <form onSubmit={addWorkspace}>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
-        <button type="submit" disabled={creating} className="bg-yellow-500 rounded-2xl p-2 font-bold">
-         {creating ? 'Creating...' : 'Create'}
+
+      {showCreateModal && (
+        <div
+       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+    onClick={() => setshowCreateModel(false)}
+  >
+    <form
+      onSubmit={addWorkspace}
+      onClick={(e) => e.stopPropagation()}
+      className="w-full max-w-2xl rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl"
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between border-b border-zinc-800 p-6">
+        <div>
+          <h2 className="text-2xl font-semibold text-zinc-100">
+            Create Workspace
+          </h2>
+
+          <p className="mt-1 text-sm text-zinc-500">
+            Create a new workspace to manage tasks, members and activity.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setshowCreateModel(false)}
+          className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
+        >
+          ✕
         </button>
-      </form> */}
+      </div>
+
+      {/* Body */}
+      <div className="space-y-6 p-6">
+        {/* Input */}
+        <div>
+          <label className="mb-2 block text-sm font-medium text-zinc-300">
+            Workspace Name
+          </label>
+
+          <input
+            type="text"
+            value={name}
+            maxLength={50}
+            placeholder="Enter workspace name..."
+            onChange={(e) => setName(e.target.value)}
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-4 py-3 outline-none transition-colors focus:border-orange-500"
+          />
+
+          <div className="mt-2 flex justify-end">
+            <span className="text-xs text-zinc-500">
+              {name.length}/50
+            </span>
+          </div>
+        </div>
+
+        {/* Helper Card */}
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-4">
+          <p className="text-sm text-zinc-400">
+            A workspace contains members, tasks and activity. You can invite
+            teammates and collaborate after creating it.
+          </p>
+        </div>
+
+        {error && (
+          <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-3">
+            <p className="text-sm text-red-400">
+              {error}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="flex justify-end gap-3 border-t border-zinc-800 p-6">
+        <button
+          type="button"
+          onClick={() => setshowCreateModel(false)}
+          className="rounded-xl px-5 py-2 text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          disabled={creating}
+          className="rounded-xl bg-zinc-100 px-6 py-2 font-medium text-zinc-900 transition-all hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {creating ? "Creating..." : "Create Workspace"}
+        </button>
+      </div>
+    </form>
+  </div>
+)}
     </div>
 
   )
