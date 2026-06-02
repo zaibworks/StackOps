@@ -2,7 +2,7 @@ import { useState,useEffect } from "react"
 import api from '../api/axios.js'
 import { useNavigate} from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
-import { Plus } from "lucide-react";
+import { Plus,X } from "lucide-react";
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
@@ -247,22 +247,16 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
     >
       {/* Header */}
       <div className="flex items-start justify-between border-b border-zinc-800 p-6">
-        <div>
           <h2 className="text-2xl font-semibold text-zinc-100">
             Create Workspace
           </h2>
-
-          <p className="mt-1 text-sm text-zinc-500">
-            Create a new workspace to manage tasks, members and activity.
-          </p>
-        </div>
 
         <button
           type="button"
           onClick={() => setshowCreateModel(false)}
           className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
         >
-          ✕
+          <X size={18}/>
         </button>
       </div>
 
