@@ -2,19 +2,19 @@ import { useState,useEffect } from "react"
 import api from '../api/axios.js'
 import { useNavigate} from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
-import { Plus,X } from "lucide-react";
+import { Plus,X,FolderKanban,CheckSquare,Activity,LogOut,MoreVertical,Users } from "lucide-react";
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [shoWorkspace, setshoWorkspace] = useState(false)
-  const [showCreateModal, setshowCreateModal] = useState(true)
+  const [showCreateModal, setshowCreateModal] = useState(false)
   const [creating, setCreating] = useState(false)
   const [name, setName] = useState('')
 
   const navigate = useNavigate()
-  const {user} = useAuth()
+  const {user,setUser} = useAuth()
 
   console.log(user)
 
@@ -101,7 +101,7 @@ const Dashboard = () => {
       onClick={() => setshoWorkspace((prev) => !prev)}
       className="flex w-full items-center justify-between rounded-xl px-3 py-1.5 text-sm text-zinc-300 transition-colors hover:bg-zinc-800/60 hover:text-zinc-200 cursor-pointer"
     >
-      <span className="font-medium">Workspaces</span>
+      <span className="font-medium flex gap-x-2 items-center"><FolderKanban size={16} />Workspaces</span>
 
       <span
         className={`text-xs text-zinc-500 transition-transform duration-200 ${
@@ -130,12 +130,12 @@ const Dashboard = () => {
     )}
 
     <div className="mt-4 space-y-1">
-      <button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200 cursor-pointer">
-        My Tasks
+      <button className="flex w-full gap-x-2 items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200 cursor-pointer">
+       <CheckSquare size={14} /> My Tasks
       </button>
 
-      <button className="flex w-full items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200 cursor-pointer">
-        Activity
+      <button className="flex w-full gap-x-2 items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200 cursor-pointer">
+        <Activity size={14} />Activity
       </button>
     </div>
 
@@ -148,6 +148,7 @@ const Dashboard = () => {
       onClick={handleLogout}
       className="flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-medium text-zinc-400 transition-all hover:bg-zinc-800/50 hover:text-red-400 bg-zinc-900/70 cursor-pointer"
     >
+      <LogOut size={16} />
       Logout
     </button>
   </div>
@@ -169,24 +170,24 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
 
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 rounded-2xl border border-zinc-700">
   <div className="rounded-2xl p-5">
-    <p className="text-sm text-zinc-500">Workspaces</p>
+    <p className="text-sm text-zinc-500"><FolderKanban size={18}/>Workspaces</p>
     <h2 className="mt-2 text-3xl font-semibold">
       {workspaces?.length}
     </h2>
   </div>
 
   <div className="rounded-2xl p-5">
-    <p className="text-sm text-zinc-500">Owned</p>
+    <p className="text-sm text-zinc-500"><Users size={18}/>Owned</p>
     <h2 className="mt-2 text-3xl font-semibold">0</h2>
   </div>
 
   <div className="rounded-2xl p-5">
-    <p className="text-sm text-zinc-500">Assigned Tasks</p>
+    <p className="text-sm text-zinc-500"><CheckSquare size={18}/>Assigned Tasks</p>
     <h2 className="mt-2 text-3xl font-semibold">0</h2>
   </div>
 
   <div className="rounded-2xl p-5">
-    <p className="text-sm text-zinc-500">Activity</p>
+    <p className="text-sm text-zinc-500"><Activity size={18}/>Activity</p>
     <h2 className="mt-2 text-3xl font-semibold">0</h2>
   </div>
 </div>
@@ -208,10 +209,10 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
         key={workspace.id}
         onClick={(e) => 
           navigate(`/workspace/${workspace.id}`)}
-        className="flex w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-3 px-5 text-left transition-all hover:border-zinc-700 hover:bg-zinc-900/70 cursor-pointer"
+        className="flex w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-3 px-5 text-left transition-all hover:bg-zinc-900/70 hover:border-orange-500/30 cursor-pointer"
       >
         <div className="flex items-center gap-10">
-         <h3 className="truncate text-lg font-medium text-zinc-100">
+         <h3 className="truncate font-semibold tracking-tight text-zinc-100">
           {workspace.name}
         </h3>
        <div className="flex items-center gap-4 text-sm text-zinc-500">
@@ -226,7 +227,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
         <button onClick={(e)=>e.stopPropagation()}
   className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300 cursor-pointer"
 >
-  ⋮
+ <MoreVertical size={18}/>
 </button>
       </div>
     ))}
@@ -286,7 +287,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
 
         {/* Helper Card */}
         <div className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-4">
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-orange-300">
             A workspace contains members, tasks and activity. You can invite
             teammates and collaborate after creating it.
           </p>
@@ -316,7 +317,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
           disabled={creating}
           className="rounded-xl bg-zinc-100 px-6 py-2 font-medium text-zinc-900 transition-all hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {creating ? "Creating..." : "Create Workspace"}
+          {creating ? "Creating..." : "Create"}
         </button>
       </div>
     </form>
