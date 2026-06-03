@@ -12,6 +12,7 @@ const Dashboard = () => {
   const [showCreateModal, setshowCreateModal] = useState(false)
   const [creating, setCreating] = useState(false)
   const [name, setName] = useState('')
+  const [activeMenu, setActiveMenu] = useState(null)
 
   const navigate = useNavigate()
   const {user,setUser} = useAuth()
@@ -254,7 +255,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
 
         <button
           type="button"
-          onClick={() => setshowCreateModel(false)}
+          onClick={() => setshowCreateModal(false)}
           className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
         >
           <X size={18}/>
