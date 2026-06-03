@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [showCreateModal, setshowCreateModal] = useState(false)
   const [creating, setCreating] = useState(false)
   const [name, setName] = useState('')
-  const [activeMenu, setActiveMenu] = useState(null)
+  const [openMenuId, setOpenMenuId] = useState(null)
 
   const navigate = useNavigate()
   const {user,setUser} = useAuth()
@@ -204,7 +204,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
       View all
     </button>
   </div>
-   <div className="max-h-[320px] overflow-y-auto scrollbar-hide space-y-3 pr-2">
+   <div className="max-h-[320px] overflow-y-auto scrollbar-hide space-y-3 pr-2 relative">
     {workspaces.slice(0, 6).map((workspace) => (
       <div
         key={workspace.id}
@@ -225,7 +225,10 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
     </div>
         </div>
 
-        <button onClick={(e)=>e.stopPropagation()}
+        <button onClick={(e)=>{
+          e.stopPropagation()
+          setOpenMenuId === workspace.id ? null :workspace.id
+        }}
   className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300 cursor-pointer"
 >
  <MoreVertical size={18}/>
