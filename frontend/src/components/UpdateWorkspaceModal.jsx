@@ -7,6 +7,7 @@ const UpdateWorkspaceModal = ({isOpen,onClose,workspace,onSuccess}) => {
      const [name, setName] = useState('')
   const [error, setError] = useState('')
   const [updating, setUpdating] = useState(false)
+  const [updating, setUpdating] = useState(false)
 
   useEffect(() => {
   if (workspace) {
@@ -15,6 +16,7 @@ const UpdateWorkspaceModal = ({isOpen,onClose,workspace,onSuccess}) => {
 }, [workspace])
 
 const updateWorkspace = async () => {
+    setUpdating(true)
   if (!name.trim()) {
     return setError("Workspace name required");
   }
@@ -39,6 +41,8 @@ const updateWorkspace = async () => {
       e.response?.data?.message ||
       "Failed to update workspace"
     );
+  }finally{
+    setUpdating(false)
   }
 }
 
