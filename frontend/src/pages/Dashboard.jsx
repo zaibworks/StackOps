@@ -2,7 +2,7 @@ import { useState,useEffect } from "react"
 import api from '../api/axios.js'
 import { useNavigate} from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
-import { Plus,X,FolderKanban,CheckSquare,Activity,LogOut,MoreVertical,Users } from "lucide-react";
+import { Plus,X,FolderKanban,CheckSquare,Activity,LogOut,MoreVertical,Users,Pencil,Trash2 } from "lucide-react";
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
@@ -204,13 +204,15 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
       View all
     </button>
   </div>
-   <div className="max-h-[320px] overflow-y-auto scrollbar-hide space-y-3 pr-2 relative">
-    {workspaces.slice(0, 6).map((workspace) => (
+   <div className="max-h-[320px] overflow-y-auto scrollbar-hide space-y-3 pr-2">
+    {workspaces.slice(0, 6).map((workspace,index) => {
+      const isNearBottom = index>= workspaces.slice(0, 6).length - 2 
+      return(
       <div
         key={workspace.id}
         onClick={(e) => 
           navigate(`/workspace/${workspace.id}`)}
-        className="flex w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-3 px-5 text-left transition-all hover:bg-zinc-900/70 hover:border-orange-500/30 cursor-pointer"
+        className="relative flex w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-3 px-5 text-left transition-all hover:bg-zinc-900/70 hover:border-orange-500/30 cursor-pointer"
       >
         <div className="flex items-center gap-10">
          <h3 className="truncate font-semibold text-base text-zinc-100">
@@ -226,15 +228,50 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
         </div>
 
         <button onClick={(e)=>{
-          e.stopPropagation()
-          setOpenMenuId === workspace.id ? null :workspace.id
+          e.stopPropagation();
+          setOpenMenuId(openMenuId === workspace.id ? null :workspace.id)
         }}
   className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300 cursor-pointer"
 >
  <MoreVertical size={18}/>
 </button>
+{
+  openMenuId === workspace.id &&(
+    <div className={`absolute right-10 z-50 w-40 text-xs rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl ${
+      isNearBottom
+        ? "bottom-10"
+        : "top-10"
+    }`}>
+{workspace.members?.[0]?.role === 'admin'?(
+<>
+    <button className="w-full px-2 py-2 text-left hover:bg-zinc-800 rounded-t-xl flex items-center gap-x-2">
+      <Pencil size={10}/>
+      Rename
+    </button>
+
+    <button className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-x-xl flex items-center gap-x-2">
+      <Trash2 size={10}/>
+      Delete
+    </button>
+
+    <button className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-b-xl flex items-center gap-x-2">
+      <LogOut size={10}/>
+      Leave
+    </button>
+</>
+):(
+  <>
+   <button className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-xl flex items-center gap-x-2">
+      <LogOut size={10}/>
+      Leave
+    </button>
+  </>
+)}
+    </div>
+  )
+}
       </div>
-    ))}
+    )})}
   </div>
 </div>
  </main>
