@@ -3,6 +3,9 @@ import api from '../api/axios.js'
 import { useNavigate} from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
 import { Plus,X,FolderKanban,CheckSquare,Activity,LogOut,MoreVertical,Users,Pencil,Trash2 } from "lucide-react";
+import UpdateWorkspaceModal from "../components/UpdateWorkspaceModal.jsx";
+import DeleteWorkspaceModal from "../components/DeleteWorkspaceModal.jsx";
+import LeaveWorkspaceModal from "../components/LeaveWorkspaceModal.jsx";
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
@@ -15,6 +18,8 @@ const Dashboard = () => {
   const [openMenuId, setOpenMenuId] = useState(null)
   const [showUpdateModal, setshowUpdateModal] = useState(false)
   const [selectedWorkspace, setSelectedWorkspace] = useState(null)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showLeaveModal, setShowLeaveModal] = useState(false)
 
   const navigate = useNavigate()
   const {user,setUser} = useAuth()
@@ -82,7 +87,18 @@ const handleWorkspaceUpdated = (updatedWorkspace) => {
         : w
     )
   )
+  setOpenMenuId(null)
 }
+const handleDeleteWorkspace = (deletedWorkspace)=>{
+  setWorkspaces(prev=>prev.filter(w=> w.id !== deletedWorkspace.id))
+}
+const handleWorkspaceLeft = (workspace) => {
+  setWorkspaces(prev =>
+    prev.filter(w => w.id !== workspace.id)
+  );
+
+  setOpenMenuId(null);
+};
 
   if (loading) return <h1>Loading...</h1>
   return (
@@ -256,30 +272,49 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
     }`}>
 {workspace.members?.[0]?.role === 'admin'?(
 <>
-    <button 
-    onClick={(e) => {
-  e.stopPropagation()
-  setSelectedWorkspace(workspace)
-  setShowUpdateModal(true)
-}}
+    <button
+  type="button"
+  onClick={(e) => {
+    e.stopPropagation()
+    setSelectedWorkspace(workspace)
+    setshowUpdateModal(true)
+  }}
     className="w-full px-2 py-2 text-left hover:bg-zinc-800 rounded-t-xl flex items-center gap-x-2">
       <Pencil size={10}/>
       Rename
     </button>
 
-    <button className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-x-xl flex items-center gap-x-2">
+    <button type="button"
+    onClick={(e)=>{
+      e.stopPropagation()
+      setSelectedWorkspace(workspace)
+        setShowDeleteModal(true)
+    }}
+    className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-x-xl flex items-center gap-x-2">
       <Trash2 size={10}/>
       Delete
     </button>
 
-    <button className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-b-xl flex items-center gap-x-2">
+<button
+    onClick={(e) => {
+  e.stopPropagation();
+  setSelectedWorkspace(workspace);
+  setShowLeaveModal(true);
+}}
+    className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-b-xl flex items-center gap-x-2">
       <LogOut size={10}/>
       Leave
     </button>
 </>
 ):(
   <>
-   <button className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-xl flex items-center gap-x-2">
+   <button 
+     onClick={(e) => {
+  e.stopPropagation();
+  setSelectedWorkspace(workspace);
+  setShowLeaveModal(true);
+}}
+   className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-xl flex items-center gap-x-2">
       <LogOut size={10}/>
       Leave
     </button>
@@ -382,7 +417,30 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
     </form>
   </div>
 )}
-    </div>
+{showUpdateModal&&(
+  <UpdateWorkspaceModal 
+  isOpen={showUpdateModal} 
+  onClose={()=>setshowUpdateModal(false)} 
+  workspace={selectedWorkspace} 
+  onSuccess={handleWorkspaceUpdated} />
+)}
+{showDeleteModal&&(
+  <DeleteWorkspaceModal
+   isOpen={showDeleteModal}
+  onClose={() => setShowDeleteModal(false)}
+  workspace={selectedWorkspace}
+  onDone={handleDeleteWorkspace}
+  />
+)}
+{showLeaveModal&&(
+  <LeaveWorkspaceModal
+  isOpen={showLeaveModal}
+  onClose={() => setShowLeaveModal(false)}
+  workspace={selectedWorkspace}
+  onDone={handleWorkspaceLeft}
+/>
+)}
+  </div>
 
   )
 }

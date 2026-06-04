@@ -1,5 +1,7 @@
 import React from 'react'
 import { X } from 'lucide-react'
+import { useState,useEffect } from 'react'
+import api from '../api/axios.js'
 
 const UpdateWorkspaceModal = ({isOpen,onClose,workspace,onSuccess}) => {
 
@@ -8,7 +10,6 @@ const UpdateWorkspaceModal = ({isOpen,onClose,workspace,onSuccess}) => {
      const [name, setName] = useState('')
   const [error, setError] = useState('')
   const [updating, setUpdating] = useState(false)
-  const [updating, setUpdating] = useState(false)
 
   useEffect(() => {
   if (workspace) {
@@ -16,7 +17,8 @@ const UpdateWorkspaceModal = ({isOpen,onClose,workspace,onSuccess}) => {
   }
 }, [workspace])
 
-const updateWorkspace = async () => {
+const updateWorkspace = async (e) => {
+  e.preventDefault()
     setUpdating(true)
   if (!name.trim()) {
     return setError("Workspace name required");
