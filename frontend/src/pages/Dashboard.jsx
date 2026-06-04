@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [name, setName] = useState('')
   const [openMenuId, setOpenMenuId] = useState(null)
   const [showUpdateModal, setshowUpdateModal] = useState(false)
+  const [selectedWorkspace, setSelectedWorkspace] = useState(null)
 
   const navigate = useNavigate()
   const {user,setUser} = useAuth()
@@ -72,6 +73,16 @@ const Dashboard = () => {
   const formatDate = (date) => {
   return new Date(date).toLocaleDateString();
 };
+
+const handleWorkspaceUpdated = (updatedWorkspace) => {
+  setWorkspaces(prev =>
+    prev.map(w =>
+      w.id === updatedWorkspace.id
+        ? updatedWorkspace
+        : w
+    )
+  )
+}
 
   if (loading) return <h1>Loading...</h1>
   return (
@@ -245,7 +256,13 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
     }`}>
 {workspace.members?.[0]?.role === 'admin'?(
 <>
-    <button className="w-full px-2 py-2 text-left hover:bg-zinc-800 rounded-t-xl flex items-center gap-x-2">
+    <button 
+    onClick={(e) => {
+  e.stopPropagation()
+  setSelectedWorkspace(workspace)
+  setShowUpdateModal(true)
+}}
+    className="w-full px-2 py-2 text-left hover:bg-zinc-800 rounded-t-xl flex items-center gap-x-2">
       <Pencil size={10}/>
       Rename
     </button>
