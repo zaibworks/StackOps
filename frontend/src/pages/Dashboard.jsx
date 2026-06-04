@@ -73,23 +73,6 @@ const Dashboard = () => {
   return new Date(date).toLocaleDateString();
 };
 
-const updateWorkspace = async (id)=>{
-  if (!name.trim()) return setError('You have to change something');
-  try{
-    const response = await api.put(`/workspace/${id}`,{
-      name
-    })
-    setWorkspaces((prev)=>prev.map((w)=>
-      w.id === id ?response.data:w
-    ))
-      setshowUpdateModal(false)
-    setError('')
-
-  }catch(e){
-     setError(e.response?.data?.message ||"Failed to update workspace");
-  }
-}
-
   if (loading) return <h1>Loading...</h1>
   return (
     <div className="min-h-screen  bg-zinc-950 text-zinc-100 overflow-hidden">
