@@ -57,7 +57,7 @@ const addTask = async(e)=>{
 
   if(loading) return <h1>Loading...</h1>
   return (
-    <div>
+    <div className='min-h-screen bg-zinc-900 text-zinc-100 p-8'>
        <h1>{workspace?.name}</h1>
        <h2>Members</h2>
        {workspace?.members?.map((m)=>(
