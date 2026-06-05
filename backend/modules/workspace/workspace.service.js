@@ -192,3 +192,7 @@ export const getWorkspacebyId = async(userId,workspaceId)=>{
 }
  })
 }
+
+export const leaveWorkspace = async(userId,workspaceId)=>{
+  
+}
