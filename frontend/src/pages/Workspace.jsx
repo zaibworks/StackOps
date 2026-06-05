@@ -17,6 +17,7 @@ const Workspace = () => {
   const [assignedToId, setAssignedToId] = useState('')
   
   const {workspaceId} = useParams()
+  const navigate = useNavigate()
 
   const fetchWorkspace = async () => {
   try {
@@ -58,7 +59,24 @@ const addTask = async(e)=>{
   if(loading) return <h1>Loading...</h1>
   return (
     <div className='min-h-screen bg-zinc-900 text-zinc-100 p-8'>
-       <h1>{workspace?.name}</h1>
+      {/* header section */}
+      <div className='mb-8 flex items-center justify-between border-b border-zinc-800 pb-6'>
+        {/* header left  */}
+          <div>
+            <button onClick={()=>navigate('/dashboard')}>← Back</button>
+            <h1>{workspace?.name}</h1>
+            <p> {workspace?.members?.length || 0} Members • {workspace?.tasks?.length || 0} Tasks</p>
+          </div>
+             {/* header right  */}
+          <div>
+                <button>Invite Member</button>
+                 <button>Add Task</button>
+          </div>
+          <div>
+
+        </div>
+      </div>
+       {/* <h1>{workspace?.name}</h1>
        <h2>Members</h2>
        {workspace?.members?.map((m)=>(
         <div key={m.id}>
@@ -97,7 +115,7 @@ const addTask = async(e)=>{
           </select>
           <button type='submit' className='bg-red-700'>Add Task</button>
       </form>
-    </div>
+    </div> */}
     </div>
   )
 }
