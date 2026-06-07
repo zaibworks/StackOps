@@ -58,9 +58,9 @@ const addTask = async(e)=>{
 
   if(loading) return <h1>Loading...</h1>
   return (
-    <div className='min-h-screen bg-zinc-900 text-zinc-100'>
+    <div className='h-screen bg-zinc-900 text-zinc-100 overflow-hidden flex flex-col'>
       {/* header section */}
-    <div className="mb-8 flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/40 px-5 py-4">
+    <div className="mb-5 flex items-center justify-between border border-zinc-800 bg-zinc-900/40 px-5 py-4">
 
   {/* Left Side */}
   <div className="flex flex-col gap-2">
@@ -124,93 +124,160 @@ const addTask = async(e)=>{
   </div>
 
 </div>
+
+
+{/* <div className="mb-2 h-px bg-gradient-to-r from-orange-500/20 via-zinc-800 to-transparent" />divider */}
+
+
 {/* stats section  */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5 mb-8 p-8">
-  
-  <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
-    <div className="flex items-center justify-between">
-      <p className="text-sm text-zinc-500">Total Tasks</p>
-      <div className="rounded-xl bg-zinc-800 p-2">
-        📋
+<div className="grid grid-cols-12 gap-5 px-5 pb-5 flex-1 min-h-0">
+
+  {/* LEFT SIDE - TASKS */}
+  <section className="col-span-8 h-full min-h-0">
+    <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 h-full overflow-hidden flex flex-col">
+
+      {/* Section Header */}
+      <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
+        <div>
+          <h2 className="text-lg font-semibold text-zinc-100">
+            Tasks
+          </h2>
+          <p className="text-sm text-zinc-500">
+            Manage all workspace tasks
+          </p>
+        </div>
+
+        <button className="rounded-xl border border-zinc-800 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800">
+          Filters
+        </button>
       </div>
+
+      {/* Tasks Area */}
+      <div className="flex-1 min-h-0 overflow-y-auto p-5 space-y-3">
+
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
+          Task Card
+        </div>
+
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
+          Task Card
+        </div>
+
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
+          Task Card
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  {/* RIGHT SIDE */}
+  <section className="col-span-4 flex flex-col gap-5 min-h-0">
+
+    {/* Stats */}
+    <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-4">
+
+  <div className="grid grid-cols-5 gap-2">
+
+    {/* Total Tasks */}
+    <div className="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-3 hover:border-zinc-700 transition-all">
+      <div className="flex items-center justify-between">
+        <p className="text-[11px] text-zinc-500">Tasks</p>
+        <div className="rounded-lg bg-zinc-800 p-2">📋</div>
+      </div>
+
+      <h2 className="mt-2 text-2xl font-semibold text-zinc-100">24</h2>
     </div>
 
-    <h2 className="mt-4 text-3xl font-semibold text-zinc-100">
-      24
-    </h2>
-
-    <p className="mt-1 text-xs text-zinc-500">
-      All workspace tasks
-    </p>
-  </div>
-
-  <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
-    <div className="flex items-center justify-between">
-      <p className="text-sm text-zinc-500">Members</p>
-      <div className="rounded-xl bg-blue-500/10 p-2">
-        👥
+    {/* Members */}
+    <div className="rounded-2xl border border-blue-500/10 bg-zinc-900/80 p-3 hover:border-blue-500/20 transition-all">
+      <div className="flex flex-col items-center justify-between">
+        <p className="text-[11px] text-zinc-500">Members</p>
+        <div className="rounded-lg bg-blue-500/10 p-2">👥</div>
       </div>
+
+      <h2 className="mt-4 text-2xl font-semibold text-zinc-100">8</h2>
     </div>
 
-    <h2 className="mt-4 text-3xl font-semibold text-zinc-100">
-      8
-    </h2>
-
-    <p className="mt-1 text-xs text-zinc-500">
-      Active collaborators
-    </p>
-  </div>
-
-  <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
-    <div className="flex items-center justify-between">
-      <p className="text-sm text-zinc-500">High Priority</p>
-      <div className="rounded-xl bg-orange-500/10 p-2">
-        ⚠️
+    {/* High Priority */}
+    <div className="rounded-2xl border border-orange-500/10 bg-zinc-900/80 p-3 hover:border-orange-500/20 transition-all">
+      <div className="flex  flex-col items-center justify-between">
+        <p className="text-[11px] text-zinc-500">Priority</p>
+        <div className="rounded-lg bg-orange-500/10 p-2">⚠️</div>
       </div>
+
+      <h2 className="mt-4 text-2xl font-semibold text-orange-400">3</h2>
     </div>
 
-    <h2 className="mt-4 text-3xl font-semibold text-zinc-100">
-      3
-    </h2>
-
-    <p className="mt-1 text-xs text-zinc-500">
-      Needs attention
-    </p>
-  </div>
-
-  <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
-    <div className="flex items-center justify-between">
-      <p className="text-sm text-zinc-500">Overdue</p>
-      <div className="rounded-xl bg-red-500/10 p-2">
-        ⏰
+    {/* Overdue */}
+    <div className="rounded-2xl border border-red-500/10 bg-zinc-900/80 p-3 hover:border-red-500/20 transition-all">
+      <div className="flex flex-col items-center justify-between">
+        <p className="text-[11px] text-zinc-500">Overdue</p>
+        <div className="rounded-lg bg-red-500/10 p-2">⏰</div>
       </div>
+
+      <h2 className="mt-4 text-2xl font-semibold text-red-400">2</h2>
     </div>
 
-    <h2 className="mt-4 text-3xl font-semibold text-zinc-100">
-      2
-    </h2>
-
-    <p className="mt-1 text-xs text-zinc-500">
-      Past due date
-    </p>
-  </div>
-
-  <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5">
-    <div className="flex items-center justify-between">
-      <p className="text-sm text-zinc-500">Unassigned</p>
-      <div className="rounded-xl bg-purple-500/10 p-2">
-        🎯
+    {/* Completed */}
+    <div className="rounded-2xl border border-emerald-500/10 bg-zinc-900/80 p-3 hover:border-emerald-500/20 transition-all">
+      <div className="flex flex-col items-center justify-between">
+        <p className="text-[11px] text-zinc-500">Completed</p>
+        <div className="rounded-lg bg-emerald-500/10 p-2">✓</div>
       </div>
+
+      <h2 className="mt-4 text-2xl font-semibold text-emerald-400">77%</h2>
     </div>
 
-    <h2 className="mt-4 text-3xl font-semibold text-zinc-100">
-      5
-    </h2>
-
-    <p className="mt-1 text-xs text-zinc-500">
-      Not assigned yet
-    </p>
   </div>
+
+</div>
+
+    {/* Members */}
+    <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 flex flex-col flex-1 min-h-0 overflow-hidden">
+
+      <div className="border-b border-zinc-800 px-5 py-4">
+        <h2 className="text-lg font-semibold text-zinc-100">
+          Members
+        </h2>
+
+        <p className="text-sm text-zinc-500">
+          Workspace collaborators
+        </p>
+      </div>
+
+      <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3">
+
+        <div className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-orange-500/20" />
+            <div>
+              <p className="text-sm font-medium">Zaib</p>
+              <p className="text-xs text-zinc-500">Admin</p>
+            </div>
+          </div>
+
+          <span className="rounded-full bg-orange-500/10 px-3 py-1 text-xs text-orange-400">
+            Owner
+          </span>
+        </div>
+
+        <div className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-zinc-700" />
+            <div>
+              <p className="text-sm font-medium">Member Name</p>
+              <p className="text-xs text-zinc-500">Member</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
 
 </div>
        {/* <h1>{workspace?.name}</h1>
