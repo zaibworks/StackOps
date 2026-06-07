@@ -3,6 +3,13 @@ import { useParams,useNavigate } from 'react-router-dom'
 import { useEffect,useState } from 'react'
 import api from '../api/axios.js'
 import TaskCard from '../components/TaskCard.jsx'
+import {
+  ListTodo,
+  Users,
+  TriangleAlert,
+  Clock3,
+  CheckCircle2
+} from "lucide-react";
 
 
 const Workspace = () => {
@@ -182,52 +189,52 @@ const addTask = async(e)=>{
 
     {/* Total Tasks */}
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-3 hover:border-zinc-700 transition-all">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4">
         <p className="text-[11px] text-zinc-500">Tasks</p>
-        <div className="rounded-lg bg-zinc-800 p-2">📋</div>
+        <div className="rounded-lg p-2"><ListTodo size={18} className="text-zinc-400" /></div>
       </div>
 
-      <h2 className="mt-2 text-2xl font-semibold text-zinc-100">24</h2>
+      <h2 className="mt-4 text-3xl font-bold text-zinc-100">24</h2>
     </div>
 
     {/* Members */}
     <div className="rounded-2xl border border-blue-500/10 bg-zinc-900/80 p-3 hover:border-blue-500/20 transition-all">
-      <div className="flex flex-col items-center justify-between">
+      <div className="flex flex-col gap-4">
         <p className="text-[11px] text-zinc-500">Members</p>
-        <div className="rounded-lg bg-blue-500/10 p-2">👥</div>
+        <div className="rounded-lg  p-2"><Users size={18} className='text-blue-500'/></div>
       </div>
 
-      <h2 className="mt-4 text-2xl font-semibold text-zinc-100">8</h2>
+      <h2 className="mt-4 text-3xl font-bold text-zinc-100">8</h2>
     </div>
 
     {/* High Priority */}
     <div className="rounded-2xl border border-orange-500/10 bg-zinc-900/80 p-3 hover:border-orange-500/20 transition-all">
-      <div className="flex  flex-col items-center justify-between">
+      <div className="flex flex-col gap-4">
         <p className="text-[11px] text-zinc-500">Priority</p>
-        <div className="rounded-lg bg-orange-500/10 p-2">⚠️</div>
+        <div className="rounded-lg  p-2"><TriangleAlert size={18} className='text-orange-500'/></div>
       </div>
 
-      <h2 className="mt-4 text-2xl font-semibold text-orange-400">3</h2>
+      <h2 className="mt-4 text-3xl font-bold text-orange-400">3</h2>
     </div>
 
     {/* Overdue */}
     <div className="rounded-2xl border border-red-500/10 bg-zinc-900/80 p-3 hover:border-red-500/20 transition-all">
-      <div className="flex flex-col items-center justify-between">
+      <div className="flex flex-col gap-4">
         <p className="text-[11px] text-zinc-500">Overdue</p>
-        <div className="rounded-lg bg-red-500/10 p-2">⏰</div>
+        <div className="rounded-lg p-2"><Clock3 size={18} className='text-red-500'/></div>
       </div>
 
-      <h2 className="mt-4 text-2xl font-semibold text-red-400">2</h2>
+      <h2 className="mt-4 text-3xl font-bold text-red-400">2</h2>
     </div>
 
     {/* Completed */}
     <div className="rounded-2xl border border-emerald-500/10 bg-zinc-900/80 p-3 hover:border-emerald-500/20 transition-all">
-      <div className="flex flex-col items-center justify-between">
+      <div className="flex flex-col gap-4">
         <p className="text-[11px] text-zinc-500">Completed</p>
-        <div className="rounded-lg bg-emerald-500/10 p-2">✓</div>
+        <div className="rounded-lg  p-2"><CheckCircle2 size={18} className='text-emerald-500'/></div>
       </div>
 
-      <h2 className="mt-4 text-2xl font-semibold text-emerald-400">77%</h2>
+      <h2 className="mt-4 text-3xl font-bold text-emerald-400">77%</h2>
     </div>
 
   </div>
