@@ -18,6 +18,7 @@ const Workspace = () => {
   const [status, setStatus] = useState('todo')
   const [dueDate, setdueDate] = useState('')
   const [assignedToId, setAssignedToId] = useState('')
+  const [openAddTask, setOpenAddTask] = useState(false)
 
 
 console.log(workspace?.tasks)
@@ -121,7 +122,7 @@ const addTask = async(e)=>{
       Invite Member
     </button>
 
-    <button
+    <button onClick={()=>setOpenAddTask(true)}
       className="rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-white cursor-pointer"
     >
       Add Task
@@ -209,8 +210,12 @@ const addTask = async(e)=>{
         {/* Due Date */}
         <span>
           {t.dueDate
-            ? new Date(t.dueDate).toLocaleDateString()
-            : "No Due Date"}
+    ? new Date(t.dueDate).toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
+    : "No Due Date"}
         </span>
 
       </div>
@@ -353,6 +358,23 @@ const addTask = async(e)=>{
           <button type='submit' className='bg-red-700'>Add Task</button>
       </form>
     </div> */}
+    {openAddTask &&(
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="w-full max-w-xl rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl">
+      <div className="border-b border-zinc-800 px-6 py-5">
+           <h2 className="text-xl font-semibold text-zinc-100">
+               Create Task
+           </h2>
+            <p className="mt-1 text-sm text-zinc-500">
+               Add a new task to this workspace
+           </p>
+      </div>
+          
+
+      </div>
+      </div>
+    )}
+
     </div>
   )
 }
