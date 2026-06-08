@@ -203,7 +203,7 @@ const addTask = async(e)=>{
 
         {/* Assignee */}
         <span>
-          {t.assignedToId?.name || "Unassigned"}
+          {t.assignedTo?.name || "Unassigned"}
         </span>
 
         {/* Due Date */}

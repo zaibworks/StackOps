@@ -1,3 +1,4 @@
+import { tr } from 'zod/v4/locales';
 import prisma from '../../src/db.js';
 
 export const createWorkspace = async (name, userId) => {
@@ -188,7 +189,17 @@ export const getWorkspacebyId = async(userId,workspaceId)=>{
     include: {
       user: {select: { id: true, name: true, email: true }}
     }},
-  tasks: {select: { id: true, title: true, status: true }}
+    tasks:{
+      include:{
+        assignedTo:{
+          select:{
+            id:true,
+            name:true,
+            email:true
+          }
+        }
+      }
+    }
 }
  })
 }
