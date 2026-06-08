@@ -102,7 +102,7 @@ const handleWorkspaceLeft = (workspace) => {
 
   if (loading) return <h1>Loading...</h1>
   return (
-    <div className="min-h-screen  bg-zinc-950 text-zinc-100 overflow-hidden">
+    <div className="h-screen  bg-zinc-950 text-zinc-100 overflow-hidden">
       <div className="flex">
      <aside className="relative flex h-screen w-64 flex-col border-r border-zinc-800 bg-zinc-900/50">
 

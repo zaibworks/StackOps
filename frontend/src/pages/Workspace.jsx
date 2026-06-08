@@ -4,14 +4,10 @@ import { useEffect,useState } from 'react'
 import api from '../api/axios.js'
 import TaskCard from '../components/TaskCard.jsx'
 import {
-  ListTodo,
-  Users,
-  TriangleAlert,
+  UserX,
   Clock3,
   CheckCircle2
 } from "lucide-react";
-
-
 const Workspace = () => {
   const [workspace, setWorkspace] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -22,6 +18,9 @@ const Workspace = () => {
   const [status, setStatus] = useState('todo')
   const [dueDate, setdueDate] = useState('')
   const [assignedToId, setAssignedToId] = useState('')
+
+
+console.log(workspace?.tasks)
   
   const {workspaceId} = useParams()
   const navigate = useNavigate()
@@ -65,7 +64,7 @@ const addTask = async(e)=>{
 
   if(loading) return <h1>Loading...</h1>
   return (
-    <div className='h-screen bg-zinc-900 text-zinc-100 overflow-hidden flex flex-col'>
+    <div className='h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col'>
       {/* header section */}
     <div className="mb-5 flex items-center justify-between border border-zinc-800 bg-zinc-900/40 px-5 py-4">
 
@@ -160,21 +159,68 @@ const addTask = async(e)=>{
       </div>
 
       {/* Tasks Area */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-5 space-y-3">
+      <div className="flex-1 min-h-0 overflow-y-auto p-5 space-y-2">
+     {workspace?.tasks?.map((t) => (
+  <div
+    key={t.id}
+    className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4 hover:border-zinc-700 transition-all cursor-pointer"
+  >
+    {/* Top Row */}
+    <div className="flex items-start justify-between">
+      <div>
+        <h3 className="font-medium text-zinc-100">
+          {t.title}
+        </h3>
 
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
-          Task Card
-        </div>
+        <p className="mt-1 text-sm text-zinc-500 line-clamp-1">
+          {t.content || "No description"}
+        </p>
+      </div>
 
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
-          Task Card
-        </div>
+      <button className="text-zinc-500 hover:text-zinc-300">
+        ⋮
+      </button>
+    </div>
 
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4">
-          Task Card
-        </div>
+    {/* Bottom Row */}
+    <div className="mt-4 flex items-center justify-between">
+
+      <div className="flex items-center gap-2">
+
+        {/* Priority */}
+        <span className="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-xs text-orange-400">
+          {t.priority}
+        </span>
+
+        {/* Status */}
+        <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-2 py-1 text-xs text-blue-400">
+          {t.status}
+        </span>
 
       </div>
+
+      <div className="flex items-center gap-4 text-xs text-zinc-500">
+
+        {/* Assignee */}
+        <span>
+          {t.assignedToId?.name || "Unassigned"}
+        </span>
+
+        {/* Due Date */}
+        <span>
+          {t.dueDate
+            ? new Date(t.dueDate).toLocaleDateString()
+            : "No Due Date"}
+        </span>
+
+      </div>
+
+    </div>
+  </div>
+))}
+</div>
+
+
 
     </div>
   </section>
@@ -185,56 +231,36 @@ const addTask = async(e)=>{
     {/* Stats */}
     <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-4">
 
-  <div className="grid grid-cols-5 gap-2">
+  <div className="grid grid-cols-3 gap-3">
 
-    {/* Total Tasks */}
-    <div className="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-3 hover:border-zinc-700 transition-all">
-      <div className="flex flex-col gap-4">
-        <p className="text-[11px] text-zinc-500">Tasks</p>
-        <div className="rounded-lg p-2"><ListTodo size={18} className="text-zinc-400" /></div>
-      </div>
-
-      <h2 className="mt-4 text-3xl font-bold text-zinc-100">24</h2>
-    </div>
-
-    {/* Members */}
-    <div className="rounded-2xl border border-blue-500/10 bg-zinc-900/80 p-3 hover:border-blue-500/20 transition-all">
-      <div className="flex flex-col gap-4">
-        <p className="text-[11px] text-zinc-500">Members</p>
-        <div className="rounded-lg  p-2"><Users size={18} className='text-blue-500'/></div>
-      </div>
-
-      <h2 className="mt-4 text-3xl font-bold text-zinc-100">8</h2>
-    </div>
-
-    {/* High Priority */}
-    <div className="rounded-2xl border border-orange-500/10 bg-zinc-900/80 p-3 hover:border-orange-500/20 transition-all">
-      <div className="flex flex-col gap-4">
-        <p className="text-[11px] text-zinc-500">Priority</p>
-        <div className="rounded-lg  p-2"><TriangleAlert size={18} className='text-orange-500'/></div>
-      </div>
-
-      <h2 className="mt-4 text-3xl font-bold text-orange-400">3</h2>
-    </div>
-
-    {/* Overdue */}
-    <div className="rounded-2xl border border-red-500/10 bg-zinc-900/80 p-3 hover:border-red-500/20 transition-all">
-      <div className="flex flex-col gap-4">
+     {/* Overdue */}
+    <div className="rounded-2xl border border-red-500/10 bg-zinc-900/80 p-3 hover:border-red-500/20 transition-all cursor-pointer">
+      <div className="flex items-center justify-between">
         <p className="text-[11px] text-zinc-500">Overdue</p>
         <div className="rounded-lg p-2"><Clock3 size={18} className='text-red-500'/></div>
       </div>
 
-      <h2 className="mt-4 text-3xl font-bold text-red-400">2</h2>
+      <h2 className="mt-2 text-2xl font-bold text-red-400">2</h2>
+    </div>
+
+    {/* UnAssigned */}
+    <div className="rounded-2xl border border-orange-500/10 bg-zinc-900/80 p-3 hover:border-orange-500/20 transition-all cursor-pointer">
+      <div className="flex items-center justify-between">
+        <p className="text-[11px] text-zinc-500">Unassigned</p>
+        <div className="rounded-lg  p-2"><UserX size={18} className='text-orange-500'/></div>
+      </div>
+
+      <h2 className="mt-2 text-2xl font-bold text-orange-400">3</h2>
     </div>
 
     {/* Completed */}
-    <div className="rounded-2xl border border-emerald-500/10 bg-zinc-900/80 p-3 hover:border-emerald-500/20 transition-all">
-      <div className="flex flex-col gap-4">
+    <div className="rounded-2xl border border-emerald-500/10 bg-zinc-900/80 p-3 hover:border-emerald-500/20 transition-all cursor-pointer">
+      <div className="flex items-center justify-between">
         <p className="text-[11px] text-zinc-500">Completed</p>
         <div className="rounded-lg  p-2"><CheckCircle2 size={18} className='text-emerald-500'/></div>
       </div>
 
-      <h2 className="mt-4 text-3xl font-bold text-emerald-400">77%</h2>
+      <h2 className="mt-2 text-2xl font-bold text-emerald-400">77%</h2>
     </div>
 
   </div>
