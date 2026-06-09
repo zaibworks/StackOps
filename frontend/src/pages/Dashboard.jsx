@@ -338,7 +338,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
     <form
       onSubmit={addWorkspace}
       onClick={(e) => e.stopPropagation()}
-      className="w-full max-w-2xl rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl"
+      className="w-full max-w-2xl rounded-3xl border border-zinc-800 backdrop-blur-lg shadow-2xl"
     >
       {/* Header */}
       <div className="flex items-start justify-between border-b border-zinc-800 p-6">

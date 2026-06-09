@@ -27,7 +27,7 @@ const DeleteWorkspaceModal = ({isOpen,onClose,workspace,onDone}) => {
 if(!isOpen) return null
   return (
    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-  <div className="w-full max-w-md rounded-3xl border border-zinc-800 bg-zinc-900 shadow-2xl">
+  <div className="w-full max-w-md rounded-3xl border border-zinc-800 backdrop-blur-2xl shadow-2xl">
 
     {/* Header */}
     <div className="border-b border-zinc-800 p-6">
