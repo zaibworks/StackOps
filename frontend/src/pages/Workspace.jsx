@@ -11,7 +11,7 @@ import {
 const Workspace = () => {
   const [workspace, setWorkspace] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+  const [error, setError] = useState("")
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [priority, setPriority] = useState('medium')
@@ -47,7 +47,7 @@ const addTask = async(e)=>{
   e.preventDefault()
   setError('')
   try {
-     const response = await api.post(`/task/${workspaceId}`,{
+     await api.post(`/task/${workspaceId}`,{
         title,
         content,
         priority,
@@ -369,7 +369,7 @@ const addTask = async(e)=>{
       </form>
     </div> */}
     {openAddTask &&(
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div  className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
         <div className='w-[60%] max-w-xl rounded-3xl border border-zinc-800 shadow-2xl backdrop-blur-lg'>
 
         
@@ -391,7 +391,7 @@ const addTask = async(e)=>{
   </button>
       </div>
 
-      <form onSubmit={addTask} className="space-y-5 p-6">
+      <form onSubmit={addTask} className="space-y-5 px-6 py-3">
         <div>
   <label className="mb-2 block text-sm text-zinc-400">Title</label>
    <input
@@ -473,15 +473,12 @@ const addTask = async(e)=>{
     className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm outline-none"
   />
 </div>
-
-      </form>
-          
-          {error && (
+ {error && (
   <p className="text-sm text-red-400">
     {error}
   </p>
 )}
-       {/* footer  */}
+     {/* footer  */}
 <div className="flex justify-end gap-3 border-t border-zinc-800 px-6 py-5">
 
 <button
@@ -502,6 +499,8 @@ disabled:cursor-not-allowed"
 </button>
 
 </div>
+
+      </form>
  
 
 
