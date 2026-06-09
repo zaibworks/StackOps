@@ -133,7 +133,10 @@ const addTask = async(e)=>{
       Invite Member
     </button>
 
-    <button onClick={()=>setOpenAddTask(true)}
+    <button onClick={()=>{
+      setOpenAddTask(true)
+      setError("")
+    } }
       className="rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-white cursor-pointer"
     >
       Add Task
@@ -385,7 +388,10 @@ const addTask = async(e)=>{
   </div>
      
   <button
- onClick={() => setOpenAddTask(false)}
+ onClick={() => {
+  setOpenAddTask(false)
+  setError("")
+ }}
  className="rounded-xl p-2 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200"
  >
     ✕
