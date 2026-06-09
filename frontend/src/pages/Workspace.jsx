@@ -63,6 +63,7 @@ const addTask = async(e)=>{
   setStatus("todo")
   setdueDate("")
   setAssignedToId("")
+   setError("")
 
   } catch (err) {
      setError(err?.response?.data?.message || 'Task creation failed')
@@ -370,10 +371,10 @@ const addTask = async(e)=>{
     </div> */}
     {openAddTask &&(
       <div  className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-        <div className='w-[60%] max-w-xl rounded-3xl border border-zinc-800 shadow-2xl backdrop-blur-lg'>
+        <div className='w-full max-w-lg rounded-3xl border border-zinc-800 shadow-2xl backdrop-blur-lg'>
 
         
-      <div className="flex items-center justify-between border-b  border-zinc-800  px-6 py-5">
+      <div className="flex items-center justify-between border-b  border-zinc-800  px-5 py-4">
           <div> 
             <h2 className="text-xl font-semibold text-zinc-100"> 
                      Create Task
@@ -391,7 +392,7 @@ const addTask = async(e)=>{
   </button>
       </div>
 
-      <form onSubmit={addTask} className="space-y-5 px-6 py-3">
+      <form onSubmit={addTask} className="space-y-4 p-5">
         <div>
   <label className="mb-2 block text-sm text-zinc-400">Title</label>
    <input
@@ -399,7 +400,7 @@ const addTask = async(e)=>{
     value={title}
     onChange={(e) => setTitle(e.target.value)}
     placeholder="Fix authentication bug"
-    className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm outline-none focus:border-zinc-600"
+    className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none focus:border-zinc-600"
   />
 </div>
 <div>
@@ -408,11 +409,11 @@ const addTask = async(e)=>{
   </label>
 
   <textarea
-    rows={4}
+    rows={3}
     value={content}
     onChange={(e) => setContent(e.target.value)}
     placeholder="Describe task..."
-    className="w-full resize-none rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm outline-none focus:border-zinc-600"
+    className="w-full resize-none rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none focus:border-zinc-600"
   />
 </div>
 {/* assignie row  */}
@@ -426,7 +427,7 @@ const addTask = async(e)=>{
   <select
     value={priority}
     onChange={(e) => setPriority(e.target.value)}
-    className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm outline-none"
+    className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none"
   >
     <option value="low">Low</option>
     <option value="medium">Medium</option>
@@ -442,7 +443,7 @@ const addTask = async(e)=>{
   <select
     value={assignedToId}
     onChange={(e) => setAssignedToId(e.target.value)}
-    className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm outline-none"
+    className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none"
   >
     <option value="">
       Unassigned
@@ -473,11 +474,13 @@ const addTask = async(e)=>{
     className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm outline-none"
   />
 </div>
- {error && (
-  <p className="text-sm text-red-400">
-    {error}
-  </p>
-)}
+<div className="h-5">
+  {error && (
+    <p className="text-sm text-red-400">
+      {error}
+    </p>
+  )}
+</div>
      {/* footer  */}
 <div className="flex justify-end gap-3 border-t border-zinc-800 px-6 py-5">
 
