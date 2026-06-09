@@ -300,22 +300,29 @@ const addTask = async(e)=>{
       </div>
 
       <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3">
-
-        <div className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
+            
+            {/* member card  */}
+            {workspace?.members?.map(member=>(
+        <div key={member.id} className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-orange-500/20" />
+            {/* <div className="h-10 w-10 rounded-full bg-orange-500/20" /> */}
+            <div className="h-10 w-10 rounded-full bg-green-800/20 flex items-center justify-center text-sm font-semibold text-white">
+  {member.user.name.charAt(0).toUpperCase()}
+</div>
             <div>
-              <p className="text-sm font-medium">Zaib</p>
-              <p className="text-xs text-zinc-500">Admin</p>
+              <p className="text-sm font-medium">{member?.user?.name}</p>
+              <p className="text-xs text-zinc-500">{member?.role}</p>
             </div>
           </div>
 
-          <span className="rounded-full bg-orange-500/10 px-3 py-1 text-xs text-orange-400">
-            Owner
+          <span className={`rounded-full  px-3 py-1 text-xs  ${member?.role==='admin'?'text-red-400 bg-red-500/10':'text-cyan-400 bg-cyan-500/10'}`}>
+            {member?.role ==='admin'?"Owner":"Member"}
           </span>
         </div>
 
-        <div className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
+            ))}
+
+        {/* <div className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-zinc-700" />
             <div>
@@ -323,7 +330,7 @@ const addTask = async(e)=>{
               <p className="text-xs text-zinc-500">Member</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
       </div>
 
