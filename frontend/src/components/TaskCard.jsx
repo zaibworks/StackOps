@@ -2,6 +2,8 @@ import React from 'react'
 import api from '../api/axios.js'
 import { useState } from 'react'
 
+import { X, Calendar, User, Flag } from "lucide-react"
+
 const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
     const [isEditing, setisEditing] = useState(false)
      const [editTitle, setEditTitle] = useState(task.title)
@@ -9,12 +11,12 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
      const [editPriority, setEditPriority] = useState(task.priority)
 
     const deleteTask = async()=>{
-      await api.delete(`/task/${workspaceId}/${task.id}`)
+      await api.delete(`/task/${workspace.id}/${task.id}`)
        await onTaskUpdate()
     }
 
     const updateTask = async()=>{
-        await api.put(`/task/${workspaceId}/${task.id}`,{
+        await api.put(`/task/${workspace.id}/${task.id}`,{
              title: editTitle,
              priority: editPriority,
            status: editStatus
@@ -24,38 +26,202 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
     }
 
   return (
-    <div>
-        {isEditing?(
-            <div>
-                <form onSubmit={updateTask}>
-                         <input type="text" placeholder='Task title' value={editTitle} onChange={(e)=>setEditTitle(e.target.value)} />
+   <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-sm">
 
-      <select value={editPriority} onChange={(e)=>setEditPriority(e.target.value)}>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-         </select>
+      <div className="h-full w-[42%] min-w-[550px] border-l border-zinc-800 bg-zinc-950 shadow-2xl">
 
-      <select value={editStatus} onChange={(e)=>setEditStatus(e.target.value)}>
-          <option value="todo">Todo</option>
-          <option value="inprogress">In-Progress</option>
-          <option value="done">Done</option>
-         </select>
+        {/* HEADER */}
 
-         <button type='Submit'>Done</button>
-                </form>
+        <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-5">
 
-<button onClick= {()=>setisEditing(false)}>Cancel</button>
+          <div>
+            <h2 className="text-xl font-semibold text-zinc-100">
+              {task.title}
+            </h2>
+
+            <p className="mt-1 text-sm text-zinc-500">
+              Task Details
+            </p>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="rounded-xl p-2 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300"
+          >
+            <X size={18} />
+          </button>
+
+        </div>
+
+        {/* BODY */}
+
+        <div className="h-[calc(100vh-90px)] overflow-y-auto p-6 space-y-6 custom-scrollbar">
+
+          {/* STATUS + PRIORITY */}
+
+          <div className="flex gap-3">
+
+            <span className="rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-xs text-orange-400">
+              {task.priority}
+            </span>
+
+            <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-xs text-blue-400">
+              {task.status}
+            </span>
+
+          </div>
+
+          {/* DESCRIPTION */}
+
+          <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5">
+
+            <h3 className="mb-3 text-sm font-medium text-zinc-300">
+              Description
+            </h3>
+
+            <p className="leading-relaxed text-sm text-zinc-500">
+              {task.content || "No description provided."}
+            </p>
+
+          </div>
+
+          <div className="rounded-3xl border border-zinc-800 bg-zinc-950/30 p-5">
+
+  <h3 className="mb-4 text-sm font-medium text-zinc-300">
+    Comments
+  </h3>
+
+  {/* Existing Comments */}
+
+  <div className="space-y-4 mb-5">
+
+    <div className="border-l border-zinc-700 pl-4">
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-medium text-zinc-200">
+          Zaib
+        </span>
+
+        <span className="text-xs text-zinc-500">
+          2 hours ago
+        </span>
+      </div>
+
+      <p className="mt-2 text-sm text-zinc-400">
+        Authentication issue seems fixed.
+      </p>
+    </div>
+
+  </div>
+
+  {/* Add Comment */}
+
+  <div className="space-y-3">
+
+    <textarea
+      rows={3}
+      placeholder="Write a comment..."
+      className="w-full resize-none rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm outline-none focus:border-zinc-700"
+    />
+
+    <div className="flex justify-end">
+
+      <button
+        className="rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-white"
+      >
+        Comment
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+          {/* META */}
+
+          <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5">
+
+            <h3 className="mb-5 text-sm font-medium text-zinc-300">
+              Details
+            </h3>
+
+            <div className="space-y-5">
+
+              <div className="flex items-center justify-between">
+
+                <div className="flex items-center gap-3 text-zinc-500">
+                  <User size={16} />
+                  <span>Assigned To</span>
+                </div>
+
+                <span className="text-sm text-zinc-200">
+                  {task.assignedTo?.name || "Unassigned"}
+                </span>
+
+              </div>
+
+              <div className="flex items-center justify-between">
+
+                <div className="flex items-center gap-3 text-zinc-500">
+                  <Calendar size={16} />
+                  <span>Due Date</span>
+                </div>
+
+                <span className="text-sm text-zinc-200">
+                  {task.dueDate
+                    ? new Date(task.dueDate).toLocaleDateString()
+                    : "No Due Date"}
+                </span>
+
+              </div>
+
+              <div className="flex items-center justify-between">
+
+                <div className="flex items-center gap-3 text-zinc-500">
+                  <Flag size={16} />
+                  <span>Priority</span>
+                </div>
+
+                <span className="text-sm text-zinc-200">
+                  {task.priority}
+                </span>
+
+              </div>
+
             </div>
-        ):(
-            <div>
-         <p>{task.title}</p>
-         <p>{task.status}</p>
-        <button onClick={deleteTask}>Delete</button>
-        <button onClick={()=>setisEditing(true)}>Edit</button>
+
+          </div>
+
+          {/* ACTIVITY */}
+
+          <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5">
+
+            <h3 className="mb-4 text-sm font-medium text-zinc-300">
+              Activity
+            </h3>
+
+            <div className="space-y-4">
+
+              <div className="border-l border-zinc-700 pl-4">
+
+                <p className="text-sm text-zinc-300">
+                  Task Created
+                </p>
+
+                <p className="text-xs text-zinc-500">
+                  {new Date(task.createdAt).toLocaleString()}
+                </p>
+
+              </div>
+
             </div>
-        )
-    }
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   )
 }
