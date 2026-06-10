@@ -81,7 +81,7 @@ const addTask = async(e)=>{
     <div className='h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col'>
     <Navbar/>
       {/* header section */}
-    <div className="mb-5 flex items-center justify-between border border-zinc-800 bg-zinc-900/40 px-5 py-4">
+    <div className="mb-5 flex items-center justify-between border border-zinc-800 bg-zinc-950/40 px-5 py-4">
 
   {/* Left Side */}
   <div className="flex flex-col gap-2">
