@@ -2,24 +2,40 @@ import React from 'react'
 import api from '../api/axios.js'
 import { useState } from 'react'
 
-import { X, Calendar, User, Flag } from "lucide-react"
+import { X, Calendar, User, Flag, PencilIcon } from "lucide-react"
 
 const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
     const [isEditing, setisEditing] = useState(false)
+
      const [editTitle, setEditTitle] = useState(task.title)
-    const [editStatus, setEditStatus] = useState(task.status)
+     const [editContent, setEditContent] = useState(task.content)
+
+     const [editDueDate, setEditDueDate] = useState(task.dueDate)
+     const [editAssignie, setEditAssignie] = useState(task.assignedTo)
      const [editPriority, setEditPriority] = useState(task.priority)
+    const [editStatus, setEditStatus] = useState(task.status)
+
+     const [isMetaEditing, setisMetaEditing] = useState(false)
 
     const deleteTask = async()=>{
       await api.delete(`/task/${workspace.id}/${task.id}`)
        await onTaskUpdate()
     }
 
-    const updateTask = async()=>{
+    const updateTaskHeader = async()=>{
         await api.put(`/task/${workspace.id}/${task.id}`,{
              title: editTitle,
+            content: editContent
+        })
+        await onTaskUpdate()
+        setisEditing(false)
+    }
+    const updateTaskMeta = async()=>{
+        await api.put(`/task/${workspace.id}/${task.id}`,{
              priority: editPriority,
-           status: editStatus
+            status: editStatus,
+            dueDate:editDueDate,
+             assignedTo: editAssignie
         })
         await onTaskUpdate()
         setisEditing(false)
@@ -44,12 +60,23 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
             </p>
           </div>
 
-          <button
-            onClick={onClose}
-            className="rounded-xl p-2 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300"
-          >
-            <X size={18} />
-          </button>
+         <div className="flex items-center gap-2">
+
+  <button
+    onClick={() => setisEditing(true)}
+    className="rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+  >
+    <PencilIcon size={14}/>
+  </button>
+
+  <button
+    onClick={onClose}
+    className="rounded-xl p-2 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300"
+  >
+    <X size={18} />
+  </button>
+
+</div>
 
         </div>
 
@@ -85,7 +112,112 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
 
           </div>
 
-          <div className="rounded-3xl border border-zinc-800 bg-zinc-950/30 p-5">
+          {/* META */}
+
+          <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5">
+
+                    <div className='flex items-center justify-between px-2 py-1'>
+            <h3 className="mb-5 text-sm font-medium text-zinc-300">
+              Details
+            </h3>
+
+            <button className='rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800'> 
+                  <PencilIcon size={14}/>
+            </button>
+                           
+
+                    </div>
+
+                           
+
+            <div className="space-y-5">
+
+              <div className="flex items-center justify-between">
+
+                <div className="flex items-center gap-3 text-zinc-500">
+                  <User size={16} />
+                  <span>Assigned To</span>
+                </div>
+
+                <span className="text-sm text-zinc-200">
+                  {task.assignedTo?.name || "Unassigned"}
+                </span>
+
+              </div>
+
+              <div className="flex items-center justify-between">
+
+                <div className="flex items-center gap-3 text-zinc-500">
+                  <Calendar size={16} />
+                  <span>Due Date</span>
+                </div>
+
+                <span className="text-sm text-zinc-200">
+                  {task.dueDate
+                    ? new Date(task.dueDate).toLocaleDateString()
+                    : "No Due Date"}
+                </span>
+
+              </div>
+
+              <div className="flex items-center justify-between">
+
+                <div className="flex items-center gap-3 text-zinc-500">
+                  <Flag size={16} />
+                  <span>Priority</span>
+                </div>
+
+                <span className="text-sm text-zinc-200">
+                  {task.priority}
+                </span>
+
+              </div>
+              <div className="flex items-center justify-between">
+
+                <div className="flex items-center gap-3 text-zinc-500">
+                  <Flag size={16} />
+                  <span>Status</span>
+                </div>
+
+                <span className="text-sm text-zinc-200">
+                  {task.status}
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* ACTIVITY */}
+
+          <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5">
+
+            <h3 className="mb-4 text-sm font-medium text-zinc-300">
+              Activity
+            </h3>
+
+            <div className="space-y-4">
+
+              <div className="border-l border-zinc-700 pl-4">
+
+                <p className="text-sm text-zinc-300">
+                  Task Created
+                </p>
+
+                <p className="text-xs text-zinc-500">
+                  {new Date(task.createdAt).toLocaleString()}
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* comments  */}
+          <div className='p-3 border-b border-zinc-800'>
+             <div className="rounded-3xl border border-zinc-800 bg-zinc-950/30 p-5">
 
   <h3 className="mb-4 text-sm font-medium text-zinc-300">
     Comments
@@ -136,87 +268,12 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
   </div>
 
 </div>
-
-          {/* META */}
-
-          <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5">
-
-            <h3 className="mb-5 text-sm font-medium text-zinc-300">
-              Details
-            </h3>
-
-            <div className="space-y-5">
-
-              <div className="flex items-center justify-between">
-
-                <div className="flex items-center gap-3 text-zinc-500">
-                  <User size={16} />
-                  <span>Assigned To</span>
-                </div>
-
-                <span className="text-sm text-zinc-200">
-                  {task.assignedTo?.name || "Unassigned"}
-                </span>
-
-              </div>
-
-              <div className="flex items-center justify-between">
-
-                <div className="flex items-center gap-3 text-zinc-500">
-                  <Calendar size={16} />
-                  <span>Due Date</span>
-                </div>
-
-                <span className="text-sm text-zinc-200">
-                  {task.dueDate
-                    ? new Date(task.dueDate).toLocaleDateString()
-                    : "No Due Date"}
-                </span>
-
-              </div>
-
-              <div className="flex items-center justify-between">
-
-                <div className="flex items-center gap-3 text-zinc-500">
-                  <Flag size={16} />
-                  <span>Priority</span>
-                </div>
-
-                <span className="text-sm text-zinc-200">
-                  {task.priority}
-                </span>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          {/* ACTIVITY */}
-
-          <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5">
-
-            <h3 className="mb-4 text-sm font-medium text-zinc-300">
-              Activity
-            </h3>
-
-            <div className="space-y-4">
-
-              <div className="border-l border-zinc-700 pl-4">
-
-                <p className="text-sm text-zinc-300">
-                  Task Created
-                </p>
-
-                <p className="text-xs text-zinc-500">
-                  {new Date(task.createdAt).toLocaleString()}
-                </p>
-
-              </div>
-
-            </div>
-
-          </div>
+</div>
+{/* delete button  */}
+<button
+ className="w-full rounded-2xl border border-red-500/20 bg-red-500/10 py-3 text-red-400 hover:bg-red-500/20">
+ Delete Task
+</button>
 
         </div>
 
