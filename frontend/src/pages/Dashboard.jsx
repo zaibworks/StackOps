@@ -6,6 +6,7 @@ import { Plus,X,FolderKanban,CheckSquare,Activity,LogOut,MoreVertical,Users,Penc
 import UpdateWorkspaceModal from "../components/UpdateWorkspaceModal.jsx";
 import DeleteWorkspaceModal from "../components/DeleteWorkspaceModal.jsx";
 import LeaveWorkspaceModal from "../components/LeaveWorkspaceModal.jsx";
+import Navbar from "../components/Navbar.jsx";
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
@@ -102,9 +103,11 @@ const handleWorkspaceLeft = (workspace) => {
 
   if (loading) return <h1>Loading...</h1>
   return (
-    <div className="h-screen  bg-zinc-950 text-zinc-100 overflow-hidden">
-      <div className="flex">
-     <aside className="relative flex h-screen w-64 flex-col border-r border-zinc-800 bg-zinc-900/50">
+    <>
+    <div className="h-screen flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
+    <Navbar/>
+      <div className="flex flex-1 overflow-hidden">
+     <aside className="relative flex w-64 flex-col border-r border-zinc-800 bg-zinc-950/50">
 
   {/* Fixed welcome */}
   <div className="px-5 pt-5">
@@ -183,7 +186,7 @@ const handleWorkspaceLeft = (workspace) => {
   </div>
 </div>
 </aside>
- <main className="flex-1 p-8 overflow-y-auto">
+ <main className="flex-1 p-8 overflow-y-auto main-scrollbar">
   <div className="flex items-center justify-between px-2 mb-8">
      <div>
        <h1 className="text-3xl font-semibold tracking-tight text-zinc-100">
@@ -441,7 +444,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
 />
 )}
   </div>
-
+ </>
   )
 }
 

@@ -8,6 +8,7 @@ import {
   Clock3,
   CheckCircle2
 } from "lucide-react";
+import Navbar from '../components/Navbar.jsx'
 const Workspace = () => {
   const [workspace, setWorkspace] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -76,7 +77,9 @@ const addTask = async(e)=>{
 
   if(loading) return <h1>Loading...</h1>
   return (
+    <>
     <div className='h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col'>
+    <Navbar/>
       {/* header section */}
     <div className="mb-5 flex items-center justify-between border border-zinc-800 bg-zinc-900/40 px-5 py-4">
 
@@ -84,7 +87,7 @@ const addTask = async(e)=>{
   <div className="flex flex-col gap-2">
 
     {/* Breadcrumb */}
-    <div className="flex items-center gap-2 text-sm">
+    {/* <div className="flex items-center gap-2 text-sm">
       <button
         onClick={() => navigate("/dashboard")}
         className="text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer"
@@ -97,7 +100,7 @@ const addTask = async(e)=>{
       <span className="text-zinc-500">
         Workspace
       </span>
-    </div>
+    </div> */}
 
     {/* Workspace Info */}
     <div className="flex items-center gap-4">
@@ -106,7 +109,7 @@ const addTask = async(e)=>{
         {workspace?.name}
       </h1>
 
-      <div className="h-5 w-px bg-zinc-800" />
+      {/* <div className="h-5 w-px bg-zinc-800" /> */}
 
       <div className="flex items-center gap-2 text-xs">
 
@@ -525,6 +528,7 @@ disabled:cursor-not-allowed"
     )}
 
     </div>
+     </>
   )
 }
 
