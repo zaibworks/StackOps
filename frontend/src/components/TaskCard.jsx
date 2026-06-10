@@ -2,7 +2,7 @@ import React from 'react'
 import api from '../api/axios.js'
 import { useState } from 'react'
 
-const TaskCard = ({task,workspaceId,onTaskUpdate}) => {
+const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
     const [isEditing, setisEditing] = useState(false)
      const [editTitle, setEditTitle] = useState(task.title)
     const [editStatus, setEditStatus] = useState(task.status)

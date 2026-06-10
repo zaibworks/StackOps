@@ -21,6 +21,7 @@ const Workspace = () => {
   const [assignedToId, setAssignedToId] = useState('')
   const [openAddTask, setOpenAddTask] = useState(false)
   const [addingTask, setAddingTask] = useState(false)
+  const [selectedTask, setSelectedTask] = useState(null)
 
 
 console.log(workspace?.tasks)
@@ -81,7 +82,7 @@ const addTask = async(e)=>{
     <div className='h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col'>
     <Navbar/>
       {/* header section */}
-    <div className="mb-5 flex items-center justify-between border border-zinc-800 bg-zinc-950/40 px-5 py-4">
+    <div className="mb-5 flex items-center justify-between border-b border-zinc-800 bg-zinc-950/40 px-5 py-4">
 
   {/* Left Side */}
   <div className="flex flex-col gap-2">
@@ -158,7 +159,7 @@ const addTask = async(e)=>{
 
   {/* LEFT SIDE - TASKS */}
   <section className="col-span-8 h-full min-h-0">
-    <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 h-full overflow-hidden flex flex-col">
+    <div className="rounded-3xl border border-zinc-800 bg-zinc-950/40 h-full overflow-hidden flex flex-col">
 
       {/* Section Header */}
       <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
@@ -181,7 +182,8 @@ const addTask = async(e)=>{
      {workspace?.tasks?.map((t) => (
   <div
     key={t.id}
-    className="rounded-2xl border border-zinc-800 bg-zinc-900 p-4 hover:border-zinc-700 transition-all cursor-pointer"
+    onClick={() => setSelectedTask(t)}
+    className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-4 hover:border-zinc-700 transition-all cursor-pointer"
   >
     {/* Top Row */}
     <div className="flex items-start justify-between">
@@ -241,22 +243,34 @@ const addTask = async(e)=>{
   </div>
 ))}
 </div>
-
-
-
     </div>
   </section>
+
+  {/* taskcard modal  */}
+  {selectedTask && (
+  <TaskCard
+    task={selectedTask}
+    workspace={workspace}
+    onClose={() => setSelectedTask(null)}
+    onTaskUpdate={fetchWorkspace}
+  />
+)}
+{/* ----------- */}
+
+
+
+
 
   {/* RIGHT SIDE */}
   <section className="col-span-4 flex flex-col gap-5 min-h-0">
 
     {/* Stats */}
-    <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-4">
+    <div className="rounded-3xl border border-zinc-800 bg-zinc-950/40 p-4">
 
   <div className="grid grid-cols-3 gap-3">
 
      {/* Overdue */}
-    <div className="rounded-2xl border border-red-500/10 bg-zinc-900/80 p-3 hover:border-red-500/20 transition-all cursor-pointer">
+    <div className="rounded-2xl border border-red-500/10 bg-zinc-900/30 p-3 hover:border-red-500/20 transition-all cursor-pointer">
       <div className="flex items-center justify-between">
         <p className="text-[11px] text-zinc-500">Overdue</p>
         <div className="rounded-lg p-2"><Clock3 size={18} className='text-red-500'/></div>
@@ -266,7 +280,7 @@ const addTask = async(e)=>{
     </div>
 
     {/* UnAssigned */}
-    <div className="rounded-2xl border border-orange-500/10 bg-zinc-900/80 p-3 hover:border-orange-500/20 transition-all cursor-pointer">
+    <div className="rounded-2xl border border-orange-500/10 bg-zinc-900/30 p-3 hover:border-orange-500/20 transition-all cursor-pointer">
       <div className="flex items-center justify-between">
         <p className="text-[11px] text-zinc-500">Unassigned</p>
         <div className="rounded-lg  p-2"><UserX size={18} className='text-orange-500'/></div>
@@ -276,7 +290,7 @@ const addTask = async(e)=>{
     </div>
 
     {/* Completed */}
-    <div className="rounded-2xl border border-emerald-500/10 bg-zinc-900/80 p-3 hover:border-emerald-500/20 transition-all cursor-pointer">
+    <div className="rounded-2xl border border-emerald-500/10 bg-zinc-900/30 p-3 hover:border-emerald-500/20 transition-all cursor-pointer">
       <div className="flex items-center justify-between">
         <p className="text-[11px] text-zinc-500">Completed</p>
         <div className="rounded-lg  p-2"><CheckCircle2 size={18} className='text-emerald-500'/></div>
@@ -290,7 +304,7 @@ const addTask = async(e)=>{
 </div>
 
     {/* Members */}
-    <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 flex flex-col flex-1 min-h-0 overflow-hidden">
+    <div className="rounded-3xl border border-zinc-800 bg-zinc-950/40 flex flex-col flex-1 min-h-0 overflow-hidden">
 
       <div className="border-b border-zinc-800 px-5 py-4">
         <h2 className="text-lg font-semibold text-zinc-100">
@@ -306,7 +320,7 @@ const addTask = async(e)=>{
             
             {/* member card  */}
             {workspace?.members?.map(member=>(
-        <div key={member.id} className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
+        <div key={member.id} className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/30 p-3">
           <div className="flex items-center gap-3">
             {/* <div className="h-10 w-10 rounded-full bg-orange-500/20" /> */}
             <div className="h-10 w-10 rounded-full bg-green-800/20 flex items-center justify-center text-sm font-semibold text-white">
