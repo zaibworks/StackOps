@@ -9,11 +9,11 @@ import { createTaskController,
 
 import {workspaceMemberMiddlware} from '../middleware/workspace.middleware.js'
 import { validate } from '../middleware/validation.middleware.js'
-import { taskSchema } from './task.schema.js'
+import { taskSchema, updateTaskSchema } from './task.schema.js'
 
 router.get('/:workspaceId',authMiddleware,workspaceMemberMiddlware,getTasksController)
 router.post('/:workspaceId',authMiddleware,validate(taskSchema,"Task creation Failed"),workspaceMemberMiddlware,createTaskController)
-router.put('/:workspaceId/:taskId',authMiddleware,validate(taskSchema,'Task updation failed'),workspaceMemberMiddlware,updateTaskController)
+router.put('/:workspaceId/:taskId',authMiddleware,validate(updateTaskSchema,'Task updation failed'),workspaceMemberMiddlware,updateTaskController)
 router.delete('/:workspaceId/:taskId',authMiddleware,workspaceMemberMiddlware,deleteTaskController)
 
 export default router 

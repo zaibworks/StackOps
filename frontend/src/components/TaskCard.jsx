@@ -165,72 +165,125 @@ custom-scrollbar
               <h3 className="mb-5 text-sm font-medium text-zinc-300">
                 Details
               </h3>
-                        
-                        {isMetaEditing?(<>
-                        <div className="flex gap-2">
-  <button
-    onClick={() => setisMetaEditing(false)}
-    className="rounded-lg px-3 py-1.5 text-xs text-zinc-400 hover:bg-zinc-800"
-  >
-    Cancel
-  </button>
 
-  <button
-    onClick={updateTaskMeta}
-    className="rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-900 hover:bg-white"
-  >
-    Save
-  </button>
-</div>
-                        </>):(
-              <button  onClick={()=>setisMetaEditing(true)}
-              className="rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800">
-                <PencilIcon size={14} />
-              </button>
-                        )}
+              {isMetaEditing ? (
+                <>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setisMetaEditing(false)}
+                      className="rounded-lg px-3 py-1.5 text-xs text-zinc-400 hover:bg-zinc-800"
+                    >
+                      Cancel
+                    </button>
+
+                    <button
+                      onClick={updateTaskMeta}
+                      className="rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-900 hover:bg-white"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <button
+                  onClick={() => setisMetaEditing(true)}
+                  className="rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+                >
+                  <PencilIcon size={14} />
+                </button>
+              )}
             </div>
 
-
             <div className="space-y-5">
+              {/* assignie  */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 text-zinc-500">
                   <User size={16} />
                   <span>Assigned To</span>
                 </div>
-
-                <span className="text-sm text-zinc-200">
-                  {task.assignedTo?.name || "Unassigned"}
-                </span>
+                {isMetaEditing ? (
+                  <select
+                    value={editAssignedToId}
+                    onChange={(e) => setEditAssignedToId(e.target.value)}
+                    className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-zinc-700"
+                  >
+                    <option value="">Unassigned</option>
+                    {workspace.members.map((member) => (
+                      <option key={member.user.id} value={member.user.id}>
+                        {member.user.name}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <span className="text-sm text-zinc-200">
+                    {task.assignedTo?.name || "Unassigned"}
+                  </span>
+                )}
               </div>
 
+              {/* due date  */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 text-zinc-500">
                   <Calendar size={16} />
                   <span>Due Date</span>
                 </div>
 
-                <span className="text-sm text-zinc-200">
-                  {task.dueDate
-                    ? new Date(task.dueDate).toLocaleDateString()
-                    : "No Due Date"}
-                </span>
+                {isMetaEditing ? (
+                  <input
+                    type="date"
+                    value={editDueDate?.split("T")[0] || ""}
+                    onChange={(e) => setEditDueDate(e.target.value)}
+                    className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-zinc-700"
+                  />
+                ) : (
+                  <span className="text-sm text-zinc-200">
+                    {task.dueDate
+                      ? new Date(task.dueDate).toLocaleDateString()
+                      : "No Due Date"}
+                  </span>
+                )}
               </div>
 
+              {/* priority  */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 text-zinc-500">
                   <Flag size={16} />
                   <span>Priority</span>
                 </div>
-
-                <span className="text-sm text-zinc-200">{task.priority}</span>
+                {isMetaEditing ? (
+                  <select
+                    value={editPriority}
+                    onChange={(e) => setEditPriority(e.target.value)}
+                    className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-zinc-700"
+                  >
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                ) : (
+                  <span className="text-sm text-zinc-200">{task.priority}</span>
+                )}
               </div>
+
+              {/* status  */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3 text-zinc-500">
                   <Flag size={16} />
                   <span>Status</span>
                 </div>
-
-                <span className="text-sm text-zinc-200">{task.status}</span>
+                {isMetaEditing ? (
+                  <select
+                    value={editStatus}
+                    onChange={(e) => setEditStatus(e.target.value)}
+                    className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-zinc-700"
+                  >
+                    <option value="todo">Todo</option>
+                    <option value="inprogress">In Progress</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                ) : (
+                  <span className="text-sm text-zinc-200">{task.status}</span>
+                )}
               </div>
             </div>
           </div>

@@ -9,3 +9,5 @@ export const taskSchema = z.object({
     status: z.enum(["todo", "inprogress", "done"]).optional().default("todo"),
     assignedToId: z.number().int().positive().optional().nullable(),
 })
+
+export const updateTaskSchema = taskSchema.partial()
