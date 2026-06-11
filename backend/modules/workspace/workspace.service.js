@@ -189,7 +189,7 @@ export const getWorkspacebyId = async(userId,workspaceId)=>{
     include: {
       user: {select: { id: true, name: true, email: true }}
     }},
-    tasks:{
+    tasks:{ orderBy:{updatedAt:'desc'},
       include:{
         assignedTo:{
           select:{

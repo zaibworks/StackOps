@@ -44,7 +44,7 @@ export const getTasks = async (workspaceId, filters, pagination) => {
       priority,
       assignedToId
     },
-    orderBy: { id: 'desc' },
+    orderBy: { updatedAt : 'desc' },
     skip,
     take: limit,
     include: {

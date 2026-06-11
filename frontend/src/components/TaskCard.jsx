@@ -36,7 +36,8 @@ const TaskCard = ({ task, workspace, onClose, onTaskUpdate }) => {
   };
 
   const updateTaskMeta = async () => {
-    await api.put(`/task/${workspace.id}/${task.id}`, {
+    try{
+       await api.put(`/task/${workspace.id}/${task.id}`, {
       priority: editPriority,
       status: editStatus,
       dueDate: editDueDate ? new Date(editDueDate).toISOString() : null,
@@ -44,6 +45,9 @@ const TaskCard = ({ task, workspace, onClose, onTaskUpdate }) => {
     });
     await onTaskUpdate();
     setisMetaEditing(false);
+    }catch(e){
+      console.log(e)
+    }
   };
 
   return (
@@ -204,7 +208,7 @@ custom-scrollbar
                 {isMetaEditing ? (
                   <select
                     value={editAssignedToId}
-                    onChange={(e) => setEditAssignedToId(e.target.value)}
+                    onChange={(e) => setEditAssignedToId(e.target.value ? Number(e.target.value) : null)}
                     className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-zinc-700"
                   >
                     <option value="">Unassigned</option>
@@ -279,7 +283,7 @@ custom-scrollbar
                   >
                     <option value="todo">Todo</option>
                     <option value="inprogress">In Progress</option>
-                    <option value="completed">Completed</option>
+                    <option value="done">Done</option>
                   </select>
                 ) : (
                   <span className="text-sm text-zinc-200">{task.status}</span>
@@ -299,6 +303,15 @@ custom-scrollbar
 
                 <p className="text-xs text-zinc-500">
                   {new Date(task.createdAt).toLocaleString()}
+                </p>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <div className="border-l border-zinc-700 pl-4">
+                <p className="text-sm text-zinc-300">Task Updated</p>
+
+                <p className="text-xs text-zinc-500">
+                  {new Date(task.updatedAt).toLocaleString()}
                 </p>
               </div>
             </div>

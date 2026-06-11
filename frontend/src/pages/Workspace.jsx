@@ -177,6 +177,12 @@ const addTask = async(e)=>{
         </button>
       </div>
 
+      {console.log(
+  workspace.tasks.map(t => ({
+    title: t.title,
+    updatedAt: t.updatedAt
+  }))
+)}
       {/* Tasks Area */}
       <div className="flex-1 min-h-0 overflow-y-auto p-5 space-y-2 custom-scrollbar">
      {workspace?.tasks?.map((t) => (

@@ -31,6 +31,9 @@ export const updateTaskController= async(req,res)=>{
    const { taskId } = req.params
    const userId = req.user.userId
    const workspaceId = parseInt(req.params.workspaceId)
+
+   console.log(req.body)
+   
    const result = await updateTask(taskId,userId,req.body,workspaceId)
    res.json({message:"Task updated successfully",data:result})
  }catch(e){
