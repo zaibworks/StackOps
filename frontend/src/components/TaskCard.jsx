@@ -47,18 +47,24 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
       <div className="h-full w-[42%] min-w-[550px] border-l border-zinc-800 bg-zinc-950 shadow-2xl">
 
         {/* HEADER */}
-        {isEditing?(
-            
-        ): 
-
-        }
 
         <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-5">
 
-          <div>
+     <div>
+                 {isEditing?(
+             <input
+      type="text"
+      value={editTitle}
+      onChange={(e) => setEditTitle(e.target.value)}
+      className="w-full rounded-xl border border-zinc-800 bg-zinc-950/80 px-3 py-2 text-xl font-semibold text-zinc-100 outline-none focus:border-zinc-700"
+    />
+                 ):(
             <h2 className="text-xl font-semibold text-zinc-100">
               {task.title}
             </h2>
+                 )
+                }
+
 
             <p className="mt-1 text-sm text-zinc-500">
               Task Details
@@ -67,12 +73,33 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
 
          <div className="flex items-center gap-2">
 
+{isEditing?(
+  <>
+  
+       <button 
+    onClick={() => setisEditing(false)}
+    className="rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+  >
+    Cancel
+  </button>
+
+       <button
+    onClick={updateTaskHeader}
+    className="rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+  >
+    Save
+  </button>
+
+
+  </>
+):(
   <button
     onClick={() => setisEditing(true)}
     className="rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
   >
     <PencilIcon size={14}/>
   </button>
+)}
 
   <button
     onClick={onClose}
@@ -82,6 +109,7 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
   </button>
 
 </div>
+
 
         </div>
 
@@ -104,7 +132,17 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
           </div>
 
           {/* DESCRIPTION */}
-
+               
+               {isEditing?(
+                    <textarea
+      rows={6}
+      value={editContent}
+      onChange={(e) => setEditContent(e.target.value)}
+      className="w-full resize-none rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm text-zinc-300 outline-none focus:border-zinc-700"
+    />
+               ):(<>
+               
+               
           <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5">
 
             <h3 className="mb-3 text-sm font-medium text-zinc-300">
@@ -116,6 +154,8 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
             </p>
 
           </div>
+               </>
+               )}
 
           {/* META */}
 
