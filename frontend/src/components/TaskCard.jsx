@@ -10,8 +10,8 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
      const [editTitle, setEditTitle] = useState(task.title)
      const [editContent, setEditContent] = useState(task.content)
 
-     const [editDueDate, setEditDueDate] = useState(task.dueDate)
-     const [editAssignie, setEditAssignie] = useState(task.assignedTo)
+     const [editDueDate, setEditDueDate] = useState(task.dueDate?new Date(task.dueDate).toISOString().split("T")[0]:"")
+   const [editAssignedToId, setEditAssignedToId] = useState(task.assignedTo?.id || "")
      const [editPriority, setEditPriority] = useState(task.priority)
     const [editStatus, setEditStatus] = useState(task.status)
 
@@ -34,11 +34,11 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
         await api.put(`/task/${workspace.id}/${task.id}`,{
              priority: editPriority,
             status: editStatus,
-            dueDate:editDueDate,
-             assignedTo: editAssignie
+            dueDate:editDueDate  ? new Date(editDueDate).toISOString()  : null,
+             assignedToId: editAssignedToId
         })
         await onTaskUpdate()
-        setisEditing(false)
+       setisMetaEditing(false)
     }
 
   return (
@@ -47,6 +47,11 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
       <div className="h-full w-[42%] min-w-[550px] border-l border-zinc-800 bg-zinc-950 shadow-2xl">
 
         {/* HEADER */}
+        {isEditing?(
+            
+        ): 
+
+        }
 
         <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-5">
 
