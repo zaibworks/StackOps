@@ -56,7 +56,15 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
       type="text"
       value={editTitle}
       onChange={(e) => setEditTitle(e.target.value)}
-      className="w-full rounded-xl border border-zinc-800 bg-zinc-950/80 px-3 py-2 text-xl font-semibold text-zinc-100 outline-none focus:border-zinc-700"
+      className="w-full
+bg-transparent
+text-xl
+font-semibold
+text-zinc-100
+outline-none
+border-b
+border-zinc-700
+pb-1"
     />
                  ):(
             <h2 className="text-xl font-semibold text-zinc-100">
@@ -78,14 +86,14 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
   
        <button 
     onClick={() => setisEditing(false)}
-    className="rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+    className="rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-red-800"
   >
     Cancel
   </button>
 
        <button
     onClick={updateTaskHeader}
-    className="rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+    className="rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-cyan-800"
   >
     Save
   </button>
@@ -138,18 +146,26 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate}) => {
       rows={6}
       value={editContent}
       onChange={(e) => setEditContent(e.target.value)}
-      className="w-full resize-none rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm text-zinc-300 outline-none focus:border-zinc-700"
+      className="w-full
+bg-transparent
+text-sm
+leading-relaxed
+text-zinc-400
+outline-none
+resize-none
+custom-scrollbar
+"
     />
                ):(<>
                
                
-          <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5">
+          <div className="rounded-3xl border border-zinc-800 bg-zinc-900/40 p-5 min-h-[220px]">
 
             <h3 className="mb-3 text-sm font-medium text-zinc-300">
               Description
             </h3>
 
-            <p className="leading-relaxed text-sm text-zinc-500">
+            <p className="leading-relaxed text-sm text-zinc-500 break-all whitespace-pre-wrap">
               {task.content || "No description provided."}
             </p>
 
