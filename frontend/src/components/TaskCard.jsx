@@ -1,10 +1,16 @@
 import React, { useEffect, useEffectEvent } from "react";
 import api from "../api/axios.js";
 import { useState} from "react";
+import { useAuth } from "../context/AuthContext.jsx";
 
 import { X, Calendar, User, Flag, PencilIcon } from "lucide-react";
 
-const TaskCard = ({ task, workspace, onClose, onTaskUpdate }) => {
+const TaskCard = ({ task, workspace, onClose, onTaskUpdate,user }) => {
+
+  const {user} = useAuth()
+
+  const currentUserId = user.id
+const currentUserRole = workspace.role
 
 const [comments,setComments] = useState([])
 const [comment,setComment] = useState("")
@@ -84,6 +90,18 @@ const addComment = async () => {
     fetchComments()
 
   }catch(err){
+    console.log(err)
+  }
+}
+
+const deleteComment = async (commentId) => {
+  try {
+    await api.delete(
+      `/comment/${workspace.id}/${task.id}/${commentId}`
+    )
+
+    fetchComments()
+  } catch (err) {
     console.log(err)
   }
 }
@@ -365,7 +383,8 @@ custom-scrollbar
               {/* Existing Comments */}
          
           {comments.map(c=>(
-
+                   
+                   
               <div key={c.id} className="space-y-4 mb-5 bg-transparent hover:bg-zinc-800/30 ">
                 <div className="flex items-center justify-between pr-4">
                           <div className="border-l border-zinc-700 pl-4">
@@ -380,9 +399,17 @@ custom-scrollbar
                   <p className="mt-2 text-sm text-zinc-400">
                     {c.content}
                   </p>
-
+            
                 </div>
-                     <button className="rounded-lg p-2 text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer">⋮</button>
+
+                     {(c.userId === currentUserId || currentUserRole === "admin") && (
+    <button
+      onClick={() => deleteComment(c.id)}
+      className="rounded-lg p-2 text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer"
+    >
+      ⋮
+    </button>
+  )}
                 </div>
 
               </div>

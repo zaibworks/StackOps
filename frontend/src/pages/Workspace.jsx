@@ -23,8 +23,6 @@ const Workspace = () => {
   const [addingTask, setAddingTask] = useState(false)
   const [selectedTask, setSelectedTask] = useState(null)
 
-
-console.log(workspace?.tasks)
   
   const {workspaceId} = useParams()
   const navigate = useNavigate()
@@ -73,7 +71,6 @@ const addTask = async(e)=>{
      setAddingTask(false)
   }
 }
-
 
 
   if(loading) return <h1>Loading...</h1>
