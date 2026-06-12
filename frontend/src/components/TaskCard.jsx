@@ -15,6 +15,8 @@ const currentUserRole = workspace.role
 const [comments,setComments] = useState([])
 const [comment,setComment] = useState("")
 
+const [openCommentMenuId, setopenCommentMenuId] = useState(null)
+
   const [isEditing, setisEditing] = useState(false);
 
   const [editTitle, setEditTitle] = useState(task.title);
@@ -402,13 +404,25 @@ custom-scrollbar
             
                 </div>
 
-                     {(c.userId === currentUserId || currentUserRole === "admin") && (
-    <button
-      onClick={() => deleteComment(c.id)}
-      className="rounded-lg p-2 text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer"
-    >
+                     {(c.userId === currentUserId || currentUserRole === "admin") && (<>
+                     <div className="relative">
+    <button onClick={() => setopenCommentMenuId( openCommentMenuId ===c.id?null:c.id)}
+       className="rounded-lg p-2 text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer">
       ⋮
     </button>
+      {openCommentMenuId === c.id && (
+    <div className="absolute right-0 top-8 z-50 min-w-[100px] rounded-xl border border-zinc-800 bg-zinc-900 p-1 shadow-xl">
+      <button
+        onClick={() => deleteComment(c.id)}
+        className="w-full rounded-lg px-3 py-2 text-left text-sm text-red-400 hover:bg-zinc-800"
+      >
+        Delete
+      </button>
+    </div>
+  )}
+
+                     </div>
+                     </>
   )}
                 </div>
 
