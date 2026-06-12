@@ -366,8 +366,9 @@ custom-scrollbar
          
           {comments.map(c=>(
 
-              <div key={c.id} className="space-y-4 mb-5">
-                <div className="border-l border-zinc-700 pl-4">
+              <div key={c.id} className="space-y-4 mb-5 bg-transparent hover:bg-zinc-800/30 ">
+                <div className="flex items-center justify-between pr-4">
+                          <div className="border-l border-zinc-700 pl-4">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-zinc-200">
                       {c.user?.name}
@@ -379,7 +380,11 @@ custom-scrollbar
                   <p className="mt-2 text-sm text-zinc-400">
                     {c.content}
                   </p>
+
                 </div>
+                     <button className="rounded-lg p-2 text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer">⋮</button>
+                </div>
+
               </div>
           ))}
 
