@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect, useEffectEvent } from "react";
 import api from "../api/axios.js";
-import { useState } from "react";
+import { useState} from "react";
 
 import { X, Calendar, User, Flag, PencilIcon } from "lucide-react";
 
 const TaskCard = ({ task, workspace, onClose, onTaskUpdate }) => {
+
+const [comments,setComments] = useState([])
+const [comment,setComment] = useState("")
+
   const [isEditing, setisEditing] = useState(false);
 
   const [editTitle, setEditTitle] = useState(task.title);
@@ -49,6 +53,40 @@ const TaskCard = ({ task, workspace, onClose, onTaskUpdate }) => {
       console.log(e)
     }
   };
+
+  const fetchComments = async () => {
+    console.log("FETCH COMMENTS CALLED")
+  try{
+    const res = await api.get(
+      `/comment/${workspace.id}/${task.id}`
+    )
+    await console.log(res.data.data)
+    setComments(res.data.data)
+  }catch(err){
+    console.log(err)
+  }
+}
+
+useEffect(() => {
+  fetchComments()
+}, [task.id])
+
+const addComment = async () => {
+  try{
+    await api.post(
+      `/comment/${workspace.id}/${task.id}`,
+      {
+        content: comment
+      }
+    )
+
+    setComment("")
+    fetchComments()
+
+  }catch(err){
+    console.log(err)
+  }
+}
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-sm">
@@ -325,22 +363,25 @@ custom-scrollbar
               </h3>
 
               {/* Existing Comments */}
+         
+          {comments.map(c=>(
 
-              <div className="space-y-4 mb-5">
+              <div key={c.id} className="space-y-4 mb-5">
                 <div className="border-l border-zinc-700 pl-4">
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-zinc-200">
-                      Zaib
+                      {c.user?.name}
                     </span>
 
-                    <span className="text-xs text-zinc-500">2 hours ago</span>
+                    <span className="text-xs text-zinc-500">{new Date(c.createdAt).toLocaleString()}</span>
                   </div>
 
                   <p className="mt-2 text-sm text-zinc-400">
-                    Authentication issue seems fixed.
+                    {c.content}
                   </p>
                 </div>
               </div>
+          ))}
 
               {/* Add Comment */}
 
@@ -348,11 +389,13 @@ custom-scrollbar
                 <textarea
                   rows={3}
                   placeholder="Write a comment..."
+                  value={comment}
+                  onChange={(e)=>setComment(e.target.value)}
                   className="w-full resize-none rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm outline-none focus:border-zinc-700"
                 />
 
                 <div className="flex justify-end">
-                  <button className="rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-white">
+                  <button onClick={addComment} className="rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-white">
                     Comment
                   </button>
                 </div>

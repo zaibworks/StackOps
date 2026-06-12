@@ -21,6 +21,10 @@ export const getComments = async(taskId)=>{
     return await prisma.comment.findMany({
         where:{
             taskId
+        },include:{
+            user:{
+                select:{id:true,name:true,email:true}
+            }
         }
     })
 }

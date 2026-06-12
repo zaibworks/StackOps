@@ -45,7 +45,7 @@ export const getMyWorkspace = async (userId)=>{
     members:{
       some:{ userId }
     }
-  },
+  },orderBy:{updatedAt:'desc'},
   include:{
     _count:{
       select:{
