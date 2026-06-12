@@ -3,14 +3,19 @@ import api from "../api/axios.js";
 import { useState} from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 
-import { X, Calendar, User, Flag, PencilIcon } from "lucide-react";
+import { X, Calendar, User, Flag, PencilIcon,Trash2 } from "lucide-react";
 
-const TaskCard = ({ task, workspace, onClose, onTaskUpdate,user }) => {
+const TaskCard = ({ task, workspace, onClose, onTaskUpdate}) => {
 
   const {user} = useAuth()
 
   const currentUserId = user.id
-const currentUserRole = workspace.role
+const currentMember = workspace.members.find(
+  member => member.userId === currentUserId
+)
+const currentUserRole = currentMember?.role
+
+console.log(currentMember)
 
 const [comments,setComments] = useState([])
 const [comment,setComment] = useState("")
@@ -99,9 +104,10 @@ const addComment = async () => {
 const deleteComment = async (commentId) => {
   try {
     await api.delete(
-      `/comment/${workspace.id}/${task.id}/${commentId}`
+      `/comment/${workspace.id}/${commentId}`
     )
-
+     
+    setopenCommentMenuId(null)
     fetchComments()
   } catch (err) {
     console.log(err)
@@ -411,12 +417,13 @@ custom-scrollbar
       ⋮
     </button>
       {openCommentMenuId === c.id && (
-    <div className="absolute right-0 top-8 z-50 min-w-[100px] rounded-xl border border-zinc-800 bg-zinc-900 p-1 shadow-xl">
+    <div className="absolute right-0 top-8 z-50 min-w-[100px] rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl">
       <button
         onClick={() => deleteComment(c.id)}
-        className="w-full rounded-lg px-3 py-2 text-left text-sm text-red-400 hover:bg-zinc-800"
+        className="w-full rounded-lg flex justify-between items-center text-left text-sm text-red-400 hover:bg-zinc-800 px-3"
       >
-        Delete
+        <Trash2 size={14}/>
+        Remove
       </button>
     </div>
   )}
