@@ -89,7 +89,7 @@ model Comment{
 
   taskId Int
   userId Int
-  task Task @relation(fields: [taskId],references: [id])
+  task Task @relation(fields: [taskId],references: [id],onDelete: Cascade)
   user User @relation(fields: [userId],references: [id])
 
   createdAt DateTime @default(now())

@@ -23,6 +23,32 @@ const Workspace = () => {
   const [addingTask, setAddingTask] = useState(false)
   const [selectedTask, setSelectedTask] = useState(null)
 
+  const [showFilters, setShowFilters] = useState(false)
+  const [filters, setFilters] = useState({
+    status: "",
+  priority: "",
+  assignedToId: ""
+  })
+
+const filteredTasks = workspace?.tasks?.filter((task) => {
+  const statusMatch =
+    !filters.status ||
+    task.status === filters.status
+
+  const priorityMatch =
+    !filters.priority ||
+    task.priority === filters.priority
+
+  const assigneeMatch =
+    !filters.assignedToId ||
+    task.assignedTo?.id === Number(filters.assignedToId)
+
+  return (
+    statusMatch &&
+    priorityMatch &&
+    assigneeMatch
+  )
+})
   
   const {workspaceId} = useParams()
   const navigate = useNavigate()
@@ -156,7 +182,7 @@ const addTask = async(e)=>{
 
   {/* LEFT SIDE - TASKS */}
   <section className="col-span-8 h-full min-h-0">
-    <div className="rounded-3xl border border-zinc-800 bg-zinc-950/40 h-full overflow-hidden flex flex-col">
+    <div className="rounded-3xl border border-zinc-800 bg-zinc-950/40 h-full overflow-hidden flex flex-col relative">
 
       {/* Section Header */}
       <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
@@ -169,9 +195,28 @@ const addTask = async(e)=>{
           </p>
         </div>
 
-        <button className="rounded-xl border border-zinc-800 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800">
+        <button onClick={()=> setShowFilters(!showFilters)}
+        className="rounded-xl border border-zinc-800 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800">
           Filters
         </button>
+
+        {showFilters && (
+  <div className="absolute right-5 top-20 w-72 rounded-2xl border border-zinc-800 bg-zinc-950 p-4 shadow-xl">
+    <select name='Status' 
+    value={filters.status} 
+    onChange={(e)=>setFilters(prev=>({
+      ...prev,status: e.target.value
+    }))}
+     className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm"
+     >
+  <option value="">All</option>
+  <option value="todo">Todo</option>
+  <option value="inprogress">In Progress</option>
+  <option value="done">Done</option>
+    </select>
+    <select name="Priority" id=""></select>
+  </div>
+)}
       </div>
 
       {console.log(
@@ -182,7 +227,7 @@ const addTask = async(e)=>{
 )}
       {/* Tasks Area */}
       <div className="flex-1 min-h-0 overflow-y-auto p-5 space-y-2 custom-scrollbar">
-     {workspace?.tasks?.map((t) => (
+     {filteredTasks.map((t) => (
   <div
     key={t.id}
     onClick={() => setSelectedTask(t)}

@@ -49,7 +49,10 @@ export const deleteTaskController= async(req,res)=>{
     const result = await deleteTask(userId,workspaceId,taskId)
     res.json(result)
    }catch(e){
-     res.status(400).json({ message: e.message })
+     console.log("DELETE ERROR:", e)
+  res.status(400).json({
+    message:e.message
+  })
 
    }
 }

@@ -15,7 +15,6 @@ const currentMember = workspace.members.find(
 )
 const currentUserRole = currentMember?.role
 
-console.log(currentMember)
 
 const [comments,setComments] = useState([])
 const [comment,setComment] = useState("")
@@ -39,8 +38,14 @@ const [openCommentMenuId, setopenCommentMenuId] = useState(null)
   const [isMetaEditing, setisMetaEditing] = useState(false);
 
   const deleteTask = async () => {
-    await api.delete(`/task/${workspace.id}/${task.id}`);
-    await onTaskUpdate();
+    try {
+      const res = await api.delete(`/task/${workspace.id}/${task.id}`);
+      await onTaskUpdate();
+       onClose()
+    } catch (e) {
+      console.log(e.response?.data)
+      
+    }
   };
 
   const updateTaskHeader = async () => {
@@ -456,7 +461,8 @@ custom-scrollbar
             </div>
           </div>
           {/* delete button  */}
-          <button className="w-full rounded-2xl border border-red-500/20 bg-red-500/10 py-3 text-red-400 hover:bg-red-500/20">
+          <button  onClick={deleteTask}
+          className="w-full rounded-2xl border border-red-500/20 bg-red-500/10 py-3 text-red-400 hover:bg-red-500/20">
             Delete Task
           </button>
         </div>
