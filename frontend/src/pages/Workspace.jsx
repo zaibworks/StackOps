@@ -23,6 +23,8 @@ const Workspace = () => {
   const [addingTask, setAddingTask] = useState(false)
   const [selectedTask, setSelectedTask] = useState(null)
 
+  const [openInviteModal, setopenInviteModal] = useState(false)
+
   const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState({
     status: "",
@@ -155,6 +157,7 @@ const addTask = async(e)=>{
   <div className="flex items-center gap-3">
 
     <button
+    onClick={()=>setOpenInviteModal(true)}
       className="rounded-xl border border-zinc-800 px-4 py-2 text-sm font-medium text-zinc-300 transition-all hover:bg-zinc-800 hover:text-zinc-100 cursor-pointer"
     >
       Invite Member
@@ -201,21 +204,84 @@ const addTask = async(e)=>{
         </button>
 
         {showFilters && (
-  <div className="absolute right-5 top-20 w-72 rounded-2xl border border-zinc-800 bg-zinc-950 p-4 shadow-xl">
-    <select name='Status' 
-    value={filters.status} 
-    onChange={(e)=>setFilters(prev=>({
-      ...prev,status: e.target.value
-    }))}
-     className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm"
-     >
-  <option value="">All</option>
-  <option value="todo">Todo</option>
-  <option value="inprogress">In Progress</option>
-  <option value="done">Done</option>
+  <div className="absolute right-5 top-20 w-72 rounded-2xl border border-zinc-800 bg-zinc-950 p-4 shadow-xl space-y-4">
+
+  {/* Status */}
+  <div>
+    <label className="mb-1 block text-xs text-zinc-500">
+      Status
+    </label>
+
+    <select
+      value={filters.status}
+      onChange={(e) =>
+        setFilters((prev) => ({
+          ...prev,
+          status: e.target.value,
+        }))
+      }
+      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm"
+    >
+      <option value="">All</option>
+      <option value="todo">Todo</option>
+      <option value="inprogress">In Progress</option>
+      <option value="done">Done</option>
     </select>
-    <select name="Priority" id=""></select>
   </div>
+
+  {/* Priority */}
+  <div>
+    <label className="mb-1 block text-xs text-zinc-500">
+      Priority
+    </label>
+
+    <select
+      value={filters.priority}
+      onChange={(e) =>
+        setFilters((prev) => ({
+          ...prev,
+          priority: e.target.value,
+        }))
+      }
+      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm"
+    >
+      <option value="">All</option>
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+  </div>
+
+  {/* Assignee */}
+  <div>
+    <label className="mb-1 block text-xs text-zinc-500">
+      Assignee
+    </label>
+
+    <select
+      value={filters.assignedToId}
+      onChange={(e) =>
+        setFilters((prev) => ({
+          ...prev,
+          assignedToId: e.target.value,
+        }))
+      }
+      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm"
+    >
+      <option value="">All</option>
+
+      {workspace?.members?.map((member) => (
+        <option
+          key={member.user.id}
+          value={member.user.id}
+        >
+          {member.user.name}
+        </option>
+      ))}
+    </select>
+  </div>
+
+</div>
 )}
       </div>
 
