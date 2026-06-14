@@ -1,21 +1,32 @@
 import React from 'react'
 import api from '../api/axios.js'
+import { useState } from 'react'
 
 const InviteModal = ({workspaceId,onClose,onInviteSuccess}) => {
   const [inviteEmail, setinviteEmail] = useState("")
-  const [inviteRole, setinviteRole] = useState("")
+  const [inviteRole, setinviteRole] = useState("member")
   const [inviteError, setinviteError] = useState("")
+  const [inviting, setInviting] = useState(false)
 
   const inviteMember = async()=>{
+    if(!inviteEmail.trim()){
+      return setinviteError("Email is required")
+    }
+    setinviteError("")
+    setInviting(true)
     try{
-         await api.post(`workspace/${workspaceId}`,{
+         await api.post(`workspace/${workspaceId}/invite`,{
           email:inviteEmail,
           role:inviteRole
          })
          onInviteSuccess()
+         setinviteEmail("")
+         setinviteRole("member")
          onClose()
     }catch(e){
-      setinviteError(e)
+      setinviteError( e?.response?.data?.message || "Invite failed")
+    }finally{
+      setInviting(false)
     }
   }
   return (
@@ -26,7 +37,7 @@ const InviteModal = ({workspaceId,onClose,onInviteSuccess}) => {
           <option value="admin">Admin</option>
           <option value="member">Member</option>
         </select>
-        <button onClick={inviteMember}>Invite</button>
+        <button disabled={inviting} onClick={inviteMember}> {inviting ? "Inviting..." : "Invite"}</button>
        </div>
     </div>
   )
