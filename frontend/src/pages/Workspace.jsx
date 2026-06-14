@@ -31,7 +31,9 @@ const Workspace = () => {
   const [filters, setFilters] = useState({
     status: "",
   priority: "",
-  assignedToId: ""
+  assignedToId: "",
+  unassigned:false,
+  overdue:false
   })
 
 const filteredTasks = workspace?.tasks?.filter((task) => {
@@ -47,10 +49,24 @@ const filteredTasks = workspace?.tasks?.filter((task) => {
     !filters.assignedToId ||
     task.assignedTo?.id === Number(filters.assignedToId)
 
+  const unassignedMatch =
+  !filters.unassigned ||
+  !task.assignedTo
+
+  const overdueMatch =
+  !filters.overdue ||
+  (
+    task.dueDate &&
+    new Date(task.dueDate) < new Date() &&
+    task.status !== "done"
+  )
+
   return (
     statusMatch &&
     priorityMatch &&
-    assigneeMatch
+    assigneeMatch &&
+    unassignedMatch &&
+    overdueMatch
   )
 })
   
@@ -102,8 +118,26 @@ const addTask = async(e)=>{
   }
 }
 
+const overdueCount = workspace?.tasks?.filter(task =>
+  task.dueDate &&
+  new Date(task.dueDate) < new Date() &&
+  task.status !== "done"
+).length || 0
+
+const unassignedCount = workspace?.tasks?.filter(task =>
+  !task.assignedTo
+).length || 0
+
+
+const totalTasks = workspace?.tasks?.length || 0
+
+const completedTasks = workspace?.tasks?.filter(task=>task.status==='done').length || 0
+
+const completedPercentage = totalTasks > 0 ? Math.round((completedTasks/totalTasks)*100):0
+
 
   if(loading) return <h1>Loading...</h1>
+
   return (
     <>
     <div className='h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col'>
@@ -391,25 +425,26 @@ const addTask = async(e)=>{
     <div className="rounded-3xl border border-zinc-800 bg-zinc-950/40 p-4">
 
   <div className="grid grid-cols-3 gap-3">
-
      {/* Overdue */}
-    <div className="rounded-2xl border border-red-500/10 bg-zinc-900/30 p-3 hover:border-red-500/20 transition-all cursor-pointer">
+    <div onClick={()=>setFilters(prev=>({...prev,overdue:!prev.overdue}))}
+    className="rounded-2xl border border-red-500/10 bg-zinc-900/30 p-3 hover:border-red-500/20 transition-all cursor-pointer">
       <div className="flex items-center justify-between">
         <p className="text-[11px] text-zinc-500">Overdue</p>
         <div className="rounded-lg p-2"><Clock3 size={18} className='text-red-500'/></div>
       </div>
 
-      <h2 className="mt-2 text-2xl font-bold text-red-400">2</h2>
+      <h2 className="mt-2 text-2xl font-bold text-red-400">{overdueCount}</h2>
     </div>
 
     {/* UnAssigned */}
-    <div className="rounded-2xl border border-orange-500/10 bg-zinc-900/30 p-3 hover:border-orange-500/20 transition-all cursor-pointer">
+    <div onClick={()=>setFilters(prev=>({...prev,unassigned: !prev.unassigned}))}
+    className="rounded-2xl border border-orange-500/10 bg-zinc-900/30 p-3 hover:border-orange-500/20 transition-all cursor-pointer">
       <div className="flex items-center justify-between">
         <p className="text-[11px] text-zinc-500">Unassigned</p>
         <div className="rounded-lg  p-2"><UserX size={18} className='text-orange-500'/></div>
       </div>
 
-      <h2 className="mt-2 text-2xl font-bold text-orange-400">3</h2>
+      <h2 className="mt-2 text-2xl font-bold text-orange-400">{unassignedCount}</h2>
     </div>
 
     {/* Completed */}
