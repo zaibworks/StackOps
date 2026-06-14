@@ -33,7 +33,7 @@ const Workspace = () => {
   priority: "",
   assignedToId: "",
   unassigned:false,
-  overdue:false
+  overdue:false,
   })
 
 const filteredTasks = workspace?.tasks?.filter((task) => {
@@ -366,12 +366,12 @@ const completedPercentage = totalTasks > 0 ? Math.round((completedTasks/totalTas
 
         {/* Priority */}
         <span className="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-xs text-orange-400">
-          {t.priority}
+          {t.priority.charAt(0).toUpperCase()+t.priority.slice(1)}
         </span>
 
         {/* Status */}
         <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-2 py-1 text-xs text-blue-400">
-          {t.status}
+          {t.status.charAt(0).toUpperCase()+t.status.slice(1)}
         </span>
 
       </div>
@@ -448,13 +448,14 @@ const completedPercentage = totalTasks > 0 ? Math.round((completedTasks/totalTas
     </div>
 
     {/* Completed */}
-    <div className="rounded-2xl border border-emerald-500/10 bg-zinc-900/30 p-3 hover:border-emerald-500/20 transition-all cursor-pointer">
+    <div 
+    className="rounded-2xl border border-emerald-500/10 bg-zinc-900/30 p-3 hover:border-emerald-500/20 transition-all cursor-pointer">
       <div className="flex items-center justify-between">
         <p className="text-[11px] text-zinc-500">Completed</p>
         <div className="rounded-lg  p-2"><CheckCircle2 size={18} className='text-emerald-500'/></div>
       </div>
 
-      <h2 className="mt-2 text-2xl font-bold text-emerald-400">77%</h2>
+      <h2 className="mt-2 text-2xl font-bold text-emerald-400">{completedPercentage}%</h2>
     </div>
 
   </div>

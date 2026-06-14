@@ -192,11 +192,11 @@ pb-1"
 
           <div className="flex gap-3">
             <span className="rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-xs text-orange-400">
-              {task.priority}
+              {task.priority.charAt(0).toUpperCase()+task.priority.slice(1)}
             </span>
 
             <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-xs text-blue-400">
-              {task.status}
+              {task.status.charAt(0).toUpperCase()+task.status.slice(1)}
             </span>
           </div>
 
@@ -334,7 +334,7 @@ custom-scrollbar
                     <option value="high">High</option>
                   </select>
                 ) : (
-                  <span className="text-sm text-zinc-200">{task.priority}</span>
+                  <span className="text-sm text-zinc-200">{task.priority.charAt(0).toUpperCase()+task.priority.slice(1)}</span>
                 )}
               </div>
 
@@ -355,7 +355,7 @@ custom-scrollbar
                     <option value="done">Done</option>
                   </select>
                 ) : (
-                  <span className="text-sm text-zinc-200">{task.status}</span>
+                  <span className="text-sm text-zinc-200">{task.status.charAt(0).toUpperCase()+task.status.slice(1)}</span>
                 )}
               </div>
             </div>
