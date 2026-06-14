@@ -6,7 +6,8 @@ import TaskCard from '../components/TaskCard.jsx'
 import {
   UserX,
   Clock3,
-  CheckCircle2
+  CheckCircle2,
+  ChevronDown
 } from "lucide-react";
 import Navbar from '../components/Navbar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
@@ -158,7 +159,7 @@ const addTask = async(e)=>{
   <div className="flex items-center gap-3">
 
     <button
-    onClick={()=>setOpenInviteModal(true)}
+    onClick={()=>setopenInviteModal(true)}
       className="rounded-xl border border-zinc-800 px-4 py-2 text-sm font-medium text-zinc-300 transition-all hover:bg-zinc-800 hover:text-zinc-100 cursor-pointer"
     >
       Invite Member
@@ -461,16 +462,6 @@ const addTask = async(e)=>{
 
             ))}
 
-        {/* <div className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-zinc-700" />
-            <div>
-              <p className="text-sm font-medium">Member Name</p>
-              <p className="text-xs text-zinc-500">Member</p>
-            </div>
-          </div>
-        </div> */}
-
       </div>
 
     </div>
@@ -478,46 +469,6 @@ const addTask = async(e)=>{
   </section>
 
 </div>
-       {/* <h1>{workspace?.name}</h1>
-       <h2>Members</h2>
-       {workspace?.members?.map((m)=>(
-        <div key={m.id}>
-          <p>{m.user.name}</p>
-          <p>{m.role}</p>
-        </div>
-       ))}
-
-         <h2>Tasks</h2>
-    {workspace?.tasks?.map((t) => (
-      <TaskCard task={t} workspaceId={workspaceId} onTaskUpdate={fetchWorkspace}/>
-    ))}
-
-    <div>
-      <form onSubmit={addTask}>
-         <input type="text" placeholder='Task title' value={title} onChange={(e)=>setTitle(e.target.value)} />
-         <input type="text" placeholder='Task content' value={content} onChange={(e)=>setContent(e.target.value)} />
-         <select value={priority} onChange={(e)=>setPriority(e.target.value)}>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-         </select>
-         <select value={status} onChange={(e)=>setStatus(e.target.value)}>
-          <option value="todo">Todo</option>
-          <option value="inprogress">In-Progress</option>
-          <option value="done">Done</option>
-         </select>
-
-         <input type="date" value={dueDate} onChange={(e) => setdueDate(e.target.value)} />
-
-         <select value={assignedToId} onChange={(e)=>setAssignedToId(e.target.value)}>
-          <option value="">Unassigned</option>
-           {workspace?.members?.map((m)=>(
-            <option key={m.user.id} value={m.user.id}>{m.user.name}</option>
-           ))}
-          </select>
-          <button type='submit' className='bg-red-700'>Add Task</button>
-      </form>
-    </div> */}
     {openAddTask &&(
       <div  className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
         <div className='w-full max-w-lg rounded-3xl border border-zinc-800 shadow-2xl backdrop-blur-lg'>
@@ -575,27 +526,32 @@ const addTask = async(e)=>{
   <label className="mb-2 block text-sm text-zinc-400">
     Priority
   </label>
-
+<div className='relative'>
   <select
     value={priority}
     onChange={(e) => setPriority(e.target.value)}
-    className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none"
+    className="w-full appearance-none rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none"
   >
     <option value="low">Low</option>
     <option value="medium">Medium</option>
     <option value="high">High</option>
   </select>
+       <ChevronDown
+    size={18}
+    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500"
+  />
+</div>
 </div>
    {/* assignedto  */}
      <div>
   <label className="mb-2 block text-sm text-zinc-400">
     Assignee
   </label>
-
+<div className='relative'>
   <select
     value={assignedToId}
     onChange={(e) => setAssignedToId(e.target.value)}
-    className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none"
+    className="w-full rounded-2xl appearance-none border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none"
   >
     <option value="">
       Unassigned
@@ -610,6 +566,13 @@ const addTask = async(e)=>{
       </option>
     ))}
   </select>
+
+    <ChevronDown
+    size={18}
+    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500"
+  />
+
+</div>
 </div>
 </div>
 
