@@ -225,7 +225,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
 </div>
 
 {/* Recent Workspaces */}
-<div className="mt-8">
+<div className="mt-8 relative">
   <div className="mb-4 flex items-center justify-between">
     <h2 className="text-xl font-semibold text-zinc-100">
       Recent Workspaces
@@ -235,7 +235,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
       View all
     </button>
   </div>
-   <div className="max-h-[320px] overflow-y-auto scrollbar-hide space-y-3 pr-2">
+   <div className="max-h-[320px] overflow-visible scrollbar-hide space-y-3 pr-2">
     {workspaces.slice(0, 6).map((workspace,index) => {
       const isNearBottom = index>= workspaces.slice(0, 6).length - 2 
       return(
@@ -243,7 +243,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
         key={workspace.id}
         onClick={(e) => 
           navigate(`/workspace/${workspace.id}`)}
-        className="relative flex w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-3 px-5 text-left transition-all hover:bg-zinc-900/70 hover:border-orange-500/30 cursor-pointer"
+        className="flex relative w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-3 px-5 text-left transition-all hover:bg-zinc-900/70 hover:border-orange-500/30 cursor-pointer"
       >
         <div className="flex items-center gap-10">
          <h3 className="truncate font-semibold text-base text-zinc-100">
@@ -268,7 +268,7 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
 </button>
 {
   openMenuId === workspace.id &&(
-    <div className={`absolute right-10 z-50 w-40 text-xs rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl ${
+    <div className={`absolute right-15 z-200 w-40 text-xs rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl ${
       isNearBottom
         ? "bottom-10"
         : "top-10"
