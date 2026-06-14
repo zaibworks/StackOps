@@ -9,6 +9,7 @@ import {
   CheckCircle2
 } from "lucide-react";
 import Navbar from '../components/Navbar.jsx'
+import InviteModal from '../components/InviteModal.jsx'
 const Workspace = () => {
   const [workspace, setWorkspace] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -178,6 +179,13 @@ const addTask = async(e)=>{
 
 
 {/* <div className="mb-2 h-px bg-gradient-to-r from-orange-500/20 via-zinc-800 to-transparent" />divider */}
+{openInviteModal&&(
+  <InviteModal
+  workspaceId={workspaceId}
+  onClose={()=>setopenInviteModal(false)}
+  onInviteSuccess={fetchWorkspace}
+  />
+)}
 
 
 {/* stats section  */}
