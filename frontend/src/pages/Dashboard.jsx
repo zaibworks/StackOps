@@ -235,15 +235,15 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
       View all
     </button>
   </div>
-   <div className="max-h-[320px] overflow-visible scrollbar-hide space-y-3 pr-2">
-    {workspaces.slice(0, 6).map((workspace,index) => {
-      const isNearBottom = index>= workspaces.slice(0, 6).length - 2 
+   <div className="h-[240px] overflow-visible scrollbar-hide space-y-3 pr-2">
+    {workspaces.slice(0, 3).map((workspace,index) => {
+      const isNearBottom = index>= workspaces.slice(0, 3).length - 2 
       return(
       <div
         key={workspace.id}
         onClick={(e) => 
           navigate(`/workspace/${workspace.id}`)}
-        className="flex relative w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-3 px-5 text-left transition-all hover:bg-zinc-900/70 hover:border-orange-500/30 cursor-pointer"
+        className="flex relative w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-4.5 px-5 text-left transition-all hover:bg-zinc-900/70 hover:border-orange-500/30 cursor-pointer"
       >
         <div className="flex items-center gap-10">
          <h3 className="truncate font-semibold text-base text-zinc-100">

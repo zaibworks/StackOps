@@ -7,7 +7,9 @@ import {
   UserX,
   Clock3,
   CheckCircle2,
-  ChevronDown
+  ChevronDown,
+  Pencil,
+  Trash2
 } from "lucide-react";
 import Navbar from '../components/Navbar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
@@ -24,6 +26,9 @@ const Workspace = () => {
   const [openAddTask, setOpenAddTask] = useState(false)
   const [addingTask, setAddingTask] = useState(false)
   const [selectedTask, setSelectedTask] = useState(null)
+
+  const [openTaskMenuId, setopenTaskMenuId] = useState(null)
+  const [editMode, seteditMode] = useState(false)
 
   const [openInviteModal, setopenInviteModal] = useState(false)
 
@@ -135,6 +140,33 @@ const completedTasks = workspace?.tasks?.filter(task=>task.status==='done').leng
 
 const completedPercentage = totalTasks > 0 ? Math.round((completedTasks/totalTasks)*100):0
 
+
+const handleEdit =(task)=>{
+  seteditMode(true)
+  setSelectedTask(task)
+}
+
+const handleClose =()=>{
+  seteditMode(false)
+  setSelectedTask(null)
+}
+
+const handleDelete = async (task) => {
+  try {
+    await api.delete(`/task/${workspace.id}/${task.id}`)
+
+    await fetchWorkspace()
+
+    setopenTaskMenuId(null)
+
+    if (selectedTask?.id === task.id) {
+      setSelectedTask(null)
+    }
+
+  } catch (err) {
+    console.log(err)
+  }
+}
 
   if(loading) return <h1>Loading...</h1>
 
@@ -336,7 +368,11 @@ const completedPercentage = totalTasks > 0 ? Math.round((completedTasks/totalTas
 )}
       {/* Tasks Area */}
       <div className="flex-1 min-h-0 overflow-y-auto p-5 space-y-2 custom-scrollbar">
-     {filteredTasks.map((t) => (
+     {filteredTasks.map((t,index) => {
+      const isNearBottom =
+  filteredTasks.length > 3 &&
+  index >= filteredTasks.length - 2
+      return(
   <div
     key={t.id}
     onClick={() => setSelectedTask(t)}
@@ -353,10 +389,56 @@ const completedPercentage = totalTasks > 0 ? Math.round((completedTasks/totalTas
           {t.content || "No description"}
         </p>
       </div>
-
-      <button className="text-zinc-500 hover:text-zinc-300">
+          <div className='relative'>
+      <button onClick={(e)=>{
+  e.stopPropagation()
+  setopenTaskMenuId(
+    openTaskMenuId === t.id
+      ? null
+      : t.id
+  )
+}}
+      className="text-zinc-500 hover:text-zinc-300">
         ⋮
       </button>
+      {openTaskMenuId ===t.id&&(
+         <div
+  className={`absolute right-0 z-50 w-40 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl ${
+    isNearBottom
+      ? "bottom-8"
+      : "top-8"
+  }`}
+>
+            <button
+        onClick={() => handleEdit(t)}
+        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+      >
+        <Pencil size={14} />
+        Edit
+      </button>
+            <button
+        onClick={() => handleStatus(t)}
+        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+      >
+        <Pencil size={14} />
+        Change status
+      </button>
+
+        <button
+        onClick={(e) => {e.stopPropagation() 
+          handleDelete(t)
+
+        }}
+        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-zinc-800"
+      >
+        <Trash2 size={14} />
+        Delete
+      </button>
+
+         </div>
+      )}
+          </div>
+
     </div>
 
     {/* Bottom Row */}
@@ -398,7 +480,7 @@ const completedPercentage = totalTasks > 0 ? Math.round((completedTasks/totalTas
 
     </div>
   </div>
-))}
+)})}
 </div>
     </div>
   </section>
@@ -408,8 +490,9 @@ const completedPercentage = totalTasks > 0 ? Math.round((completedTasks/totalTas
   <TaskCard
     task={selectedTask}
     workspace={workspace}
-    onClose={() => setSelectedTask(null)}
+    onClose={handleClose}
     onTaskUpdate={fetchWorkspace}
+    startInEditMode={editMode}
   />
 )}
 {/* ----------- */}

@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 
 import { X, Calendar, User, Flag, PencilIcon,Trash2 } from "lucide-react";
 
-const TaskCard = ({ task, workspace, onClose, onTaskUpdate}) => {
+const TaskCard = ({ task, workspace, onClose, onTaskUpdate,startInEditMode}) => {
 
   const {user} = useAuth()
 
@@ -21,7 +21,7 @@ const [comment,setComment] = useState("")
 
 const [openCommentMenuId, setopenCommentMenuId] = useState(null)
 
-  const [isEditing, setisEditing] = useState(false);
+  const [isEditing, setisEditing] = useState(startInEditMode||false);
 
   const [editTitle, setEditTitle] = useState(task.title);
   const [editContent, setEditContent] = useState(task.content);
@@ -35,7 +35,7 @@ const [openCommentMenuId, setopenCommentMenuId] = useState(null)
   const [editPriority, setEditPriority] = useState(task.priority);
   const [editStatus, setEditStatus] = useState(task.status);
 
-  const [isMetaEditing, setisMetaEditing] = useState(false);
+  const [isMetaEditing, setisMetaEditing] = useState(startInEditMode||false);
 
   const deleteTask = async () => {
     try {
