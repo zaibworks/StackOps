@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Navbar from '../components/Navbar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
+import MemberCard from '../components/MemberCard.jsx'
 const Workspace = () => {
   const [workspace, setWorkspace] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -26,11 +27,13 @@ const Workspace = () => {
   const [openAddTask, setOpenAddTask] = useState(false)
   const [addingTask, setAddingTask] = useState(false)
   const [selectedTask, setSelectedTask] = useState(null)
+  const [selectedMember, setSelectedMember] = useState(null)
 
   const [openTaskMenuId, setopenTaskMenuId] = useState(null)
   const [editMode, seteditMode] = useState(false)
 
   const [openInviteModal, setopenInviteModal] = useState(false)
+  const [newStatus, setNewStatus] = useState("")
 
   const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState({
@@ -153,7 +156,7 @@ const handleClose =()=>{
 
 const handleDelete = async (task) => {
   try {
-    await api.delete(`/task/${workspace.id}/${task.id}`)
+    await api.delete(`/task/${workspaceId}/${task.id}`)
 
     await fetchWorkspace()
 
@@ -162,6 +165,20 @@ const handleDelete = async (task) => {
     if (selectedTask?.id === task.id) {
       setSelectedTask(null)
     }
+
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const handleStatus = async (taskId,status) => {
+  console.log(taskId,status)
+  try {
+    await api.put(`/task/${workspaceId}/${taskId}`, {
+      status
+    })
+
+    await fetchWorkspace()
 
   } catch (err) {
     console.log(err)
@@ -416,13 +433,17 @@ const handleDelete = async (task) => {
         <Pencil size={14} />
         Edit
       </button>
-            <button
-        onClick={() => handleStatus(t)}
+
+            <select
+        onClick={(e) =>{
+          e.stopPropagation()
+        }} value={newStatus} onChange={(e)=>{handleStatus(t.id,e.target.value)}}
         className="flex w-full items-center gap-2 px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
       >
-        <Pencil size={14} />
-        Change status
-      </button>
+        <option value="todo">Todo</option>
+        <option value="inprogress">Inprogress</option>
+        <option value="done">Done</option>
+      </select>
 
         <button
         onClick={(e) => {e.stopPropagation() 
@@ -562,7 +583,7 @@ const handleDelete = async (task) => {
             
             {/* member card  */}
             {workspace?.members?.map(member=>(
-        <div key={member.id} className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/30 p-3">
+        <div onClick={()=>setSelectedMember(member)} key={member.id} className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/30 p-3">
           <div className="flex items-center gap-3">
             {/* <div className="h-10 w-10 rounded-full bg-orange-500/20" /> */}
             <div className="h-10 w-10 rounded-full bg-green-800/20 flex items-center justify-center text-sm font-semibold text-white">
@@ -588,6 +609,18 @@ const handleDelete = async (task) => {
   </section>
 
 </div>
+
+{/* member card  */}
+{selectedMember &&(
+  <MemberCard
+  member={selectedMember}
+  workspace={workspace}
+  onClose={()=>setSelectedMember(null)}
+  onMemberUpdate={fetchWorkspace}
+  />
+)}
+
+{/*  */}
     {openAddTask &&(
       <div  className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
         <div className='w-full max-w-lg rounded-3xl border border-zinc-800 shadow-2xl backdrop-blur-lg'>
