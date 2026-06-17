@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { Settings,Pin,TrashIcon } from 'lucide-react'
 import { useAuth } from '../context/AuthContext.jsx'
+import api from '../api/axios.js'
 
 
 

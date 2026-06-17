@@ -71,11 +71,15 @@ model Workspace{
   updatedAt DateTime @default(now()) @updatedAt
 }
 
+enum Role{
+  admin
+  member
+}
 model Membership{
 id Int @id @default(autoincrement())
 userId Int
 workspaceId Int
-role String
+role Role @default(member)
 
 user User @relation(fields: [userId],references: [id])
 workspace Workspace @relation(fields: [workspaceId],references: [id])

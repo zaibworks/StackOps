@@ -1,5 +1,6 @@
 import { tr } from 'zod/v4/locales';
 import prisma from '../../src/db.js';
+import { isValidBase64 } from 'zod/v4/core';
 
 export const createWorkspace = async (name, userId) => {
   const existingWorkspace =
@@ -205,5 +206,59 @@ export const getWorkspacebyId = async(userId,workspaceId)=>{
 }
 
 export const leaveWorkspace = async(userId,workspaceId)=>{
-  
+        const membership = await prisma.membership.findFirst({
+          where:{
+            workspaceId:workspaceId,
+            userId:userId
+          }
+        })
+
+        const isAdmin = membership.role ==='admin'
+        const adminCount =
+  await prisma.membership.count({
+    where:{
+      workspaceId:Number(workspaceId),
+      role:"admin"
+    }
+  })
+
+        if(!membership){
+    throw new Error(
+      "You are not a member"
+    )
+  }
+  if(adminCount && isAdmin ===1){
+    throw new Error('Transfer ownsership before leaving')
+  }
+
+   return await prisma.membership.delete({
+    where:{
+     id: membership.id
+    }
+   })
+}
+
+export const changeMemberRole = async(memberId,adminId,workspaceId,role)=>{
+         const admin = await prisma.membership.findFirst({
+          where:{
+            userId:adminId,
+            workspaceId:workspaceId,
+            role:'admin'
+          }
+         })
+          if(!admin){
+    throw new Error('Not allowed: You are not the admin')
+  }else if(adminId === memberId){
+    throw new Error('You can not chagne your own role')
+  }
+
+  await prisma.membership.updateMany({
+    where:{
+    userId:memberId,
+    workspaceId:workspaceId
+    },data:{
+      role:role
+    }
+  })
+
 }
