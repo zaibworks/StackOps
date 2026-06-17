@@ -1,5 +1,14 @@
 import prisma from "../../src/db.js";
-import { createWorkspace,getMyWorkspace,inviteMember,getWorkspaceMembers,removeMember,updateWorkspace,getWorkspacebyId } from "./workspace.service.js";
+import { createWorkspace,
+    getMyWorkspace,
+    inviteMember,
+    getWorkspaceMembers,
+    removeMember,
+    updateWorkspace,
+    getWorkspacebyId,
+    leaveWorkspace,
+    changeMemberRole
+ } from "./workspace.service.js";
 
 export const createWorkspaceController= async(req,res)=>{
     try{
@@ -83,6 +92,30 @@ export const getWorkspacebyIdController =async(req,res)=>{
     const workspace = await getWorkspacebyId(userId,workspaceId)
     res.json({message:"Workspace fetched successfully",data:workspace})
     }catch(e){
+        res.status(500).json({message:e.message})
+    }
+}
+
+export const leaveWorkspaceController=async(req,res)=>{
+       try {
+        const workspaceId =parseInt(req.params.workspaceId)
+        const userId = req.user.userId
+        const leave = await leaveWorkspace(userId,workspaceId)
+        res.json({message:e.message})
+       } catch (e) {
+         res.status(500).json({message:e.message})
+       }
+}
+
+export const changeMemberRoleController = async(req,res)=>{
+    try {
+        const memberId = parseInt(req.params.memberId)
+        const adminId = req.user.userId
+        const workspaceId = parseInt(req.params.workspaceId)
+        const {role} = req.body
+        const member = changeMemberRole(memberId,adminId,workspaceId,role)
+         res.json({message:"Role changed successfully",data:member})
+    } catch (e) {
         res.status(500).json({message:e.message})
     }
 }
