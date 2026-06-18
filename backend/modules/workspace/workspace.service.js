@@ -227,7 +227,7 @@ export const leaveWorkspace = async(userId,workspaceId)=>{
       "You are not a member"
     )
   }
-  if(adminCount && isAdmin ===1){
+  if(isAdmin && adminCount === 1){
     throw new Error('Transfer ownsership before leaving')
   }
 
@@ -254,7 +254,7 @@ export const changeMemberRole = async(memberId,adminId,workspaceId,role)=>{
 
   await prisma.membership.updateMany({
     where:{
-    userId:memberId,
+    id:memberId,
     workspaceId:workspaceId
     },data:{
       role:role

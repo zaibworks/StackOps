@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { Settings,Pin,TrashIcon } from 'lucide-react'
+import { Settings,Pin,TrashIcon,Circle} from 'lucide-react'
 import { useAuth } from '../context/AuthContext.jsx'
 import api from '../api/axios.js'
 
@@ -12,6 +12,7 @@ const MemberCard = ({member,workspace,onClose,onMemberUpdate}) => {
 
  const [role, setRole] = useState(member.role)
  const [isEditingRole, setIsEditingRole] = useState(false)
+ const [isRoleModalOpen, setisRoleModalOpen] = useState(false)
 
 const currentUserRole =
   workspace.members.find(
@@ -35,6 +36,20 @@ console.log("isAdmin:", isAdmin)
 
  const handleClose=()=>{
     onClose()
+ }
+
+ const removeMember = async()=>{
+    return await api.delete(`/workspace/${workspace.id}/members/${member.id}`)
+ }
+
+ const changeMemberRole = async(newRole)=>{
+  return await api.put(`/workspace/${workspace.id}/member/${member.id}`,{
+    role:newRole
+  })
+ }
+
+ const leaveWorkspace = async()=>{
+  return await api.delete(`/workspace/${workspace.id}`)
  }
   return (
     <div onClick={handleClose}
@@ -172,14 +187,17 @@ console.log("isAdmin:", isAdmin)
         </p>
         <div className="grid grid-cols-2 gap-3">
      
-          <button
+          <button  onClick={(e)=>{
+            e.stopPropagation()
+            setisRoleModalOpen(true)
+          }}
             className="w-full flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900/40 px-4 py-3 text-left text-sm text-zinc-300 hover:bg-zinc-800"
           >
              <Settings size={16}/>
              Role
           </button>
 
-          <button
+          <button onClick={removeMember}
             className="w-full flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-left text-sm text-red-400 hover:bg-red-500/20"
           >
              <TrashIcon size={16}/>
@@ -187,6 +205,92 @@ console.log("isAdmin:", isAdmin)
           </button>
 </div>
 </div>
+{isRoleModalOpen && (<>
+  <div onClick={()=>setisRoleModalOpen(false)}
+    className='fixed inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-s'>
+  <div onClick={(e)=>e.stopPropagation()}
+  className="mt-3 rounded-2xl border border-zinc-800 bg-zinc-950 p-4">
+
+    <p className="mb-4 text-xs uppercase tracking-wider text-zinc-500">
+      Change Role
+    </p>
+
+    <div className="grid grid-cols-2 gap-3">
+
+      {/* ADMIN */}
+      <button
+      value={roleChange}
+        onClick={() => changeMemberRole("admin")}
+        className={`flex items-center gap-3 rounded-xl border px-4 py-3 transition
+          ${
+            role === "admin"
+              ? "border-red-500/40 bg-red-500/10"
+              : "border-zinc-800 bg-zinc-900/40 hover:bg-zinc-800"
+          }`}
+      >
+        <div
+          className={`flex h-5 w-5 items-center justify-center rounded-full border-2
+            ${
+              role === "admin"
+                ? "border-red-400"
+                : "border-zinc-600"
+            }`}
+        >
+          <div
+            className={`h-2.5 w-2.5 rounded-full
+              ${
+                role === "admin"
+                  ? "bg-red-400"
+                  : "bg-transparent"
+              }`}
+          />
+        </div>
+
+        <span className="text-sm font-medium">
+          Admin
+        </span>
+      </button>
+
+      {/* MEMBER */}
+      <button
+      value={roleChange}
+        onClick={() => changeMemberRole("member")}
+        className={`flex items-center gap-3 rounded-xl border px-4 py-3 transition
+          ${
+            role === "member"
+              ? "border-cyan-500/40 bg-cyan-500/10"
+              : "border-zinc-800 bg-zinc-900/40 hover:bg-zinc-800"
+          }`}
+      >
+        <div
+          className={`flex h-5 w-5 items-center justify-center rounded-full border-2
+            ${
+              role === "member"
+                ? "border-cyan-400"
+                : "border-zinc-600"
+            }`}
+        >
+          <div
+            className={`h-2.5 w-2.5 rounded-full
+              ${
+                role === "member"
+                  ? "bg-cyan-400"
+                  : "bg-transparent"
+              }`}
+          />
+        </div>
+
+        <span className="text-sm font-medium">
+          Member
+        </span>
+      </button>
+
+    </div>
+
+  </div>
+   </div>
+  </>
+)}
            </>
 )}
 {isMySelf&&(
@@ -195,7 +299,7 @@ console.log("isAdmin:", isAdmin)
         <p className="mb-3 text-xs uppercase tracking-wider text-zinc-500">
           Controls section
         </p>
-   <button
+   <button onClick={leaveWorkspace}
             className="w-full flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-left text-sm text-red-400 hover:bg-red-500/20"
           >
              <TrashIcon size={16}/>
@@ -203,9 +307,6 @@ console.log("isAdmin:", isAdmin)
           </button>
   </div>
 )}
-
-
-
     </div>
 
   </div>

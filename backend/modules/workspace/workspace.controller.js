@@ -101,7 +101,7 @@ export const leaveWorkspaceController=async(req,res)=>{
         const workspaceId =parseInt(req.params.workspaceId)
         const userId = req.user.userId
         const leave = await leaveWorkspace(userId,workspaceId)
-        res.json({message:e.message})
+        res.json({message:"You left workspace"})
        } catch (e) {
          res.status(500).json({message:e.message})
        }
