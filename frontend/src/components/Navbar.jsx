@@ -6,12 +6,25 @@ import {
   User
 } from "lucide-react";
 
+import ProfileDropdown from "./ProfileDropdown.jsx";
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
+
 const Navbar = ({
   workspaceName,
-  showBack = false
+  showBack = false,
 }) => {
 
+  const [showProfile, setShowProfile] = useState(false)
   const navigate = useNavigate();
+  const {user,setUser} = useAuth()
+
+  const userLogout = () => {
+  localStorage.removeItem('token');
+  setUser(null);
+  // setWorkspaces([]);
+  navigate('/login');
+};
 
   return (
     <nav className="h-16 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
@@ -82,11 +95,35 @@ const Navbar = ({
           </button>
 
           {/* User */}
-          <button
-            className="h-10 w-10 rounded-full border border-zinc-800 bg-zinc-900 flex items-center justify-center"
-          >
-            <User size={18} />
-          </button>
+
+         <div className="relative">
+
+  <button
+    onClick={() => setShowProfile(prev => !prev)}
+    className="
+ flex h-10 w-10 items-center justify-center
+            rounded-full
+            border border-zinc-700
+            bg-zinc-900
+            text-xl font-bold
+            text-orange-400
+    "
+  >
+    {user?.name?.charAt(0)?.toUpperCase()}
+  </button>
+
+  {showProfile && (
+    <ProfileDropdown
+      user={user}
+      workspaceCount={5}
+      assignedTasks={28}
+      completedTasks={21}
+      onLogout={userLogout}
+      onSettings={() => navigate("/settings")}
+    />
+  )}
+
+</div>
 
         </div>
 
