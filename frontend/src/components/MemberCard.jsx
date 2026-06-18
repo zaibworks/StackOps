@@ -39,17 +39,31 @@ console.log("isAdmin:", isAdmin)
  }
 
  const removeMember = async()=>{
-    return await api.delete(`/workspace/${workspace.id}/members/${member.id}`)
+    await api.delete(`/workspace/${workspace.id}/members/${member.id}`)
+    await onMemberUpdate()
+     onClose()
  }
 
  const changeMemberRole = async(newRole)=>{
-  return await api.put(`/workspace/${workspace.id}/member/${member.id}`,{
+  console.log("1 clicked")
+  await api.put(`/workspace/${workspace.id}/member/${member.id}`,{
     role:newRole
   })
+   console.log("2 api done")
+
+  setisRoleModalOpen(false)
+  console.log("3 modal close")
+
+  await onMemberUpdate()
+  console.log("4 workspace updated")
+   onClose()
+    console.log("5 card closed")
  }
 
  const leaveWorkspace = async()=>{
-  return await api.delete(`/workspace/${workspace.id}`)
+   await api.delete(`/workspace/${workspace.id}`)
+  await onMemberUpdate()
+ onClose()
  }
   return (
     <div onClick={handleClose}
@@ -219,7 +233,6 @@ console.log("isAdmin:", isAdmin)
 
       {/* ADMIN */}
       <button
-      value={roleChange}
         onClick={() => changeMemberRole("admin")}
         className={`flex items-center gap-3 rounded-xl border px-4 py-3 transition
           ${
@@ -253,7 +266,6 @@ console.log("isAdmin:", isAdmin)
 
       {/* MEMBER */}
       <button
-      value={roleChange}
         onClick={() => changeMemberRole("member")}
         className={`flex items-center gap-3 rounded-xl border px-4 py-3 transition
           ${

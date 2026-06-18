@@ -113,9 +113,10 @@ export const changeMemberRoleController = async(req,res)=>{
         const adminId = req.user.userId
         const workspaceId = parseInt(req.params.workspaceId)
         const {role} = req.body
-        const member = changeMemberRole(memberId,adminId,workspaceId,role)
+        const member = await changeMemberRole(memberId,adminId,workspaceId,role)
          res.json({message:"Role changed successfully",data:member})
     } catch (e) {
+        console.log(e)
         res.status(500).json({message:e.message})
     }
 }

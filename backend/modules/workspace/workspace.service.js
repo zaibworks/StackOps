@@ -257,8 +257,15 @@ export const changeMemberRole = async(memberId,adminId,workspaceId,role)=>{
     id:memberId,
     workspaceId:workspaceId
     },data:{
-      role:role
+      role
     }
   })
+
+    console.log({
+  memberId,
+  adminId,
+  workspaceId,
+  role
+})
 
 }
