@@ -1,5 +1,6 @@
 import { LogOut } from "lucide-react";
 import { useState } from "react";
+import api from "../api/axios.js";
 
 const LeaveWorkspaceModal = ({
   isOpen,
@@ -7,7 +8,7 @@ const LeaveWorkspaceModal = ({
   workspace,
   onDone,
 }) => {
-  if (!isOpen) return null;
+ 
 
   const [error, setError] = useState("");
 const [leaving, setLeaving] = useState(false);
@@ -17,7 +18,7 @@ const [leaving, setLeaving] = useState(false);
   try {
     setLeaving(true);
 
-    // api later
+    await api.delete(`/workspace/${workspace.id}`)
 
     onDone(workspace);
 
@@ -31,6 +32,8 @@ const [leaving, setLeaving] = useState(false);
     setLeaving(false);
   }
 };
+
+ if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">

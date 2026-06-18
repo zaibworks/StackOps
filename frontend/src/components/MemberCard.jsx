@@ -3,16 +3,20 @@ import { useState } from 'react'
 import { Settings,Pin,TrashIcon,Circle} from 'lucide-react'
 import { useAuth } from '../context/AuthContext.jsx'
 import api from '../api/axios.js'
+import LeaveWorkspaceModal from './LeaveWorkspaceModal.jsx'
+import { useNavigate } from 'react-router-dom'
 
 
 
 const MemberCard = ({member,workspace,onClose,onMemberUpdate}) => {
 
   const {user} = useAuth()
+  const navigate = useNavigate()
 
  const [role, setRole] = useState(member.role)
  const [isEditingRole, setIsEditingRole] = useState(false)
  const [isRoleModalOpen, setisRoleModalOpen] = useState(false)
+ const [showLeaveModal, setshowLeaveModal] = useState(false)
 
 const currentUserRole =
   workspace.members.find(
@@ -60,10 +64,13 @@ console.log("isAdmin:", isAdmin)
     console.log("5 card closed")
  }
 
- const leaveWorkspace = async()=>{
-   await api.delete(`/workspace/${workspace.id}`)
+
+
+ const handleLeaveClose = async()=>{
   await onMemberUpdate()
- onClose()
+  onClose()
+ navigate('/dashboard')
+
  }
   return (
     <div onClick={handleClose}
@@ -311,13 +318,21 @@ console.log("isAdmin:", isAdmin)
         <p className="mb-3 text-xs uppercase tracking-wider text-zinc-500">
           Controls section
         </p>
-   <button onClick={leaveWorkspace}
+   <button onClick={()=>setshowLeaveModal(true)}
             className="w-full flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-left text-sm text-red-400 hover:bg-red-500/20"
           >
              <TrashIcon size={16}/>
             Leave Workspace
           </button>
   </div>
+)}
+{showLeaveModal &&(
+  <LeaveWorkspaceModal
+  isOpen={showLeaveModal}
+  onClose={()=>setshowLeaveModal(false)}
+  workspace={workspace}
+  onDone={handleLeaveClose}
+  />
 )}
     </div>
 
