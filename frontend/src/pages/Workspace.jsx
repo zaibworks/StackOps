@@ -14,6 +14,7 @@ import {
 import Navbar from '../components/Navbar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
 import MemberCard from '../components/MemberCard.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 const Workspace = () => {
   const [workspace, setWorkspace] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -43,6 +44,8 @@ const Workspace = () => {
   unassigned:false,
   overdue:false,
   })
+
+  const {user} = useAuth()
 
 const filteredTasks = workspace?.tasks?.filter((task) => {
   const statusMatch =
@@ -185,12 +188,22 @@ const handleStatus = async (taskId,status) => {
   }
 }
 
+const myAssignedTasks =
+  workspace?.tasks?.filter(
+    task => task.assignedToId === user.id
+  ) || [];
+
+const myCompletedTasks =
+  myAssignedTasks.filter(
+    task => task.status === "done"
+  ).length;
+
   if(loading) return <h1>Loading...</h1>
 
   return (
     <>
     <div className='h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col'>
-    <Navbar/>
+    <Navbar completedTasks={myCompletedTasks} assignedTasks={myAssignedTasks.length}/>
       {/* header section */}
     <div className="mb-5 flex items-center justify-between border-b border-zinc-800 bg-zinc-950/40 px-5 py-4">
 

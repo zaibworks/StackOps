@@ -48,6 +48,14 @@ export const getMyWorkspace = async (userId)=>{
     }
   },orderBy:{updatedAt:'desc'},
   include:{
+     tasks: {
+        select: {
+          assignedToId: true,
+          status: true
+        }
+      }
+  },
+  include:{
     _count:{
       select:{
         members:true

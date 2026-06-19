@@ -13,6 +13,9 @@ import { useAuth } from "../context/AuthContext.jsx";
 const Navbar = ({
   workspaceName,
   showBack = false,
+  workspaceCount,
+  assignedTasks,
+  completedTasks
 }) => {
 
   const [showProfile, setShowProfile] = useState(false)
@@ -115,9 +118,9 @@ const Navbar = ({
   {showProfile && (
     <ProfileDropdown
       user={user}
-      workspaceCount={5}
-      assignedTasks={28}
-      completedTasks={21}
+      workspaceCount={workspaceCount}
+      assignedTasks={assignedTasks}
+      completedTasks={completedTasks}
       onLogout={userLogout}
       onSettings={() => navigate("/settings")}
     />

@@ -25,6 +25,7 @@ const Dashboard = () => {
   const navigate = useNavigate()
   const {user,setUser} = useAuth()
 
+
   console.log(user)
 
   useEffect(() => {
@@ -105,7 +106,7 @@ const handleWorkspaceLeft = (workspace) => {
   return (
     <>
     <div className="h-screen flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
-    <Navbar/>
+    <Navbar workspaceCount={workspaces.length}/>
       <div className="flex flex-1 overflow-hidden">
      <aside className="relative flex w-64 flex-col border-r border-zinc-800 bg-zinc-950/50">
 
