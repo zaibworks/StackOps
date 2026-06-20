@@ -1,19 +1,41 @@
-import {
-  LogOut,
-  Settings,
-  BriefcaseBusiness,
-  CheckCircle2,
-  ClipboardList,
-} from "lucide-react";
+import {LogOut,Settings,BriefcaseBusiness,CheckCircle2,ClipboardList,} from "lucide-react";
+import { useState,useEffect } from "react";
+import api from '../api/axios.js'
+import {useAuth} from '../context/AuthContext.jsx'
 
-const ProfileDropdown = ({
-  user,
-  workspaceCount,
-  assignedTasks,
-  completedTasks,
-  onLogout,
-  onSettings,
-}) => {
+const ProfileDropdown = ({onLogout,onSettings}) => {
+
+  const [stats, setStats] = useState(null)
+
+  const {user} = useAuth()
+
+  useEffect(() => {
+  const fetchStats = async () => {
+    const res = await api.get('/user/overview')
+     console.log("FULL RESPONSE", res.data)
+    setStats(res.data.data)
+  }
+
+  fetchStats()
+}, [])
+
+const workspaceCount = stats?.length || 0
+
+const allTasks =
+  stats?.flatMap(workspace => workspace.tasks) || []
+
+  const assignedTasks =
+  allTasks.filter(
+    task => task.assignedToId === user.id
+  ).length
+
+  const completedTasks =
+  allTasks.filter(
+    task =>
+      task.assignedToId === user.id &&
+      task.status === "done"
+  ).length
+
   return (
     <div
       className="
@@ -71,7 +93,7 @@ const ProfileDropdown = ({
             </div>
 
             <span className="font-medium text-zinc-100">
-              {workspaceCount}
+              {workspaceCount || 0}
             </span>
           </div>
 
@@ -82,7 +104,7 @@ const ProfileDropdown = ({
             </div>
 
             <span className="font-medium text-zinc-100">
-              {assignedTasks}
+              {assignedTasks || 0}
             </span>
           </div>
 
@@ -93,7 +115,7 @@ const ProfileDropdown = ({
             </div>
 
             <span className="font-medium text-green-400">
-              {completedTasks}
+              {completedTasks || 0}
             </span>
           </div>
 

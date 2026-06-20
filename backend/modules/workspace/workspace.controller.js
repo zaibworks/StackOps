@@ -7,7 +7,7 @@ import { createWorkspace,
     updateWorkspace,
     getWorkspacebyId,
     leaveWorkspace,
-    changeMemberRole
+    changeMemberRole,
  } from "./workspace.service.js";
 
 export const createWorkspaceController= async(req,res)=>{

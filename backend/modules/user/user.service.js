@@ -15,3 +15,20 @@ export const getCurrentUser = async (userId)=>{
       return user
 }
 
+export const getUserOverview =async(userId)=>{
+return await prisma.workspace.findMany({
+  where:{
+      members:{
+        some:{userId}
+      }
+  },include:{
+    tasks:{
+      select:{
+        userId:true,
+        assignedToId:true,
+        status:true
+      }
+    }
+  }
+})
+}

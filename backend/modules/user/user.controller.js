@@ -1,4 +1,4 @@
-import {getCurrentUser} from "./user.service.js";
+import {getCurrentUser,getUserOverview} from "./user.service.js";
 
 export const getMe = async(req,res)=>{
     try{
@@ -11,3 +11,13 @@ export const getMe = async(req,res)=>{
     }
 }
 
+export const getUserOverviewController =async(req,res)=>{
+try{
+    const userId = req.user.userId
+    const details = await getUserOverview(userId)
+    console.log(details)
+    res.json({message:"User details",data:details})
+}catch(e){
+    res.status(500).json({message:e.message})
+}
+}
