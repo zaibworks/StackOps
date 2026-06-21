@@ -198,12 +198,28 @@ const myCompletedTasks =
     task => task.status === "done"
   ).length;
 
+  // searchdata-----------
+
+  const searchData = [
+  ...workspace.tasks.map(task => ({
+    id: task.id,
+    type: "task",
+    name: task.title
+  })),
+
+  ...workspace.members.map(member => ({
+    id: member.user.id,
+    type: "member",
+    name: member.user.name
+  }))
+]
+
   if(loading) return <h1>Loading...</h1>
 
   return (
     <>
     <div className='h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col'>
-    <Navbar completedTasks={myCompletedTasks} assignedTasks={myAssignedTasks.length}/>
+    <Navbar searchData ={searchData} searchType="workspace-page"/>
       {/* header section */}
     <div className="mb-5 flex items-center justify-between border-b border-zinc-800 bg-zinc-950/40 px-5 py-4">
 

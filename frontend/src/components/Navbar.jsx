@@ -13,9 +13,8 @@ import { useAuth } from "../context/AuthContext.jsx";
 const Navbar = ({
   workspaceName,
   showBack = false,
-  workspaceCount,
-  assignedTasks,
-  completedTasks
+  searchData,
+  searchType
 }) => {
 
   const [showProfile, setShowProfile] = useState(false)
