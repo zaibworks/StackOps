@@ -14,8 +14,13 @@ const Navbar = ({
   workspaceName,
   showBack = false,
   searchData,
-  searchType
+  searchType,
+  onTaskSelect,
+  onMemberSelect
 }) => {
+
+  const [showSearch, setShowSearch] = useState(false)
+  const [query, setQuery] = useState("")
 
   const [showProfile, setShowProfile] = useState(false)
   const navigate = useNavigate();
@@ -27,6 +32,30 @@ const Navbar = ({
   // setWorkspaces([]);
   navigate('/login');
 };
+
+const filteredResults =
+  searchData?.filter(item =>
+    item.name
+      .toLowerCase()
+      .includes(query.toLowerCase())
+  ) || []
+
+  const handleSearchClick = (item) => {
+  if (item.type === "workspace") {
+    navigate(`/workspace/${item.id}`)
+  }
+
+  if (item.type === "task") {
+    onTaskSelect(item.id)
+  }
+
+  if (item.type === "member") {
+    onMemberSelect(item.id)
+  }
+
+  setShowSearch(false)
+  setQuery("")
+}
 
   return (
     <nav className="h-16 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-50">
@@ -79,19 +108,51 @@ const Navbar = ({
           )}
         </div>
 
+{/* center  */}
+        <div className="flex-1 flex justify-center relative">
+
+  <div className="w-[450px] relative">
+
+    <Search
+      size={16}
+      className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500"
+    />
+
+    <input
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      placeholder="Search tasks, members, workspaces..."
+      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 pl-10 pr-4 py-2 text-sm outline-none focus:border-zinc-600"
+    />
+
+    {query && (
+      <div className="absolute top-12 w-full border border-zinc-800 bg-zinc-700/50 p-2 shadow-xl">
+
+        {filteredResults.slice(0, 4).map(item => (
+          <div
+            key={`${item.type}-${item.id}`}
+            onClick={() => handleSearchClick(item)}
+            className="cursor-pointer rounded-xl p-3 hover:bg-zinc-900"
+          >
+            {item.name}
+          </div>
+        ))}
+
+      </div>
+    )}
+
+  </div>
+
+</div>
+
+  
+
         {/* RIGHT */}
         <div className="flex items-center gap-3">
 
-          {/* Search */}
-          <button
-            className="rounded-xl border border-zinc-800 p-2 hover:bg-zinc-900"
-          >
-            <Search size={18} />
-          </button>
-
           {/* Settings */}
           <button
-            className="rounded-xl border border-zinc-800 p-2 hover:bg-zinc-900"
+            className="rounded-xl border border-zinc-800 p-2 hover:bg-zinc-900 cursor-pointer"
           >
             <Settings size={18} />
           </button>
@@ -109,6 +170,7 @@ const Navbar = ({
             bg-zinc-900
             text-xl font-bold
             text-orange-400
+            cursor-pointer
     "
   >
     {user?.name?.charAt(0)?.toUpperCase()}
@@ -117,9 +179,6 @@ const Navbar = ({
   {showProfile && (
     <ProfileDropdown
       user={user}
-      workspaceCount={workspaceCount}
-      assignedTasks={assignedTasks}
-      completedTasks={completedTasks}
       onLogout={userLogout}
       onSettings={() => navigate("/settings")}
     />

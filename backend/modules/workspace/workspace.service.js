@@ -1,6 +1,7 @@
 import { tr } from 'zod/v4/locales';
 import prisma from '../../src/db.js';
 import { isValidBase64 } from 'zod/v4/core';
+import createActivity from '../../utils/createActivity.js';
 
 export const createWorkspace = async (name, userId) => {
   const existingWorkspace =
@@ -20,7 +21,7 @@ if (existingWorkspace) {
     'Workspace already exists'
   )
 }
-  return await prisma.workspace.create({
+  const workspace = await prisma.workspace.create({
     data: {
       name,
 
@@ -38,6 +39,14 @@ if (existingWorkspace) {
       members: true
     }
   })
+
+   await createActivity({
+    userId,
+    workspaceId: workspace.id,
+    action: `Created workspace ${workspace.name}`
+  })
+
+  return workspace
 }
 
 export const getMyWorkspace = async (userId)=>{
@@ -113,6 +122,13 @@ const newMember = await prisma.membership.create({
    role
   }
 })
+
+await createActivity({
+  userId,
+  workspaceId: parsedWorkspaceId,
+  action: `Invited ${invitedUser.name} as ${role}`
+})
+
 return newMember
 }
 
@@ -161,6 +177,18 @@ export const removeMember = async(adminId,workspaceId,membershipId)=>{
       id:membershipId
     }
   })
+
+  const workspace = await prisma.workspace.findUnique({
+  where:{
+    id:workspaceId
+  }
+})
+
+  await createActivity({
+  userId:adminId, // admin jisne invite kiya
+  workspaceId:workspaceId,
+  action: `${admin.name} Removed ${member.user.name} from ${workspace.name}`
+})
 
   return deleteMember
 }

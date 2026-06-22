@@ -20,6 +20,7 @@ model User {
   assignedTask  Task[]  @relation("AssignedTask")
   memberships Membership[]
   comments Comment[]
+  activities Activity[]
 
 }
 enum Priority{
@@ -69,6 +70,8 @@ model Workspace{
   
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  activities Activity[]
 }
 
 enum Role{
@@ -99,6 +102,19 @@ model Comment{
   user User @relation(fields: [userId],references: [id])
 
   createdAt DateTime @default(now())
+}
+
+model Activity{
+  id Int @id @default(autoincrement())
+  action String
+
+  userId Int
+  user User @relation(fields: [userId],references: [id])
+
+  workspaceId Int
+  workspace Workspace @relation(fields: [workspaceId],references: [id])
+
+   createdAt DateTime @default(now())
 }
 
 

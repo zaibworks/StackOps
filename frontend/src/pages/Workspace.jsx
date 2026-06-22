@@ -1,4 +1,3 @@
-import React from 'react'
 import { useParams,useNavigate } from 'react-router-dom'
 import { useEffect,useState } from 'react'
 import api from '../api/axios.js'
@@ -200,26 +199,46 @@ const myCompletedTasks =
 
   // searchdata-----------
 
-  const searchData = [
-  ...workspace.tasks.map(task => ({
+ const searchData = [
+  ...(workspace?.tasks?.map(task => ({
     id: task.id,
     type: "task",
     name: task.title
-  })),
+  })) || []),
 
-  ...workspace.members.map(member => ({
+  ...(workspace?.members?.map(member => ({
     id: member.user.id,
     type: "member",
     name: member.user.name
-  }))
+  })) || [])
 ]
+
+const taskSelect = (taskId)=>{
+   const task = workspace.tasks.find(
+      t => t.id === taskId
+    )
+
+    if (task) {
+      setSelectedTask(task)
+      setSelectedMember(null)
+    }
+}
+const memberSelect=(memberId)=>{
+  const member = workspace.members.find(
+    m => m.user.id ===memberId
+  )
+  if(member){
+    setSelectedMember(member)
+    setSelectedTask(null)
+  }
+}
 
   if(loading) return <h1>Loading...</h1>
 
   return (
     <>
     <div className='h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col'>
-    <Navbar searchData ={searchData} searchType="workspace-page"/>
+    <Navbar searchData ={searchData} searchType="workspace-page" onTaskSelect={taskSelect} onMemberSelect={memberSelect}/>
       {/* header section */}
     <div className="mb-5 flex items-center justify-between border-b border-zinc-800 bg-zinc-950/40 px-5 py-4">
 
