@@ -185,9 +185,9 @@ export const removeMember = async(adminId,workspaceId,membershipId)=>{
 })
 
   await createActivity({
-  userId:adminId, // admin jisne invite kiya
+  userId:adminId, 
   workspaceId:workspaceId,
-  action: `${admin.name} Removed ${member.user.name} from ${workspace.name}`
+  action: `Removed ${member.user.name} from ${workspace.name}`
 })
 
   return deleteMember
@@ -205,6 +205,11 @@ export const updateWorkspace = async(adminId,workspaceId,name)=>{
   if(!admin){
     throw new Error('Not allowed: You are not the admin')
   }
+  const workspace = await prisma.workspace.findUnique({
+    where:{
+      id:workspaceId
+    }
+  })
 
   const updateName = await prisma.workspace.update({
   where:{
@@ -213,6 +218,13 @@ export const updateWorkspace = async(adminId,workspaceId,name)=>{
     name:name
   }
   })
+
+   await createActivity({
+  userId:adminId, 
+  workspaceId:workspaceId,
+  action: `Renamed workspace from ${workspace.name} to ${updateName.name}`
+})
+  
 
   return updateName
 }
@@ -245,8 +257,16 @@ export const leaveWorkspace = async(userId,workspaceId)=>{
           where:{
             workspaceId:workspaceId,
             userId:userId
+          },include:{
+            user:true
           }
         })
+
+         if(!membership){
+    throw new Error(
+      "You are not a member"
+    )
+  }
 
         const isAdmin = membership.role ==='admin'
         const adminCount =
@@ -256,17 +276,24 @@ export const leaveWorkspace = async(userId,workspaceId)=>{
       role:"admin"
     }
   })
-
-        if(!membership){
-    throw new Error(
-      "You are not a member"
-    )
-  }
   if(isAdmin && adminCount === 1){
     throw new Error('Transfer ownsership before leaving')
   }
 
-   return await prisma.membership.delete({
+  
+  const workspace = await prisma.workspace.findUnique({
+    where:{
+      id:workspaceId
+    }
+  })
+
+    await createActivity({
+  userId, 
+  workspaceId:workspaceId,
+  action: `Left workspace ${workspace.name}`
+})
+  
+  return await prisma.membership.delete({
     where:{
      id: membership.id
     }
@@ -281,13 +308,23 @@ export const changeMemberRole = async(memberId,adminId,workspaceId,role)=>{
             role:'admin'
           }
          })
+
+         const member = await prisma.membership.findFirst({
+  where:{
+    userId: memberId,
+    workspaceId
+  },
+  include:{
+    user:true
+  }
+})
           if(!admin){
     throw new Error('Not allowed: You are not the admin')
   }else if(adminId === memberId){
     throw new Error('You can not chagne your own role')
   }
 
-  await prisma.membership.updateMany({
+ const update = await prisma.membership.update({
     where:{
     id:memberId,
     workspaceId:workspaceId
@@ -296,11 +333,10 @@ export const changeMemberRole = async(memberId,adminId,workspaceId,role)=>{
     }
   })
 
-    console.log({
-  memberId,
-  adminId,
-  workspaceId,
-  role
+   await createActivity({
+  userId:adminId, 
+  workspaceId:workspaceId,
+  action: `Changed ${member.user.name}  role from ${member.role} to ${role}`
 })
 
 }
