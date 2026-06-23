@@ -81,19 +81,19 @@ export const getTasks = async (workspaceId, filters, pagination) => {
 export const updateTask= async(taskId,userId,taskData,workspaceId)=>{
        const oldTask = await prisma.task.findUnique({
       where:{
-        id:taskId
+        id:taskId,userId,workspaceId
       }
     })
 
     const updatedTask = await prisma.task.update({
-        where:{ id: Number(taskId), userId, workspaceId:workspaceId },
+        where:{ id: Number(taskId),userId,workspaceId},
         data:taskData
     })
 
       const assigneeChanged = oldTask.assignedToId !== updatedTask.assignedToId
       const statusChanged = oldTask.status !== updatedTask.status
       const priorityChanged = oldTask.priority !== updatedTask.priority
-     const dueDateChanged = oldTask.dueDate !== updatedTask.dueDate
+     const dueDateChanged = oldTask.dueDate?.getTime() !== updatedTask.dueDate?.getTime()
      const titleChanged = oldTask.title !== updatedTask.title
      const contentChanged = oldTask.content !== updatedTask.content
 
@@ -119,29 +119,15 @@ if (priorityChanged) {
 
 // assigning task  
 
-if (
-  !oldTask.assignedToId &&
-  updatedTask.assignedToId
-) {
+if (!oldTask.assignedToId && updatedTask.assignedToId) {
   actions.push(
     `Assigned ${updatedTask.title}`
   )
-}
-
-if (
-  oldTask.assignedToId &&
-  !updatedTask.assignedToId
-) {
+}else if ( oldTask.assignedToId &&!updatedTask.assignedToId) {
   actions.push(
     `Unassigned ${updatedTask.title}`
   )
-}
-
-if (
-  oldTask.assignedToId &&
-  updatedTask.assignedToId &&
-  assigneeChanged
-) {
+}else if ( assigneeChanged) {
   actions.push(
     `Reassigned ${updatedTask.title}`
   )
@@ -156,36 +142,14 @@ if (dueDateChanged) {
 
 // changin content 
 
-if (contentChanged) {
-  actions.push(
-    `Changed ${updatedTask.title} task content`
-  )
+if (!oldTask.content && updatedTask.content) {
+  actions.push(`Added description to ${updatedTask.title}`)
 }
-
-if (
-  oldTask.content &&
-  !updatedTask.content
-) {
-  actions.push(
-    `Removed description from ${updatedTask.title}`
-  )
+else if (oldTask.content && !updatedTask.content) {
+  actions.push(`Removed description from ${updatedTask.title}`)
 }
-if (
-  !oldTask.content &&
-  updatedTask.content
-) {
-  actions.push(
-    `Added description to ${updatedTask.title}`
-  )
-}
-if (
-  oldTask.content &&
-  updatedTask.content &&
- contentChanged
-) {
-  actions.push(
-    `Updated description of ${updatedTask.title}`
-  )
+else if (contentChanged) {
+  actions.push(`Updated description of ${updatedTask.title}`)
 }
 // ----------
 
@@ -197,14 +161,16 @@ if (
   })
 }
 
-  return updateTask
+  return updatedTask
 }
 
 export const deleteTask = async (userId,workspaceId,taskId) => {
 
    const task = await prisma.task.findUnique({
       where:{
-        id:taskId
+        id:taskId,
+        userId,
+        workspaceId
       }
     })
 
