@@ -9,12 +9,26 @@ export const getActivities = async(userId)=>{
       }
     })
  const workspaceIds =
-memberships.map(m=>m.workspaceId)
+memberships.map(m=>m.workspace.id)
 
 return await prisma.activity.findMany({
   where:{
     workspaceId:{
       in: workspaceIds
+    }
+  },include:{
+    user:{
+        select:{
+            id:true,
+            name:true,
+            email:true
+        }
+    },
+    workspace:{
+        select:{
+            id:true,
+            name:true
+        }
     }
   },
   orderBy:{
