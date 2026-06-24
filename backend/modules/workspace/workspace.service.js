@@ -163,6 +163,8 @@ export const removeMember = async(adminId,workspaceId,membershipId)=>{
   const member = await prisma.membership.findUnique({
     where:{
       id: membershipId
+    },include:{
+      user:true
     }
   })
   if(!member){
@@ -338,5 +340,6 @@ export const changeMemberRole = async(memberId,adminId,workspaceId,role)=>{
   workspaceId:workspaceId,
   action: `Changed ${member.user.name}  role from ${member.role} to ${role}`
 })
+return update
 
 }

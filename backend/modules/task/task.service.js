@@ -174,17 +174,17 @@ export const deleteTask = async (userId,workspaceId,taskId) => {
       }
     })
 
+      await createActivity({
+    userId,
+    workspaceId,
+    action :`Deleted task ${task.title}`
+  })
+
   const result = await prisma.task.deleteMany({
     where: { id: Number(taskId), userId,workspaceId:workspaceId }
   })
 
   if (result.count === 0) throw new Error('Task not found or not yours')
-
-     await createActivity({
-    userId,
-    workspaceId,
-    action :`Deleted task ${task.title}`
-  })
 
   return result
 }
