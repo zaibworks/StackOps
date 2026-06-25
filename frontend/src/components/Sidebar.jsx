@@ -5,6 +5,7 @@ import { FolderKanban, CheckSquare, Activity, LogOut } from "lucide-react"
 const Sidebar = ({ user, workspaces, onLogout }) => {
   const navigate = useNavigate()
   const [shoWorkspace, setshoWorkspace] = useState(false)
+  
 
   return (
     <aside className="relative flex w-64 flex-col border-r border-zinc-800 bg-zinc-950/50">

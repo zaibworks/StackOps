@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Workspace from './pages/Workspace'
 import ProtectedRoute from './components/ProtectedRoute'
 import Activity from './pages/Activity'
+import MyTasks from './pages/MyTasks'
 import { AuthProvider } from './context/AuthContext.jsx'
 import { WorkspaceProvider } from './context/WorkspaceContext.jsx'
 
@@ -13,12 +14,12 @@ function App() {
   return (
     <AuthProvider>
       <WorkspaceProvider>
-
        <BrowserRouter>
     <Routes>
       <Route path='/login' element={<Login/>}/>
       <Route path='/signup' element={<Signup/>}/>
       <Route path='activity' element={<Activity/>}/>
+      <Route path='mytasks' element={<MyTasks/>}/>
       <Route path='/dashboard' element={
        <ProtectedRoute>
          <Dashboard/>

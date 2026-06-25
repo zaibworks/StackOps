@@ -81,14 +81,19 @@ export const getTasks = async (workspaceId, filters, pagination) => {
 export const updateTask= async(taskId,userId,taskData,workspaceId)=>{
        const oldTask = await prisma.task.findUnique({
       where:{
-        id:taskId,userId,workspaceId
+        id:Number(taskId)
       }
     })
 
+     if (!oldTask || oldTask.userId !== userId || oldTask.workspaceId !== workspaceId) {
+    throw new Error("Task not found or unauthorized");
+  }
+
     const updatedTask = await prisma.task.update({
-        where:{ id: Number(taskId),userId,workspaceId},
+        where:{ id: Number(taskId)},
         data:taskData
     })
+    
 
       const assigneeChanged = oldTask.assignedToId !== updatedTask.assignedToId
       const statusChanged = oldTask.status !== updatedTask.status
@@ -168,23 +173,22 @@ export const deleteTask = async (userId,workspaceId,taskId) => {
 
    const task = await prisma.task.findUnique({
       where:{
-        id:taskId,
-        userId,
-        workspaceId
+        id:taskId
       }
     })
 
+     if (!task || task.userId !== userId || task.workspaceId !== workspaceId) {
+    throw new Error("Task not found or unauthorized")
+  }
+  
+  const result = await prisma.task.delete({
+    where: { id: Number(taskId)}
+  })
       await createActivity({
     userId,
     workspaceId,
     action :`Deleted task ${task.title}`
   })
-
-  const result = await prisma.task.deleteMany({
-    where: { id: Number(taskId), userId,workspaceId:workspaceId }
-  })
-
-  if (result.count === 0) throw new Error('Task not found or not yours')
 
   return result
 }
@@ -192,7 +196,12 @@ export const deleteTask = async (userId,workspaceId,taskId) => {
 export const getMyTasks = async (userId)=>{
     const tasks = await prisma.task.findMany({
       where:{
-       assignedToId:userId
+       assignedToId:userId, 
+       workspace:{
+        members:{
+          some:{userId}
+        }
+       }
           
       },include:{
         workspace:{
