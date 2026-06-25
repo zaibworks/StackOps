@@ -4,16 +4,21 @@ import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import Workspace from './pages/Workspace'
 import ProtectedRoute from './components/ProtectedRoute'
+import Activity from './pages/Activity'
 import { AuthProvider } from './context/AuthContext.jsx'
+import { WorkspaceProvider } from './context/WorkspaceContext.jsx'
 
 
 function App() {
   return (
     <AuthProvider>
+      <WorkspaceProvider>
+
        <BrowserRouter>
     <Routes>
       <Route path='/login' element={<Login/>}/>
       <Route path='/signup' element={<Signup/>}/>
+      <Route path='activity' element={<Activity/>}/>
       <Route path='/dashboard' element={
        <ProtectedRoute>
          <Dashboard/>
@@ -24,6 +29,7 @@ function App() {
         </ProtectedRoute>}/>
     </Routes>
     </BrowserRouter>
+      </WorkspaceProvider>
     </AuthProvider>
 
   )

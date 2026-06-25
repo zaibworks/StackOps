@@ -188,3 +188,18 @@ export const deleteTask = async (userId,workspaceId,taskId) => {
 
   return result
 }
+
+export const getMyTasks = async (userId)=>{
+    const tasks = await prisma.task.findMany({
+      where:{
+       assignedToId:userId
+          
+      },include:{
+        workspace:{
+          select:{id:true,name:true}
+        }
+      },orderBy:{updatedAt:'desc'}
+    })
+
+    return tasks
+}

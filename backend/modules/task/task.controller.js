@@ -1,4 +1,4 @@
-import { createTask,getTasks,updateTask,deleteTask } from "./task.service.js";
+import { createTask,getTasks,updateTask,deleteTask,getMyTasks} from "./task.service.js";
 
 export const createTaskController=async(req,res)=>{
     try{
@@ -49,10 +49,22 @@ export const deleteTaskController= async(req,res)=>{
     const result = await deleteTask(userId,workspaceId,taskId)
     res.json(result)
    }catch(e){
-     console.log("DELETE ERROR:", e)
   res.status(400).json({
     message:e.message
   })
 
    }
+}
+
+export const getMyTasksController = async(req,res)=>{
+  try {
+     console.log("GET MY TASKS HIT")
+    const userId = req.user.userId
+    const tasks = await getMyTasks(userId)
+    res.json({message:"All you tasks",data:tasks})
+  } catch (e) {
+       res.status(400).json({
+    message:e.message
+  })
+  }
 }

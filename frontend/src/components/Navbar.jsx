@@ -70,7 +70,7 @@ const filteredResults =
             to="/stackOps.png"
             className="text-lg font-bold text-zinc-100"
           >
-            StackOps
+            Stack<span className="text-orange-400">Ops</span>
           </Link>
 
           <div className="h-5 w-px bg-zinc-800" />

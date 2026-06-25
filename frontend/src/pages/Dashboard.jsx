@@ -8,9 +8,10 @@ import DeleteWorkspaceModal from "../components/DeleteWorkspaceModal.jsx";
 import LeaveWorkspaceModal from "../components/LeaveWorkspaceModal.jsx";
 import Navbar from "../components/Navbar.jsx";
 import Sidebar from "../components/Sidebar.jsx";
+import { useWorkspace } from "../context/WorkspaceContext.jsx";
 
 const Dashboard = () => {
-  const [workspaces, setWorkspaces] = useState([])
+  // const [workspaces, setWorkspaces] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showCreateModal, setshowCreateModal] = useState(false)
@@ -24,6 +25,7 @@ const Dashboard = () => {
 
   const navigate = useNavigate()
   const {user,setUser} = useAuth()
+  const {workspaces,setWorkspaces} = useWorkspace();
 
   const searchData = workspaces.map(w => ({
   id: w.id,

@@ -64,7 +64,8 @@ const Sidebar = ({ user, workspaces, onLogout }) => {
            <CheckSquare size={14} /> My Tasks
           </button>
 
-          <button className="flex w-full gap-x-2 items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200 cursor-pointer">
+          <button onClick={()=>navigate('/activity')}
+          className="flex w-full gap-x-2 items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200 cursor-pointer">
             <Activity size={14} />Activity
           </button>
         </div>
