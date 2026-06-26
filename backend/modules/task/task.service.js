@@ -193,7 +193,9 @@ export const deleteTask = async (userId,workspaceId,taskId) => {
   return result
 }
 
-export const getMyTasks = async (userId)=>{
+export const getMyTasks = async (userId,pagination)=>{
+  const {page,limit} = pagination
+  const skip = (page - 1) * limit
     const tasks = await prisma.task.findMany({
       where:{
        assignedToId:userId, 
@@ -207,7 +209,9 @@ export const getMyTasks = async (userId)=>{
         workspace:{
           select:{id:true,name:true}
         }
-      },orderBy:{updatedAt:'desc'}
+      },orderBy:{updatedAt:'desc'},
+      skip,
+      take:limit
     })
 
     return tasks
