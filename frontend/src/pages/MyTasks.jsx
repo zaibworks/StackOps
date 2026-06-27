@@ -1,8 +1,40 @@
 import Navbar from "../components/Navbar.jsx";
 import Sidebar from "../components/Sidebar.jsx";
 import { CheckSquare, Clock3, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { useState,useEffect } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
+import {useWorkspace} from '../context/WorkspaceContext.jsx'
+import api from "../api/axios.js";
+import { useNavigate } from "react-router-dom";
 
 const MyTasks = () => {
+  const [page, setpage] = useState(1)
+  const [tasks, setTasks] = useState([])
+  const [totalPages, setTotalPages] = useState(1)
+
+  const {user,setUser} = useAuth()
+  const {workspaces} = useWorkspace()
+  const navigate = useNavigate()
+
+
+  useEffect(() => {
+   const fetchTasks =async ()=>{
+    try{
+      const res = await api.get(`/task/getMy`,{
+        params:{
+          page:page,
+          limit:10
+        }
+      })
+      setTasks(res.data.data)
+      setTotalPages(res.data.totalPages)
+    }catch(e){
+      console.log(e)
+    }
+   }
+   fetchTasks()
+  }, [])
+  
 return (
 <div className="h-screen flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
 
@@ -10,9 +42,9 @@ return (
 
   <div className="flex flex-1 overflow-hidden">
 
-    <Sidebar />
+    <Sidebar user={user} workspaces={workspaces} />
 
-    <main className="flex-1 overflow-y-auto p-8 main-scrollbar">
+    <main className="flex-1 flex flex-col overflow-hidden p-6">
 
       {/* Header */}
       <div className="mb-8">
@@ -58,72 +90,69 @@ return (
 
       {/* Task Cards */}
       <div className="mt-8 flex-1 min-h-0 overflow-y-auto px-2 p-4 space-y-2 custom-scrollbar">
+{tasks?.map(t=>(
 
-       <div className="cursor-pointer rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 py-3 transition-all hover:border-zinc-800 hover:bg-zinc-900/40">
-
-  <div className="flex items-center justify-between">
-
-    <div className="min-w-0">
-      <h3 className="truncate text-sm font-semibold text-zinc-100">
-        Fix Login Authentication
-      </h3>
-
-      <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500">
-        <span className="font-medium hover:text-zinc-300">📁 StackOps</span>
-
-        <span>•</span>
-
-        <span>In Progress</span>
-
-        <span>•</span>
-
-        <span>28 Jun</span>
-      </div>
-    </div>
-
-    <span className=" px-2 py-1 text-[11px] font-medium text-red-500">
-      High
-    </span>
-
-  </div>
-
-</div>
-       <div className="cursor-pointer rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 py-3 transition-all hover:border-zinc-800 hover:bg-zinc-900/40">
+  <div key={t.id}
+  className="cursor-pointer rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 py-3 transition-all hover:border-zinc-800 hover:bg-zinc-900/40">
 
   <div className="flex items-center justify-between">
 
     <div className="min-w-0">
       <h3 className="truncate text-sm font-semibold text-zinc-100">
-        Fix task filter
+        {t.title}
       </h3>
 
       <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500">
-        <span className="font-medium hover:text-zinc-300">📁 oxpress</span>
+        <span onClick={()=>navigate(`/workspace/${t.workspace.id}`)}
+        className="font-medium hover:text-zinc-300">📁 {t.workspace.name}</span>
 
         <span>•</span>
 
-        <span>Todo</span>
+        <span>{t.status}</span>
 
         <span>•</span>
 
-        <span>01 Jun</span>
+        <span>{t.dueDate ? new Date(t.dueDate).toLocaleDateString():"No due Date"}</span>
       </div>
     </div>
 
     <span className="px-2 py-1 text-[11px] font-medium text-red-500">
-      High
+      {t.priority}
     </span>
 
   </div>
 
 </div>
 
+))}
+
 
       </div>
+{/* pages change  */}
+  <div className="flex border-y border-zinc-500 justify-center items-center gap-3 py-3">
+  <button
+    onClick={() => setpage(page - 1)}
+    disabled={page === 1}
+    className="px-4 py-2 rounded-xl border border-zinc-800 text-sm hover:bg-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed"
+  >
+    Previous
+  </button>
+
+  <span className="text-sm text-zinc-500">{page} / {totalPages}</span>
+
+  <button
+    onClick={() => setpage(page + 1)}
+    disabled={page === totalPages}
+    className="px-4 py-2 rounded-xl border border-zinc-800 text-sm hover:bg-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed"
+  >
+    Next
+  </button>
+</div>
 
     </main>
 
   </div>
+
 
 </div>
 )

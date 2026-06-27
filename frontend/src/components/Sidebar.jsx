@@ -60,9 +60,9 @@ const Sidebar = ({ user, workspaces, onLogout }) => {
           </div>
         )}
 
-        <div onClick={()=>navigate('/mytasks')}
-        className="mt-4 space-y-1">
-          <button className="flex w-full gap-x-2 items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200 cursor-pointer">
+        <div className="mt-4 space-y-1">
+          <button onClick={()=>navigate('/mytasks')}
+          className="flex w-full gap-x-2 items-center rounded-xl px-3 py-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-200 cursor-pointer">
            <CheckSquare size={14} /> My Tasks
           </button>
 

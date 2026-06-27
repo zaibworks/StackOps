@@ -197,7 +197,10 @@ export const getMyTasks = async (userId,page,limit)=>{
   const skip = (page - 1) * limit
     const tasks = await prisma.task.findMany({
       where:{
-       assignedToId:userId, 
+        OR:[
+          {assignedToId:userId}, 
+           {userId:userId}
+        ],
        workspace:{
         members:{
           some:{userId}
