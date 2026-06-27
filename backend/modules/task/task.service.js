@@ -193,8 +193,7 @@ export const deleteTask = async (userId,workspaceId,taskId) => {
   return result
 }
 
-export const getMyTasks = async (userId,pagination)=>{
-  const {page,limit} = pagination
+export const getMyTasks = async (userId,page,limit)=>{
   const skip = (page - 1) * limit
     const tasks = await prisma.task.findMany({
       where:{
@@ -214,5 +213,21 @@ export const getMyTasks = async (userId,pagination)=>{
       take:limit
     })
 
-    return tasks
+    const total = await prisma.task.count({
+     where:{
+       assignedToId:userId, 
+       workspace:{
+        members:{
+          some:{userId}
+        }
+       }
+          
+      }
+    })
+
+    return {
+      tasks,
+      total,
+      totalPages:Math.ceil(total/limit)
+  }
 }

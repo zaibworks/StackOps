@@ -60,8 +60,10 @@ export const getMyTasksController = async(req,res)=>{
   try {
      console.log("GET MY TASKS HIT")
     const userId = req.user.userId
-    const tasks = await getMyTasks(userId)
-    res.json({message:"All you tasks",data:tasks})
+    const page = parseInt(req.query.page) || 1
+    const limit = parseInt(req.query.limit) || 10
+    const {tasks,total,totalPages} = await getMyTasks(userId,page,limit)
+    res.json({message:"All you tasks",data:tasks,totalPages,currentPage:page})
   } catch (e) {
        res.status(400).json({
     message:e.message
