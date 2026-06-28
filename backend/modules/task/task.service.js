@@ -193,40 +193,34 @@ export const deleteTask = async (userId,workspaceId,taskId) => {
   return result
 }
 
-export const getMyTasks = async (userId,page,limit)=>{
+export const getMyTasks = async (userId,page,limit,filter)=>{
   const skip = (page - 1) * limit
-    const tasks = await prisma.task.findMany({
-      where:{
-        OR:[
-          {assignedToId:userId}, 
-           {userId:userId}
-        ],
-       workspace:{
-        members:{
-          some:{userId}
-        }
-       }
-          
-      },include:{
-        workspace:{
-          select:{id:true,name:true}
-        }
-      },orderBy:{updatedAt:'desc'},
-      skip,
-      take:limit
-    })
 
-    const total = await prisma.task.count({
-     where:{
-       assignedToId:userId, 
-       workspace:{
-        members:{
-          some:{userId}
-        }
-       }
-          
-      }
-    })
+   let filterCondition = {}
+
+    if (filter === 'all') {
+    filterCondition = { OR: [{ assignedToId: userId }, { userId }] }
+  } else if (filter === 'assignedToMe') {
+    filterCondition = { assignedToId: userId }
+  } else if (filter === 'createdByMe') {
+    filterCondition = { userId }
+  }
+
+    const where = {
+    ...filterCondition, // spreading filter condition
+    workspace: {
+      members: { some: { userId } }
+    }
+  }
+    const tasks = await prisma.task.findMany({
+    where,  // dynamic where
+    include: { workspace: { select: { id: true, name: true } } },
+    orderBy: { updatedAt: 'desc' },
+    skip,
+    take: limit
+  })
+
+    const total = await prisma.task.count({where})
 
     return {
       tasks,

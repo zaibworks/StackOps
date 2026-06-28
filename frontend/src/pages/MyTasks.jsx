@@ -11,6 +11,7 @@ const MyTasks = () => {
   const [page, setpage] = useState(1)
   const [tasks, setTasks] = useState([])
   const [totalPages, setTotalPages] = useState(1)
+  const [filter, setFilter] = useState('all')
 
   const {user,setUser} = useAuth()
   const {workspaces} = useWorkspace()
@@ -23,7 +24,8 @@ const MyTasks = () => {
       const res = await api.get(`/task/getMy`,{
         params:{
           page:page,
-          limit:10
+          limit:10,
+          filter
         }
       })
       setTasks(res.data.data)
@@ -33,7 +35,13 @@ const MyTasks = () => {
     }
    }
    fetchTasks()
-  }, [])
+  }, [page,filter])
+
+  const priorityColors = {
+  low: 'text-yellow-400',
+  medium: 'text-orange-400',
+  high: 'text-red-500'
+}
   
 return (
 <div className="h-screen flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
@@ -62,16 +70,31 @@ return (
 
         <div className="flex gap-2 flex-wrap">
 
-          <button className="rounded-xl border border-orange-500 bg-orange-500/10 px-4 py-2 text-sm">
+          <button  onClick={() => setFilter('all')}
+          className={`rounded-xl border px-5 py-2 text-sm ${
+    filter === 'all'
+    ? 'border-orange-500 bg-orange-500/10'
+    : 'border-zinc-800 hover:bg-zinc-900'
+  }`}>
             All
           </button>
 
-          <button className="rounded-xl border border-zinc-800 px-7 py-2 text-sm hover:bg-zinc-900">
+          <button onClick={() => setFilter('createdByMe')}
+          className={`rounded-xl border px-7 py-2 text-sm ${
+    filter === 'createdByMe'
+    ? 'border-orange-500 bg-orange-500/10'
+    : 'border-zinc-800 hover:bg-zinc-900'
+  }`}>
             CreatedByMe
           </button>
 
-          <button className="rounded-xl border border-zinc-800 px-7 py-2 text-sm hover:bg-zinc-900">
-             AssignedTome
+          <button onClick={() => setFilter('assignedToMe')}
+          className={`rounded-xl border px-7 py-2 text-sm ${
+    filter === 'assignedToMe'
+    ? 'border-orange-500 bg-orange-500/10'
+    : 'border-zinc-800 hover:bg-zinc-900'
+  }`}>
+             AssignedToMe
           </button>
 
         </div>
@@ -116,9 +139,9 @@ return (
       </div>
     </div>
 
-    <span className="px-2 py-1 text-[11px] font-medium text-red-500">
-      {t.priority}
-    </span>
+  <span className={`px-2 py-1 text-[11px] font-medium ${priorityColors[t.priority] || 'text-zinc-400'}`}>
+  {t.priority}
+</span>
 
   </div>
 

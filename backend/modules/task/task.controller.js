@@ -58,11 +58,11 @@ export const deleteTaskController= async(req,res)=>{
 
 export const getMyTasksController = async(req,res)=>{
   try {
-     console.log("GET MY TASKS HIT")
     const userId = req.user.userId
+    const filter = req.query.filter || 'all'
     const page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 10
-    const {tasks,total,totalPages} = await getMyTasks(userId,page,limit)
+    const {tasks,total,totalPages} = await getMyTasks(userId,page,limit,filter)
     res.json({message:"All you tasks",data:tasks,totalPages,currentPage:page})
   } catch (e) {
        res.status(400).json({

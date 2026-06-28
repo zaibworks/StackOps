@@ -245,22 +245,6 @@ const memberSelect=(memberId)=>{
   {/* Left Side */}
   <div className="flex flex-col gap-2">
 
-    {/* Breadcrumb */}
-    {/* <div className="flex items-center gap-2 text-sm">
-      <button
-        onClick={() => navigate("/dashboard")}
-        className="text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer"
-      >
-        Dashboard
-      </button>
-
-      <span className="text-zinc-700">/</span>
-
-      <span className="text-zinc-500">
-        Workspace
-      </span>
-    </div> */}
-
     {/* Workspace Info */}
     <div className="flex items-center gap-4">
 
