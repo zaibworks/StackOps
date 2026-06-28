@@ -2,7 +2,7 @@ import { useState,useEffect } from "react"
 import api from '../api/axios.js'
 import { useNavigate} from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
-import { Plus,X,MoreVertical,Pencil,Trash2, FolderKanban, Users, CheckSquare, Activity, LogOut } from "lucide-react";
+import { Plus,X,MoreVertical,Pencil,Trash2, FolderKanban, Users, CheckSquare, Activity, LogOut, Flag } from "lucide-react";
 import UpdateWorkspaceModal from "../components/UpdateWorkspaceModal.jsx";
 import DeleteWorkspaceModal from "../components/DeleteWorkspaceModal.jsx";
 import LeaveWorkspaceModal from "../components/LeaveWorkspaceModal.jsx";
@@ -12,7 +12,7 @@ import { useWorkspace } from "../context/WorkspaceContext.jsx";
 
 const Dashboard = () => {
   // const [workspaces, setWorkspaces] = useState([])
-  const [loading, setLoading] = useState(true)
+  // const [loading, setLoading] = useState(false)       
   const [error, setError] = useState('')
   const [showCreateModal, setshowCreateModal] = useState(false)
   const [creating, setCreating] = useState(false)
@@ -25,7 +25,7 @@ const Dashboard = () => {
 
   const navigate = useNavigate()
   const {user,setUser} = useAuth()
-  const {workspaces,setWorkspaces} = useWorkspace();
+  const {workspaces,setWorkspaces,loading} = useWorkspace();
 
   const searchData = workspaces.map(w => ({
   id: w.id,
@@ -34,21 +34,6 @@ const Dashboard = () => {
 }))
 
   console.log(user)
-
-  useEffect(() => {
-    const fetchWorkspaces = async()=>{
-      try{
-        const response = await api.get('/workspace')
-        setWorkspaces(response.data)
-
-      }catch(e){
-         setError(e.response?.data?.message || "Failed to get workspaces")
-      }finally{
-        setLoading(false)
-      }
-    }
-    fetchWorkspaces()
-  }, [])
 
   const handleLogout = () => {
   localStorage.removeItem('token');

@@ -13,6 +13,9 @@ const MyTasks = () => {
   const [totalPages, setTotalPages] = useState(1)
   const [filter, setFilter] = useState('all')
 
+  const [status, setStatus] = useState('')
+  const [workspaceId, setWorkspaceId] = useState('')
+
   const {user,setUser} = useAuth()
   const {workspaces} = useWorkspace()
   const navigate = useNavigate()
@@ -25,7 +28,9 @@ const MyTasks = () => {
         params:{
           page:page,
           limit:10,
-          filter
+          filter,
+          status,
+          workspaceId
         }
       })
       setTasks(res.data.data)
@@ -35,7 +40,7 @@ const MyTasks = () => {
     }
    }
    fetchTasks()
-  }, [page,filter])
+  }, [page,filter,status,workspaceId])
 
   const priorityColors = {
   low: 'text-yellow-400',
@@ -101,12 +106,28 @@ return (
 
 <div className="flex gap-2 flex-wrap">
 
-        <div className="rounded-xl border border-zinc-800 px-4 py-2 text-sm hover:bg-zinc-900">
-            Status
-        </div>
-        <div className="rounded-xl border border-zinc-800 px-4 py-2 text-sm hover:bg-zinc-900">
-            Workspace
-        </div>
+  <select
+    value={status}
+    onChange={(e) => { setStatus(e.target.value); setpage(1) }}
+    className="rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2 text-sm text-zinc-400 hover:bg-zinc-900 cursor-pointer outline-none"
+  >
+    <option value="">All</option>
+    <option value="todo">Todo</option>
+    <option value="inprogress">In Progress</option>
+    <option value="done">Done</option>
+  </select>
+
+  <select
+    value={workspaceId}
+    onChange={(e) => { setWorkspaceId(e.target.value); setpage(1) }}
+    className="rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2 text-sm text-zinc-400 hover:bg-zinc-900 cursor-pointer outline-none"
+  >
+    <option value="">Workspace</option>
+    {workspaces?.map(w => (
+      <option key={w.id} value={w.id}>{w.name}</option>
+    ))}
+  </select>
+
 </div>
 
       </div>

@@ -62,7 +62,9 @@ export const getMyTasksController = async(req,res)=>{
     const filter = req.query.filter || 'all'
     const page = parseInt(req.query.page) || 1
     const limit = parseInt(req.query.limit) || 10
-    const {tasks,total,totalPages} = await getMyTasks(userId,page,limit,filter)
+    const status =(req.query.status)
+    const workspaceId = parseInt(req.query.workspaceId)
+    const {tasks,total,totalPages} = await getMyTasks(userId,page,limit,filter,status,workspaceId)
     res.json({message:"All you tasks",data:tasks,totalPages,currentPage:page})
   } catch (e) {
        res.status(400).json({

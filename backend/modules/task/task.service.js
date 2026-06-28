@@ -193,7 +193,7 @@ export const deleteTask = async (userId,workspaceId,taskId) => {
   return result
 }
 
-export const getMyTasks = async (userId,page,limit,filter)=>{
+export const getMyTasks = async (userId,page,limit,filter,status,workspaceId)=>{
   const skip = (page - 1) * limit
 
    let filterCondition = {}
@@ -206,11 +206,19 @@ export const getMyTasks = async (userId,page,limit,filter)=>{
     filterCondition = { userId }
   }
 
+
     const where = {
     ...filterCondition, // spreading filter condition
     workspace: {
       members: { some: { userId } }
     }
+  }
+
+   if(status){
+    where.status = status
+  }
+  if(workspaceId){
+    where.workspaceId = workspaceId
   }
     const tasks = await prisma.task.findMany({
     where,  // dynamic where
