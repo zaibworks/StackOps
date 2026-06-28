@@ -79,13 +79,22 @@ export const getTasks = async (workspaceId, filters, pagination) => {
 }
 
 export const updateTask= async(taskId,userId,taskData,workspaceId)=>{
+
+   const isAdmin = await prisma.membership.findFirst({
+      where:{
+        workspaceId,
+        userId,
+        role:"admin"
+      }
+    })
+
        const oldTask = await prisma.task.findUnique({
       where:{
         id:Number(taskId)
       }
     })
 
-     if (!oldTask || oldTask.userId !== userId || oldTask.workspaceId !== workspaceId) {
+     if (!oldTask|| oldTask.workspaceId !== workspaceId ( oldTask.userId !== userId &&!isAdmin)) {
     throw new Error("Task not found or unauthorized");
   }
 
@@ -173,13 +182,21 @@ export const deleteTask = async (userId,workspaceId,taskId) => {
 
    const task = await prisma.task.findUnique({
       where:{
-        id:taskId
+        id:Number(taskId)
       }
     })
 
-     if (!task || task.userId !== userId || task.workspaceId !== workspaceId) {
+    const isAdmin = await prisma.membership.findFirst({
+      where:{
+        workspaceId,
+        userId,
+        role:"admin"
+      }
+    })
+
+     if (!task || task.workspaceId !== workspaceId || (task.userId !== userId && !isAdmin)) {
     throw new Error("Task not found or unauthorized")
-  }
+}
   
   const result = await prisma.task.delete({
     where: { id: Number(taskId)}

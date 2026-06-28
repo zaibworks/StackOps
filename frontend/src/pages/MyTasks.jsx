@@ -28,8 +28,12 @@ const [selectedWorkspace, setSelectedWorkspace] = useState(null)
 
   const handleTaskClick = async (task) => {
   const res = await api.get(`/workspace/${task.workspace.id}`)
-  setSelectedWorkspace(res.data.data)
-  setSelectedTask(task)
+  const freshWorkspace = res.data.data
+
+  const freshTask = freshWorkspace.tasks.find(t => t.id === task.id)
+  
+  setSelectedWorkspace(freshWorkspace)
+  setSelectedTask(freshTask || tasks)
 }
 
   const fetchTasks =async ()=>{
@@ -61,18 +65,16 @@ const [selectedWorkspace, setSelectedWorkspace] = useState(null)
 }
 
 const handleTaskUpdate = async () => {
-  await fetchTasks() 
+  await fetchTasks()
   
-  if(selectedTask) {
-    const res = await api.get(`/workspace/${selectedTask.workspace.id}`)
-    setSelectedWorkspace(res.data.data)
-  }
-
-   const updatedTask = tasks.find(t => t.id === selectedTask.id)
+  const res = await api.get(`/workspace/${selectedTask.workspace.id}`)
+  const updatedWorkspace = res.data.data
+  console.log('updatedWorkspace:', updatedWorkspace)
+  const updatedTask = updatedWorkspace.tasks.find(t => t.id === selectedTask.id)
+  console.log('updatedTask:', updatedTask)
+  
+  setSelectedWorkspace(updatedWorkspace)
   if(updatedTask) setSelectedTask(updatedTask)
-    
-   setSelectedTask(null)   
-  setSelectedWorkspace(null)
 }
   
 return (
@@ -138,7 +140,7 @@ return (
     onChange={(e) => { setStatus(e.target.value); setpage(1) }}
     className="rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2 text-sm text-zinc-400 hover:bg-zinc-900 cursor-pointer outline-none"
   >
-    <option value="">All</option>
+    <option value="">Status</option>
     <option value="todo">Todo</option>
     <option value="inprogress">In Progress</option>
     <option value="done">Done</option>

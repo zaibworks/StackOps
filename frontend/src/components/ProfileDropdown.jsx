@@ -125,6 +125,23 @@ const allTasks =
       {/* Actions */}
       <div className="p-4 space-y-2">
 
+         <button
+          onClick={onLogout}
+          className="
+          flex w-full items-center gap-3
+          rounded-xl
+          border border-zinc-500/20
+          bg-zinc-500/10
+          px-4 py-3
+          text-sm text-zinc-400
+          transition
+          hover:bg-zinc-500/20
+          "
+        >
+          <Settings size={16} />
+          Settings
+        </button>
+
         <button
           onClick={onLogout}
           className="
@@ -141,7 +158,6 @@ const allTasks =
           <LogOut size={16} />
           Logout
         </button>
-
       </div>
     </div>
   );
