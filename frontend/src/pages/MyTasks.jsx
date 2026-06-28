@@ -6,8 +6,13 @@ import { useAuth } from "../context/AuthContext.jsx";
 import {useWorkspace} from '../context/WorkspaceContext.jsx'
 import api from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
+import TaskCard from "../components/TaskCard.jsx";
 
 const MyTasks = () => {
+
+  const [selectedTask, setSelectedTask] = useState(null)
+const [selectedWorkspace, setSelectedWorkspace] = useState(null)
+
   const [page, setpage] = useState(1)
   const [tasks, setTasks] = useState([])
   const [totalPages, setTotalPages] = useState(1)
@@ -21,8 +26,13 @@ const MyTasks = () => {
   const navigate = useNavigate()
 
 
-  useEffect(() => {
-   const fetchTasks =async ()=>{
+  const handleTaskClick = async (task) => {
+  const res = await api.get(`/workspace/${task.workspace.id}`)
+  setSelectedWorkspace(res.data.data)
+  setSelectedTask(task)
+}
+
+  const fetchTasks =async ()=>{
     try{
       const res = await api.get(`/task/getMy`,{
         params:{
@@ -39,6 +49,8 @@ const MyTasks = () => {
       console.log(e)
     }
    }
+
+  useEffect(() => {
    fetchTasks()
   }, [page,filter,status,workspaceId])
 
@@ -46,6 +58,21 @@ const MyTasks = () => {
   low: 'text-yellow-400',
   medium: 'text-orange-400',
   high: 'text-red-500'
+}
+
+const handleTaskUpdate = async () => {
+  await fetchTasks() 
+  
+  if(selectedTask) {
+    const res = await api.get(`/workspace/${selectedTask.workspace.id}`)
+    setSelectedWorkspace(res.data.data)
+  }
+
+   const updatedTask = tasks.find(t => t.id === selectedTask.id)
+  if(updatedTask) setSelectedTask(updatedTask)
+    
+   setSelectedTask(null)   
+  setSelectedWorkspace(null)
 }
   
 return (
@@ -136,7 +163,7 @@ return (
       <div className="mt-8 flex-1 min-h-0 overflow-y-auto px-2 p-4 space-y-2 custom-scrollbar">
 {tasks?.map(t=>(
 
-  <div key={t.id}
+  <div  key={t.id} onClick={() => handleTaskClick(t)}
   className="cursor-pointer rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 py-3 transition-all hover:border-zinc-800 hover:bg-zinc-900/40">
 
   <div className="flex items-center justify-between">
@@ -147,7 +174,10 @@ return (
       </h3>
 
       <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500">
-        <span onClick={()=>navigate(`/workspace/${t.workspace.id}`)}
+        <span  onClick={(e) => { 
+  e.stopPropagation() 
+  navigate(`/workspace/${t.workspace.id}`) 
+}}
         className="font-medium hover:text-zinc-300">📁 {t.workspace.name}</span>
 
         <span>•</span>
@@ -197,6 +227,14 @@ return (
 
   </div>
 
+{selectedTask && selectedWorkspace && (
+  <TaskCard
+    task={selectedTask}
+    workspace={selectedWorkspace}
+    onClose={() => { setSelectedTask(null); setSelectedWorkspace(null) }}
+    onTaskUpdate={handleTaskUpdate}
+  />
+)}
 
 </div>
 )

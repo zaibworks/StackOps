@@ -1,27 +1,26 @@
 import React, { useEffect, useEffectEvent } from "react";
 import api from "../api/axios.js";
-import { useState} from "react";
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 
-import { X, Calendar, User, Flag, PencilIcon,Trash2 } from "lucide-react";
+import { X, Calendar, User, Flag, PencilIcon, Trash2 } from "lucide-react";
 
-const TaskCard = ({ task, workspace, onClose, onTaskUpdate,startInEditMode}) => {
+const TaskCard = ({task,workspace,onClose,onTaskUpdate,startInEditMode,
+}) => {
+  const { user } = useAuth();
 
-  const {user} = useAuth()
+  const currentUserId = user.id;
+  const currentMember = workspace.members.find(
+    (member) => member.userId === currentUserId,
+  );
+  const currentUserRole = currentMember?.role;
 
-  const currentUserId = user.id
-const currentMember = workspace.members.find(
-  member => member.userId === currentUserId
-)
-const currentUserRole = currentMember?.role
+  const [comments, setComments] = useState([]);
+  const [comment, setComment] = useState("");
 
+  const [openCommentMenuId, setopenCommentMenuId] = useState(null);
 
-const [comments,setComments] = useState([])
-const [comment,setComment] = useState("")
-
-const [openCommentMenuId, setopenCommentMenuId] = useState(null)
-
-  const [isEditing, setisEditing] = useState(startInEditMode||false);
+  const [isEditing, setisEditing] = useState(startInEditMode || false);
 
   const [editTitle, setEditTitle] = useState(task.title);
   const [editContent, setEditContent] = useState(task.content);
@@ -35,16 +34,15 @@ const [openCommentMenuId, setopenCommentMenuId] = useState(null)
   const [editPriority, setEditPriority] = useState(task.priority);
   const [editStatus, setEditStatus] = useState(task.status);
 
-  const [isMetaEditing, setisMetaEditing] = useState(startInEditMode||false);
+  const [isMetaEditing, setisMetaEditing] = useState(startInEditMode || false);
 
   const deleteTask = async () => {
     try {
       const res = await api.delete(`/task/${workspace.id}/${task.id}`);
       await onTaskUpdate();
-       onClose()
+      onClose();
     } catch (e) {
-      console.log(e.response?.data)
-      
+      console.log(e.response?.data);
     }
   };
 
@@ -58,66 +56,58 @@ const [openCommentMenuId, setopenCommentMenuId] = useState(null)
   };
 
   const updateTaskMeta = async () => {
-    try{
-       await api.put(`/task/${workspace.id}/${task.id}`, {
-      priority: editPriority,
-      status: editStatus,
-      dueDate: editDueDate ? new Date(editDueDate).toISOString() : null,
-      assignedToId: editAssignedToId,
-    });
-    await onTaskUpdate();
-    setisMetaEditing(false);
-    }catch(e){
-      console.log(e)
+    try {
+      await api.put(`/task/${workspace.id}/${task.id}`, {
+        priority: editPriority,
+        status: editStatus,
+        dueDate: editDueDate ? new Date(editDueDate).toISOString() : null,
+        assignedToId: editAssignedToId,
+      });
+      await onTaskUpdate();
+      setisMetaEditing(false);
+    } catch (e) {
+      console.log(e);
     }
   };
 
   const fetchComments = async () => {
-    console.log("FETCH COMMENTS CALLED")
-  try{
-    const res = await api.get(
-      `/comment/${workspace.id}/${task.id}`
-    )
-    await console.log(res.data.data)
-    setComments(res.data.data)
-  }catch(err){
-    console.log(err)
-  }
-}
+    console.log("FETCH COMMENTS CALLED");
+    try {
+      const res = await api.get(`/comment/${workspace.id}/${task.id}`);
+      await console.log(res.data.data);
+      setComments(res.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-useEffect(() => {
-  fetchComments()
-}, [task.id])
+  useEffect(() => {
+    fetchComments();
+  }, [task.id]);
 
-const addComment = async () => {
-  try{
-    await api.post(
-      `/comment/${workspace.id}/${task.id}`,
-      {
-        content: comment
-      }
-    )
+  const addComment = async () => {
+    try {
+      await api.post(`/comment/${workspace.id}/${task.id}`, {
+        content: comment,
+      });
 
-    setComment("")
-    fetchComments()
+      setComment("");
+      fetchComments();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  }catch(err){
-    console.log(err)
-  }
-}
+  const deleteComment = async (commentId) => {
+    try {
+      await api.delete(`/comment/${workspace.id}/${commentId}`);
 
-const deleteComment = async (commentId) => {
-  try {
-    await api.delete(
-      `/comment/${workspace.id}/${commentId}`
-    )
-     
-    setopenCommentMenuId(null)
-    fetchComments()
-  } catch (err) {
-    console.log(err)
-  }
-}
+      setopenCommentMenuId(null);
+      fetchComments();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-sm">
@@ -192,11 +182,11 @@ pb-1"
 
           <div className="flex gap-3">
             <span className="rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1 text-xs text-orange-400">
-              {task.priority.charAt(0).toUpperCase()+task.priority.slice(1)}
+              {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
             </span>
 
             <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-3 py-1 text-xs text-blue-400">
-              {task.status.charAt(0).toUpperCase()+task.status.slice(1)}
+              {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
             </span>
           </div>
 
@@ -277,7 +267,11 @@ custom-scrollbar
                 {isMetaEditing ? (
                   <select
                     value={editAssignedToId}
-                    onChange={(e) => setEditAssignedToId(e.target.value ? Number(e.target.value) : null)}
+                    onChange={(e) =>
+                      setEditAssignedToId(
+                        e.target.value ? Number(e.target.value) : null,
+                      )
+                    }
                     className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-zinc-700"
                   >
                     <option value="">Unassigned</option>
@@ -334,7 +328,10 @@ custom-scrollbar
                     <option value="high">High</option>
                   </select>
                 ) : (
-                  <span className="text-sm text-zinc-200">{task.priority.charAt(0).toUpperCase()+task.priority.slice(1)}</span>
+                  <span className="text-sm text-zinc-200">
+                    {task.priority.charAt(0).toUpperCase() +
+                      task.priority.slice(1)}
+                  </span>
                 )}
               </div>
 
@@ -355,7 +352,9 @@ custom-scrollbar
                     <option value="done">Done</option>
                   </select>
                 ) : (
-                  <span className="text-sm text-zinc-200">{task.status.charAt(0).toUpperCase()+task.status.slice(1)}</span>
+                  <span className="text-sm text-zinc-200">
+                    {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
+                  </span>
                 )}
               </div>
             </div>
@@ -394,52 +393,58 @@ custom-scrollbar
               </h3>
 
               {/* Existing Comments */}
-         
-          {comments.map(c=>(
-                   
-                   
-              <div key={c.id} className="space-y-4 mb-5 bg-transparent hover:bg-zinc-800/30 ">
-                <div className="flex items-center justify-between pr-4">
-                          <div className="border-l border-zinc-700 pl-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-zinc-200">
-                      {c.user?.name}
-                    </span>
 
-                    <span className="text-xs text-zinc-500">{new Date(c.createdAt).toLocaleString()}</span>
+              {comments.map((c) => (
+                <div
+                  key={c.id}
+                  className="space-y-4 mb-5 bg-transparent hover:bg-zinc-800/30 "
+                >
+                  <div className="flex items-center justify-between pr-4">
+                    <div className="border-l border-zinc-700 pl-4">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-zinc-200">
+                          {c.user?.name}
+                        </span>
+
+                        <span className="text-xs text-zinc-500">
+                          {new Date(c.createdAt).toLocaleString()}
+                        </span>
+                      </div>
+
+                      <p className="mt-2 text-sm text-zinc-400">{c.content}</p>
+                    </div>
+
+                    {(c.userId === currentUserId ||
+                      currentUserRole === "admin") && (
+                      <>
+                        <div className="relative">
+                          <button
+                            onClick={() =>
+                              setopenCommentMenuId(
+                                openCommentMenuId === c.id ? null : c.id,
+                              )
+                            }
+                            className="rounded-lg p-2 text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer"
+                          >
+                            ⋮
+                          </button>
+                          {openCommentMenuId === c.id && (
+                            <div className="absolute right-0 top-8 z-50 min-w-[100px] rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl">
+                              <button
+                                onClick={() => deleteComment(c.id)}
+                                className="w-full rounded-lg flex justify-between items-center text-left text-sm text-red-400 hover:bg-zinc-800 px-3"
+                              >
+                                <Trash2 size={14} />
+                                Remove
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
                   </div>
-
-                  <p className="mt-2 text-sm text-zinc-400">
-                    {c.content}
-                  </p>
-            
                 </div>
-
-                     {(c.userId === currentUserId || currentUserRole === "admin") && (<>
-                     <div className="relative">
-    <button onClick={() => setopenCommentMenuId( openCommentMenuId ===c.id?null:c.id)}
-       className="rounded-lg p-2 text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer">
-      ⋮
-    </button>
-      {openCommentMenuId === c.id && (
-    <div className="absolute right-0 top-8 z-50 min-w-[100px] rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl">
-      <button
-        onClick={() => deleteComment(c.id)}
-        className="w-full rounded-lg flex justify-between items-center text-left text-sm text-red-400 hover:bg-zinc-800 px-3"
-      >
-        <Trash2 size={14}/>
-        Remove
-      </button>
-    </div>
-  )}
-
-                     </div>
-                     </>
-  )}
-                </div>
-
-              </div>
-          ))}
+              ))}
 
               {/* Add Comment */}
 
@@ -448,12 +453,15 @@ custom-scrollbar
                   rows={3}
                   placeholder="Write a comment..."
                   value={comment}
-                  onChange={(e)=>setComment(e.target.value)}
+                  onChange={(e) => setComment(e.target.value)}
                   className="w-full resize-none rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm outline-none focus:border-zinc-700"
                 />
 
                 <div className="flex justify-end">
-                  <button onClick={addComment} className="rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-white">
+                  <button
+                    onClick={addComment}
+                    className="rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-white"
+                  >
                     Comment
                   </button>
                 </div>
@@ -461,8 +469,10 @@ custom-scrollbar
             </div>
           </div>
           {/* delete button  */}
-          <button  onClick={deleteTask}
-          className="w-full rounded-2xl border border-red-500/20 bg-red-500/10 py-3 text-red-400 hover:bg-red-500/20">
+          <button
+            onClick={deleteTask}
+            className="w-full rounded-2xl border border-red-500/20 bg-red-500/10 py-3 text-red-400 hover:bg-red-500/20"
+          >
             Delete Task
           </button>
         </div>
