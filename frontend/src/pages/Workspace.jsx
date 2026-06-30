@@ -305,6 +305,7 @@ const memberSelect=(memberId)=>{
      isOpen={isOpenWorkspaceSettings}
      onClose={()=>setisOpenWorkspaceSettings(false)}
      workspace={workspace}
+     onDone={fetchWorkspace}
      />
   </>
 )}

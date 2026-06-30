@@ -21,10 +21,12 @@ const updateWorkspace = async (e) => {
   e.preventDefault()
     setUpdating(true)
   if (!name.trim()) {
+    setUpdating(false)
     return setError("Workspace name required");
   }
 
   if (name.trim() === workspace.name) {
+    setUpdating(false)
     return setError("Workspace name is unchanged");
   }
 
@@ -50,8 +52,10 @@ const updateWorkspace = async (e) => {
 }
 
   return (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div onClick={(e) => e.stopPropagation()}
+  className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
   <form
+  onClick={(e) => e.stopPropagation()}
     onSubmit={updateWorkspace}
     className="w-full max-w-xl rounded-3xl border border-zinc-800 backdrop-blur-2xl shadow-2xl"
   >

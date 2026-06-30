@@ -1,18 +1,17 @@
-import {
-  X,
-  Pencil,
-  Trash2,
-  LogOut,
-  Settings,
-  ChevronRight,
-} from "lucide-react";
+import {X,Pencil,Trash2,LogOut,Settings,ChevronRight, Flag,} from "lucide-react";
 import { useState } from "react";
+import DeleteWorkspaceModal from "./DeleteWorkspaceModal.jsx";
+import UpdateWorkspaceModal from "./UpdateWorkspaceModal.jsx";
+import { useWorkspace } from "../context/WorkspaceContext.jsx";
+import { useNavigate } from "react-router-dom";
 
-if (!isOpen) return null;
-const WorkspaceSettingsModal = ({isOpen,onClose,workspace}) => {
+const WorkspaceSettingsModal = ({isOpen,onClose,workspace,onDone}) => {
+  if (!isOpen) return null;
+
+  const navigate = useNavigate()
 
    const [showUpdateWorkspace, setshowUpdateWorkspace] = useState(false)
-    const [showDelelteWorkspace, setshowDelelteWorkspace] = useState(false)
+    const [showDeleteWorkspace, setshowDelelteWorkspace] = useState(false)
     
   return (
     <div
@@ -46,15 +45,13 @@ const WorkspaceSettingsModal = ({isOpen,onClose,workspace}) => {
 
         {/* Body */}
         <div className="p-5 space-y-3">
-
-          {isAdmin && (
-            <>
               <button
-                onClick={onRename}
-                className="flex w-full items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4 transition hover:border-orange-500 hover:bg-zinc-900"
+                onClick={()=>{
+                  setshowUpdateWorkspace(true)}}
+                className="flex w-full items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4 transition hover:border-cyan-500 hover:bg-zinc-900"
               >
                 <div className="flex items-center gap-4">
-                  <div className="rounded-xl bg-orange-500/10 p-3 text-orange-400">
+                  <div className="rounded-xl bg-cyan-500/10 p-3 text-cyan-400">
                     <Pencil size={18} />
                   </div>
 
@@ -73,7 +70,8 @@ const WorkspaceSettingsModal = ({isOpen,onClose,workspace}) => {
               </button>
 
               <button
-                onClick={onDelete}
+                onClick={()=>{
+                  setshowDelelteWorkspace(true)}}
                 className="flex w-full items-center justify-between rounded-2xl border border-red-500/20 bg-red-500/5 p-4 transition hover:bg-red-500/10"
               >
                 <div className="flex items-center gap-4">
@@ -94,53 +92,6 @@ const WorkspaceSettingsModal = ({isOpen,onClose,workspace}) => {
 
                 <ChevronRight size={18} />
               </button>
-            </>
-          )}
-
-          <button
-            onClick={onLeave}
-            className="flex w-full items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4 transition hover:border-cyan-500 hover:bg-zinc-900"
-          >
-            <div className="flex items-center gap-4">
-              <div className="rounded-xl bg-zinc-800 p-3 text-cyan-400">
-                <Pencil size={18} />
-              </div>
-
-              <div className="text-left">
-                <p className="font-medium">
-                  Rename Workspace
-                </p>
-
-                <p className="text-sm text-zinc-500">
-                  Rename this workspace.
-                </p>
-              </div>
-            </div>
-
-            <ChevronRight size={18} />
-          </button>
-          <button
-            onClick={onLeave}
-            className="flex w-full items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4 transition hover:border-red-500 hover:bg-zinc-900"
-          >
-            <div className="flex items-center gap-4">
-              <div className="rounded-xl bg-zinc-800 p-3 text-red-400">
-                <Trash2 size={18} />
-              </div>
-
-              <div className="text-left">
-                <p className="font-medium">
-                  Delete Workspace
-                </p>
-
-                <p className="text-sm text-zinc-500">
-                  Remove this workspace.
-                </p>
-              </div>
-            </div>
-
-            <ChevronRight size={18} />
-          </button>
 
         </div>
 
@@ -154,6 +105,23 @@ const WorkspaceSettingsModal = ({isOpen,onClose,workspace}) => {
           </button>
         </div>
       </div>
+      {showUpdateWorkspace &&(
+        <UpdateWorkspaceModal
+        isOpen={showUpdateWorkspace}
+        onClose={()=>setshowUpdateWorkspace(false)}
+        workspace={workspace}
+        onSuccess={onDone}
+        />
+      )}
+      {showDeleteWorkspace&&(
+        <DeleteWorkspaceModal
+        isOpen={showDeleteWorkspace}
+        onClose={()=>setshowDelelteWorkspace(false)}
+        workspace={workspace}
+        onSuccess={()=>navigate('/dashboard')}
+        />
+      )}
+      
     </div>
   );
 };

@@ -4,16 +4,17 @@ import api from '../api/axios.js'
 
 
 
-const DeleteWorkspaceModal = ({isOpen,onClose,workspace,onDone}) => {
+const DeleteWorkspaceModal = ({isOpen,onClose,workspace,onDone,onSuccess}) => {
 
     const [error, setError] = useState("")
     const [deleting, setDeleting] = useState(false)
 
     const deleteWorkspace = async()=>{
-        setDeleting(false)
+        setDeleting(true)
     try{
         const response = await api.delete(`/workspace/${workspace.id}`)
-        onDone(response.data)
+        onDone?.(response.data);
+        onSuccess?.();
         onClose()
         setError("")
     }catch(e){
@@ -26,7 +27,8 @@ const DeleteWorkspaceModal = ({isOpen,onClose,workspace,onDone}) => {
 }
 if(!isOpen) return null
   return (
-   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+   <div onClick={(e) => e.stopPropagation()}
+   className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
   <div className="w-full max-w-md rounded-3xl border border-zinc-800 backdrop-blur-2xl shadow-2xl">
 
     {/* Header */}
