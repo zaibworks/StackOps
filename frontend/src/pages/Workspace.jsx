@@ -15,6 +15,8 @@ import Navbar from '../components/Navbar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
 import MemberCard from '../components/MemberCard.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
+import WorkspaceSettingsModal from '../components/WorkspaceSettingsModal.jsx';
+
 const Workspace = () => {
   const [workspace, setWorkspace] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -298,9 +300,7 @@ const memberSelect=(memberId)=>{
 </button>
 {isOpenWorkspaceSettings&&(
   <>
-  <div className='absolute right-10 w-[300px] border border-zinc-400 rounded-2xl'>
-       Hey
-  </div>
+     <WorkspaceSettingsModal isOpen={isOpenWorkspaceSettings}/>
   </>
 )}
 </div>
