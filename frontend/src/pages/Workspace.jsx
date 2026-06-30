@@ -300,7 +300,10 @@ const memberSelect=(memberId)=>{
 </button>
 {isOpenWorkspaceSettings&&(
   <>
-     <WorkspaceSettingsModal isOpen={isOpenWorkspaceSettings}/>
+     <WorkspaceSettingsModal 
+     isOpen={isOpenWorkspaceSettings}
+     onClose={()=>setisOpenWorkspaceSettings(false)}
+     />
   </>
 )}
 </div>
