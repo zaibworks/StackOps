@@ -8,6 +8,8 @@ import { createWorkspace,
     getWorkspacebyId,
     leaveWorkspace,
     changeMemberRole,
+    deleteWorkspace
+    
  } from "./workspace.service.js";
 
 export const createWorkspaceController= async(req,res)=>{
@@ -116,7 +118,17 @@ export const changeMemberRoleController = async(req,res)=>{
         const member = await changeMemberRole(memberId,adminId,workspaceId,role)
          res.json({message:"Role changed successfully",data:member})
     } catch (e) {
-        console.log(e)
         res.status(500).json({message:e.message})
+    }
+}
+
+export const deleteWorkspaceController = async (req,res)=>{
+    try {
+        const userId = req.user.userId
+        const workspaceId = parseInt(req.params.workspaceId)
+        const workspace = await deleteWorkspace(workspaceId,userId)
+        res.json({message:"Workspace deleted successfully",data:workspace.name})
+    } catch (e) {
+        res.status(403).json({message:e.message})
     }
 }
