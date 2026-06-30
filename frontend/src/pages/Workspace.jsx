@@ -33,6 +33,7 @@ const Workspace = () => {
   const [selectedMember, setSelectedMember] = useState(null)
   const [isOpenWorkspaceSettings, setisOpenWorkspaceSettings] = useState(false)
 
+
   const [openTaskMenuId, setopenTaskMenuId] = useState(null)
   const [editMode, seteditMode] = useState(false)
 
@@ -303,6 +304,7 @@ const memberSelect=(memberId)=>{
      <WorkspaceSettingsModal 
      isOpen={isOpenWorkspaceSettings}
      onClose={()=>setisOpenWorkspaceSettings(false)}
+     workspace={workspace}
      />
   </>
 )}

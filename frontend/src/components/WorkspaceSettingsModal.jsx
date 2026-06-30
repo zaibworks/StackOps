@@ -6,18 +6,14 @@ import {
   Settings,
   ChevronRight,
 } from "lucide-react";
+import { useState } from "react";
 
-const WorkspaceSettingsModal = ({
-  isOpen,
-  onClose,
-  workspace,
-  onRename,
-  onDelete,
-  onLeave,
-  isAdmin,
-}) => {
-  if (!isOpen) return null;
+if (!isOpen) return null;
+const WorkspaceSettingsModal = ({isOpen,onClose,workspace}) => {
 
+   const [showUpdateWorkspace, setshowUpdateWorkspace] = useState(false)
+    const [showDelelteWorkspace, setshowDelelteWorkspace] = useState(false)
+    
   return (
     <div
       onClick={onClose}
@@ -103,7 +99,7 @@ const WorkspaceSettingsModal = ({
 
           <button
             onClick={onLeave}
-            className="flex w-full items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4 transition hover:border-red-500 hover:bg-zinc-900"
+            className="flex w-full items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4 transition hover:border-cyan-500 hover:bg-zinc-900"
           >
             <div className="flex items-center gap-4">
               <div className="rounded-xl bg-zinc-800 p-3 text-cyan-400">
