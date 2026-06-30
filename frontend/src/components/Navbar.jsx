@@ -150,13 +150,6 @@ const filteredResults =
         {/* RIGHT */}
         <div className="flex items-center gap-3">
 
-          {/* Settings */}
-          <button
-            className="rounded-xl border border-zinc-800 p-2 hover:bg-zinc-900 cursor-pointer"
-          >
-            <Settings size={18} />
-          </button>
-
           {/* User */}
 
          <div className="relative">

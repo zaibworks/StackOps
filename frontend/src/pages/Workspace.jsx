@@ -8,7 +8,8 @@ import {
   CheckCircle2,
   ChevronDown,
   Pencil,
-  Trash2
+  Trash2,
+  Bolt
 } from "lucide-react";
 import Navbar from '../components/Navbar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
@@ -28,6 +29,7 @@ const Workspace = () => {
   const [addingTask, setAddingTask] = useState(false)
   const [selectedTask, setSelectedTask] = useState(null)
   const [selectedMember, setSelectedMember] = useState(null)
+  const [isOpenWorkspaceSettings, setisOpenWorkspaceSettings] = useState(false)
 
   const [openTaskMenuId, setopenTaskMenuId] = useState(null)
   const [editMode, seteditMode] = useState(false)
@@ -289,6 +291,19 @@ const memberSelect=(memberId)=>{
       Add Task
     </button>
 
+<div className='relative'>
+  <button onClick={()=>setisOpenWorkspaceSettings(prev=>!prev)}
+  className='text-zinc-400 hover:text-zinc-100 transition-colors p-2 hover:bg-zinc-400/30 rounded-xl'>
+  <Bolt size={18}/>
+</button>
+{isOpenWorkspaceSettings&&(
+  <>
+  <div className='absolute right-10 w-[300px] border border-zinc-400 rounded-2xl'>
+       Hey
+  </div>
+  </>
+)}
+</div>
   </div>
 
 </div>

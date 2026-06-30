@@ -2,12 +2,14 @@ import {LogOut,Settings,BriefcaseBusiness,CheckCircle2,ClipboardList,} from "luc
 import { useState,useEffect } from "react";
 import api from '../api/axios.js'
 import {useAuth} from '../context/AuthContext.jsx'
+import { useNavigate } from "react-router-dom";
 
 const ProfileDropdown = ({onLogout,onSettings}) => {
 
   const [stats, setStats] = useState(null)
 
   const {user} = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
   const fetchStats = async () => {
@@ -143,7 +145,7 @@ const allTasks =
         </button>
 
         <button
-          onClick={onLogout}
+          onClick={()=>navigate('/settings')}
           className="
           flex w-full items-center gap-3
           rounded-xl
