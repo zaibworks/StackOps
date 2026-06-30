@@ -343,3 +343,33 @@ export const changeMemberRole = async(memberId,adminId,workspaceId,role)=>{
 return update
 
 }
+
+export const deleteWorkspace = async(workspaceId,userId)=>{
+     const isAdmin = await prisma.membership.findFirst({
+      where:{
+        userId,
+        workspaceId,
+        role:"admin"
+      },include:{
+        user:true,
+        workspace:true
+      }
+     })
+     if(!isAdmin){
+      throw new Error("Not admin, You cannot delete this workspace")
+     }
+
+    //     await createActivity({
+    //   userId:userId,
+    //   workspaceId:workspaceId,
+    //   action:`${isAdmin.user.name}  deleted workspace ${isAdmin.workspace.name}`
+    //  })
+     
+     const deletetion = await prisma.workspace.delete({
+      where:{
+        id:workspaceId
+      }
+     })
+
+     return deletetion
+}
