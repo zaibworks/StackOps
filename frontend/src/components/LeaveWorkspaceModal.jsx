@@ -18,7 +18,7 @@ const [leaving, setLeaving] = useState(false);
   try {
     setLeaving(true);
 
-    await api.delete(`/workspace/${workspace.id}`)
+    await api.delete(`/workspace/${workspace.id}/leave`)
 
     onDone(workspace);
 

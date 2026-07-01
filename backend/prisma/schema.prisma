@@ -52,7 +52,7 @@ assignedToId Int?
   assignedTo User? @relation("AssignedTask",fields: [assignedToId],references: [id])
 
   workspaceId Int
-  workspace Workspace @relation(fields: [workspaceId],references: [id])
+  workspace Workspace @relation(fields: [workspaceId],references: [id],onDelete: Cascade)
 
   comments Comment[]
 
@@ -85,7 +85,7 @@ workspaceId Int
 role Role @default(member)
 
 user User @relation(fields: [userId],references: [id])
-workspace Workspace @relation(fields: [workspaceId],references: [id])
+workspace Workspace @relation(fields: [workspaceId],references: [id],onDelete:Cascade)
 
   @@unique([userId, workspaceId])
 
@@ -112,7 +112,7 @@ model Activity{
   user User @relation(fields: [userId],references: [id])
 
   workspaceId Int
-  workspace Workspace @relation(fields: [workspaceId],references: [id])
+  workspace Workspace @relation(fields: [workspaceId],references: [id],onDelete: Cascade)
 
    createdAt DateTime @default(now())
 }

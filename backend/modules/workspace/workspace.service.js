@@ -359,11 +359,11 @@ export const deleteWorkspace = async(workspaceId,userId)=>{
       throw new Error("Not admin, You cannot delete this workspace")
      }
 
-    //     await createActivity({
-    //   userId:userId,
-    //   workspaceId:workspaceId,
-    //   action:`${isAdmin.user.name}  deleted workspace ${isAdmin.workspace.name}`
-    //  })
+        await createActivity({
+      userId:userId,
+      workspaceId:workspaceId,
+      action:`${isAdmin.user.name}  deleted workspace ${isAdmin.workspace.name}`
+     })
      
      const deletetion = await prisma.workspace.delete({
       where:{
