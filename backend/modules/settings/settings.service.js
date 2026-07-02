@@ -100,3 +100,133 @@ if (myWorkspaceIds.length === 0) {
     deletedCount: deleted.count
 }
 }
+
+export const deleteSelectedTasks = async(userId,taskIds)=>{
+  if(!taskIds || taskIds.length === 0){
+    throw new Error("Select atleast one task")
+  }
+  const myTasks = await prisma.task.findMany({
+    where:{
+      id:{
+        in:taskIds
+      },
+      userId
+    }
+  })
+  const myTasksIds = myTasks.map(t=>t.id)
+
+  if (myTasksIds.length === 0) {
+  throw new Error("No tasks found");
+}
+
+if (myTasksIds.length !== taskIds.length) {
+  throw new Error("Some selected tasks cannot be deleted");
+}
+
+  const deleted = await prisma.task.deleteMany({
+    where:{
+      id:{
+        in:myTasksIds
+      }
+    }
+  })
+
+  return{
+    deletedCount:deleted.count
+  }
+}
+
+export const deleteSelectedComments = async(userId,commentIds)=>{
+    if(!commentIds || commentIds.length === 0){
+    throw new Error("Select atleast one comment")
+  }
+  const myComments = await prisma.comment.findMany({
+    where:{
+      id:{
+        in:commentIds
+      },
+      userId
+    }
+  })
+  const myCommentIds = myComments.map(c=>c.id)
+
+  if (myCommentIds.length === 0) {
+  throw new Error("No comment found");
+}
+
+if (myCommentIds.length !== commentIds.length) {
+  throw new Error("Some selected comments cannot be deleted");
+}
+
+  const deleted = await prisma.comment.deleteMany({
+    where:{
+      id:{
+        in:myCommentIds
+      }
+    }
+  })
+
+  return{
+    deletedCount:deleted.count
+  }
+}
+
+const deleteSelectedActivities =(userId,activityIds)=>{
+  if(!activityIds || activityIds.length === 0){
+    throw new Error("Select atleast one activity")
+  }
+  const myActivity = await prisma.activity.findMany({
+    where:{
+      id:{
+        in:activityIds
+      },
+      userId
+    }
+  })
+  const myActivityIds = myActivity.map(a=>a.id)
+
+  if (myActivityIds.length === 0) {
+  throw new Error("No activity found");
+}
+
+if (myActivityIds.length !== activityIds.length) {
+  throw new Error("Some selected activities cannot be deleted");
+}
+
+  const deleted = await prisma.activity.deleteMany({
+    where:{
+      id:{
+        in:myActivityIds
+      }
+    }
+  })
+
+  return{
+    deletedCount:deleted.count
+  }
+}
+
+export const deleteUserAccount = async(userId,currentPassword)=>{
+  
+  if (!currentPassword.trim()) {
+    throw new Error("Password is required");
+}
+
+  const user = await prisma.user.findUnique({
+    where:{
+      id:Number(userId)
+    }
+  })
+   const passMatch = await bcrypt.compare(currentPassword,user.password)
+   if(!passMatch){
+    throw new Error("Type correct password")
+   }
+
+   const deleted = await prisma.user.delete({
+    where:{
+      id:Number(userId)
+    }
+   })
+
+   return deleted
+}
