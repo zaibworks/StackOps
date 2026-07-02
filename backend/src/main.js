@@ -6,6 +6,7 @@ import taskRoutes from '../modules/task/task.routes.js'
 import workspaceRoutes from '../modules/workspace/workspace.routes.js'
 import commentRoutes from '../modules/comment/comment.routes.js'
 import activityRoutes from '../modules/activity/activity.routes.js'
+import settingsRoutes from '../modules/settings/settings.routes.js'
 import cors from 'cors'
 
 const app = express()
@@ -24,6 +25,7 @@ app.use('/task',taskRoutes)
 app.use('/workspace',workspaceRoutes)
 app.use('/comment',commentRoutes)
 app.use('/activities',activityRoutes)
+app.use('/settings',settingsRoutes)
 
 app.get('/', async(req,res)=>{
  const allUsers = await prisma.user.findMany({
