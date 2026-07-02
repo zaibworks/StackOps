@@ -128,7 +128,7 @@ const allTasks =
       <div className="p-4 space-y-2">
 
          <button
-          onClick={onLogout}
+          onClick={()=>navigate('/settings')}
           className="
           flex w-full items-center gap-3
           rounded-xl

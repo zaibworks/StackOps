@@ -6,6 +6,7 @@ import Workspace from "./pages/Workspace";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Activity from "./pages/Activity";
 import MyTasks from "./pages/MyTasks";
+import Settings from "./pages/Settings";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { WorkspaceProvider } from "./context/WorkspaceContext.jsx";
 
@@ -19,6 +20,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="activity" element={<Activity />} />
             <Route path="mytasks" element={<MyTasks />} />
+            <Route path="settings" element={<Settings />} />
             <Route
               path="/dashboard"
               element={
