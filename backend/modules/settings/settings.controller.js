@@ -1,4 +1,4 @@
-import { updateProfileName } from "./settings.service.js";
+import { updateProfileName, updatePassword} from "./settings.service.js";
 
 export const updateProfileNameController = async (req,res)=>{
  try {
@@ -9,4 +9,15 @@ export const updateProfileNameController = async (req,res)=>{
  } catch (e) {
     res.status(400).json({message:e.message})
  }
+}
+
+export const updatePasswordController = async(req,res)=>{
+    try {
+        const userId = req.user.userId
+        const {currentPassword,newPassword} = req.body
+        const user = await updatePassword(currentPassword,userId,newPassword)
+         res.status(200).json({message:"Password reset successfully",data:user})
+    } catch (e) {
+        res.status(400).json({message:e.message})
+    }
 }
