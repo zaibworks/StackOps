@@ -171,7 +171,7 @@ if (myCommentIds.length !== commentIds.length) {
   }
 }
 
-const deleteSelectedActivities =(userId,activityIds)=>{
+export const deleteSelectedActivities = async(userId,activityIds)=>{
   if(!activityIds || activityIds.length === 0){
     throw new Error("Select atleast one activity")
   }

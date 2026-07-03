@@ -94,9 +94,13 @@ export const updateTask= async(taskId,userId,taskData,workspaceId)=>{
       }
     })
 
-     if (!oldTask|| oldTask.workspaceId !== workspaceId ( oldTask.userId !== userId &&!isAdmin)) {
-    throw new Error("Task not found or unauthorized");
-  }
+  if (
+  !oldTask ||
+  oldTask.workspaceId !== workspaceId ||
+  (oldTask.userId !== userId && !isAdmin)
+) {
+  throw new Error("Task not found or unauthorized");
+}
 
     const updatedTask = await prisma.task.update({
         where:{ id: Number(taskId)},

@@ -145,7 +145,7 @@ const allTasks =
         </button>
 
         <button
-          onClick={()=>navigate('/settings')}
+          onClick={onLogout}
           className="
           flex w-full items-center gap-3
           rounded-xl

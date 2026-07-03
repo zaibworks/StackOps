@@ -11,10 +11,13 @@ import {
     deleteUserAccountController
 } from "./settings.controller.js";
 import authMiddleware from "../middleware/auth.middleware.js";
-import { workspaceMemberMiddlware } from '../middleware/workspace.middleware.js';
 
 router.put('/updateName',authMiddleware,updateProfileNameController)
 router.put('/updatePassword',authMiddleware,updatePasswordController)
-router.delete('/deleteWorkspace',authMiddleware,workspaceMemberMiddlware,deleteSelectedWorkspaceController)
+router.delete('/deleteWorkspaces',authMiddleware,deleteSelectedWorkspaceController)
+router.delete('/deleteTasks',authMiddleware,deleteSelectedTasksController)
+router.delete('/deleteComments',authMiddleware,deleteSelectedCommentsController)
+router.delete('/deleteActivities',authMiddleware,deleteSelectedActivitiesController)
+router.delete('/deleteUser',authMiddleware,deleteUserAccountController)
 
 export default router

@@ -74,7 +74,7 @@ export const deleteSelectedActivitiesController = async(req,res)=>{
     }
 }
 
-export const deleteUserAccountController =(req,res)=>{
+export const deleteUserAccountController = async(req,res)=>{
   try {
     const userId = req.user.userId
     const removed = await deleteUserAccount(userId)

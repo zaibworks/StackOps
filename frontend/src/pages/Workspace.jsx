@@ -194,7 +194,7 @@ const handleStatus = async (taskId,status) => {
 
 const myAssignedTasks =
   workspace?.tasks?.filter(
-    task => task.assignedToId === user.id
+    task => task.assignedToId === user?.id
   ) || [];
 
 const myCompletedTasks =
