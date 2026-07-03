@@ -1,4 +1,12 @@
-import { updateProfileName, updatePassword} from "./settings.service.js";
+import { 
+    updateProfileName, 
+    updatePassword,
+    deleteSelectedWorkspaces,
+    deleteSelectedTasks,
+    deleteSelectedComments,
+    deleteUserAccount
+
+} from "./settings.service.js";
 
 export const updateProfileNameController = async (req,res)=>{
  try {
@@ -20,4 +28,58 @@ export const updatePasswordController = async(req,res)=>{
     } catch (e) {
         res.status(400).json({message:e.message})
     }
+}
+
+export const deleteSelectedWorkspaceController =async(req,res)=>{
+    try {
+        const userId = req.user.userId
+        const {workspaceIds} = req.body
+        const workspace = await deleteSelectedWorkspaces(userId,workspaceIds)
+          res.status(200).json({message:"Workspaces deleted successfully"})
+    } catch (e) {
+        res.status(500).json({message:e.message})
+    }
+}
+
+export const deleteSelectedTasksController = async(req,res)=>{
+    try {
+         const userId = req.user.userId
+          const {taskIds} = req.body
+          const tasks = await deleteSelectedTasks(userId,taskIds)
+         res.status(200).json({message:"Tasks deleted successfully"})
+    } catch (e) {
+         res.status(500).json({message:e.message})
+    }
+}
+
+export const deleteSelectedCommentsController = async(req,res)=>{
+    try {
+         const userId = req.user.userId
+          const {commentIds} = req.body
+          const comment = await deleteSelectedComments(userId,commentIds)
+         res.status(200).json({message:"Comments deleted successfully"})
+    } catch (e) {
+         res.status(500).json({message:e.message})
+    }
+}
+
+export const deleteSelectedActivitiesController = async(req,res)=>{
+    try {
+         const userId = req.user.userId
+          const {activityIds} = req.body
+          const activities = await deleteSelectedActivities(userId,activityIds)
+         res.status(200).json({message:"Activities deleted successfully"})
+    } catch (e) {
+         res.status(500).json({message:e.message})
+    }
+}
+
+export const deleteUserAccountController =(req,res)=>{
+  try {
+    const userId = req.user.userId
+    const removed = await deleteUserAccount(userId)
+     res.status(200).json({message:"Account permanently deleted"})
+  } catch (e) {
+    res.status(402).json({message:e.message})
+  }
 }
