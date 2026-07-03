@@ -5,6 +5,7 @@ import QuickActionsCard from "../components/settings/QuickActionsCard.jsx";
 import DangerZoneCard from "../components/settings/DangerZoneCard.jsx"
 import { useState,useEffect } from "react";
 import ChangeNameModal from "../components/modals/ChangeNameModal.jsx";
+import ChangePasswordModal from "../components/modals/ChangePasswordModal.jsx"
 
 const Settings = () => {
   const [openModal, setOpenModal] = useState(null)
@@ -44,6 +45,9 @@ const Settings = () => {
 
       {openModal === "name" &&(
          <ChangeNameModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
+      )}
+      {openModal === "password" &&(
+        <ChangePasswordModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
       )}
     </div>
   );

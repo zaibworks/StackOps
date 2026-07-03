@@ -3,9 +3,9 @@ import { X, Pencil } from "lucide-react";
 const ChangeNameModal = ({isOpen,onClose}) => {
    if(!isOpen) return;
   return (
-    <div className="fixed inset-0 z-50 flex items-center  bg-black/30 backdrop-blur-[2px]">
+    <div className="fixed inset-0 z-50 flex items-center  bg-black/30 backdrop-blur-sm">
 
-      <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 fixed left-50">
+      <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-950/90 fixed left-50">
 
         {/* Header */}
         <div className="flex items-center justify-between border-b border-zinc-800 p-5">
@@ -54,7 +54,7 @@ const ChangeNameModal = ({isOpen,onClose}) => {
                 px-4 py-3
                 outline-none
                 transition
-                focus:border-orange-500
+                focus:border-zinc-500
               "
             />
 

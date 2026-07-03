@@ -63,7 +63,8 @@ const ProfileCard = ({onClickName,onClickPassword}) => {
 
         <div className="border-t border-zinc-800" />
 
-        <button className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
+        <button onClick={onClickPassword}
+        className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
 
           <div>
 
