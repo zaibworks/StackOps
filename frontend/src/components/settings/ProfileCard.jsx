@@ -1,7 +1,8 @@
 import { ChevronRight } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { useState } from "react";
 
-const ProfileCard = () => {
+const ProfileCard = ({onClickName,onClickPassword}) => {
   const { user } = useAuth();
 
   return (
@@ -41,7 +42,8 @@ const ProfileCard = () => {
 
       <div className="border-t border-zinc-800">
 
-        <button className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
+        <button onClick={onClickName}
+        className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
 
           <div>
 
@@ -80,7 +82,6 @@ const ProfileCard = () => {
         </button>
 
       </div>
-
     </div>
   );
 };

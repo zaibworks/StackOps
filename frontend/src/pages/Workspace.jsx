@@ -344,12 +344,12 @@ const memberSelect=(memberId)=>{
         </div>
 
         <button onClick={()=> setShowFilters(!showFilters)}
-        className="rounded-xl border border-zinc-800 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800">
+        className="rounded-xl border border-zinc-800 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-800 cursor-pointer">
           Filters
         </button>
 
         {showFilters && (
-  <div className="absolute right-5 top-20 w-72 rounded-2xl border border-zinc-800 bg-zinc-950 p-4 shadow-xl space-y-4">
+  <div className="absolute right-5 top-20 w-40 rounded-2xl border border-zinc-800 bg-zinc-950 p-4 shadow-xl space-y-2">
 
   {/* Status */}
   <div>
@@ -365,7 +365,7 @@ const memberSelect=(memberId)=>{
           status: e.target.value,
         }))
       }
-      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm"
+      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-2 py-1 text-sm"
     >
       <option value="">All</option>
       <option value="todo">Todo</option>
@@ -388,7 +388,7 @@ const memberSelect=(memberId)=>{
           priority: e.target.value,
         }))
       }
-      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm"
+      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-2 py-1 text-sm"
     >
       <option value="">All</option>
       <option value="low">Low</option>
@@ -411,7 +411,7 @@ const memberSelect=(memberId)=>{
           assignedToId: e.target.value,
         }))
       }
-      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm"
+      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-2 py-1 text-sm"
     >
       <option value="">All</option>
 
@@ -446,7 +446,7 @@ const memberSelect=(memberId)=>{
   <div
     key={t.id}
     onClick={() => setSelectedTask(t)}
-    className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-4 hover:border-zinc-700 transition-all cursor-pointer"
+    className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-4 hover:border-zinc-700 transition-all"
   >
     {/* Top Row */}
     <div className="flex items-start justify-between">
@@ -468,7 +468,7 @@ const memberSelect=(memberId)=>{
       : t.id
   )
 }}
-      className="text-zinc-500 hover:text-zinc-300">
+      className="text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60 p-2 rounded-2xl cursor-pointer">
         ⋮
       </button>
       {openTaskMenuId ===t.id&&(
@@ -636,7 +636,7 @@ const memberSelect=(memberId)=>{
             
             {/* member card  */}
             {workspace?.members?.map(member=>(
-        <div onClick={()=>setSelectedMember(member)} key={member.id} className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/30 p-3">
+        <div onClick={()=>setSelectedMember(member)} key={member.id} className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/30 p-3 cursor-pointer hover:border-zinc-600/60">
           <div className="flex items-center gap-3">
             {/* <div className="h-10 w-10 rounded-full bg-orange-500/20" /> */}
             <div className="h-10 w-10 rounded-full bg-green-800/20 flex items-center justify-center text-sm font-semibold text-white">

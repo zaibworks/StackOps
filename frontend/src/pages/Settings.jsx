@@ -3,8 +3,11 @@ import AboutCard from "../components/settings/AboutCard.jsx";
 import ProfileCard from "../components/settings/ProfileCard.jsx";
 import QuickActionsCard from "../components/settings/QuickActionsCard.jsx";
 import DangerZoneCard from "../components/settings/DangerZoneCard.jsx"
+import { useState,useEffect } from "react";
+import ChangeNameModal from "../components/modals/ChangeNameModal.jsx";
 
 const Settings = () => {
+  const [openModal, setOpenModal] = useState(null)
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
 
@@ -28,7 +31,10 @@ const Settings = () => {
         {/* Cards */}
         <div className="space-y-6">
 
-          <ProfileCard />
+          <ProfileCard 
+          onClickName={()=>setOpenModal("name")}
+          onClickPassword={()=>setOpenModal("password")}
+            />
           <QuickActionsCard/>
           <AboutCard/>
           <DangerZoneCard/>
@@ -36,6 +42,9 @@ const Settings = () => {
 
       </main>
 
+      {openModal === "name" &&(
+         <ChangeNameModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
+      )}
     </div>
   );
 };
