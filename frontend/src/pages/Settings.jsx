@@ -6,14 +6,41 @@ import DangerZoneCard from "../components/settings/DangerZoneCard.jsx"
 import { useState,useEffect } from "react";
 import ChangeNameModal from "../components/modals/ChangeNameModal.jsx";
 import ChangePasswordModal from "../components/modals/ChangePasswordModal.jsx"
-import ManageWorkspaceModal from "../components/modals/ManageWorkspaceModal.jsx";
-import ManageTasksModal from "../components/modals/ManageTasksModal.jsx";
-import ManageCommentModal from "../components/modals/ManageCommentModal.jsx";
-import ManageActivityModal from "../components/modals/ManageActivityModal.jsx";
 import DeleteAccountModal from "../components/modals/DeleteAccountModal.jsx";
+import ManageItemsModal from "../components/modals/ManageItemsModal.jsx";
+
+const modalConfig ={
+   workspaces: {
+    title: "Manage your Workspaces",
+    description: "Select one or more workspaces to delete",
+  },
+
+  tasks: {
+    title: "Manage your tasks",
+    description: "Select one or more tasks to delete",
+  },
+
+  comments: {
+    title: "...",
+    description: "...",
+  },
+
+  activities: {
+    title: "...",
+    description: "...",
+  }
+}
 
 const Settings = () => {
   const [openModal, setOpenModal] = useState(null)
+  const [currentType, setCurrentType] = useState(null);
+
+  const config = modalConfig[currentType];
+
+  const handleManage = (type) => {
+  setCurrentType(type);
+  setOpenModal("manage");
+};
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
 
@@ -41,12 +68,12 @@ const Settings = () => {
           onClickName={()=>setOpenModal("name")}
           onClickPassword={()=>setOpenModal("password")}
             />
-          <QuickActionsCard
-          onWorkspaces={()=>setOpenModal("workspaces")}
-          onTasks={()=>setOpenModal("tasks")}
-          onComments={()=>setOpenModal("comments")}
-          onActivities={()=>setOpenModal("activities")}
-          />
+         <QuickActionsCard
+  onWorkspaces={() => handleManage("workspaces")}
+  onTasks={() => handleManage("tasks")}
+  onComments={() => handleManage("comments")}
+  onActivities={() => handleManage("activities")}
+/>
           <AboutCard/>
           <DangerZoneCard onClickDanger={()=>setOpenModal("danger")} />
         </div>
@@ -59,21 +86,14 @@ const Settings = () => {
       {openModal === "password" &&(
         <ChangePasswordModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
       )}
-      {openModal === "workspaces" &&(
-        <ManageWorkspaceModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
-      )}
-      {openModal === "tasks" &&(
-        <ManageTasksModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
-      )}
-      {openModal === "comments" &&(
-        <ManageCommentModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
-      )}
-      {openModal === "activities" &&(
-        <ManageActivityModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
-      )}
-      {openModal === "danger" &&(
-        <DeleteAccountModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
-      )}
+      {openModal === "manage" && (
+  <ManageItemsModal 
+  isOpen={openModal} 
+  onClose={()=>setOpenModal(null)}
+  title={config.title}
+  description={config.description}
+  />
+)}
     </div>
   );
 };

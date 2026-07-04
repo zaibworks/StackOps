@@ -3,7 +3,7 @@ import {
   BriefcaseBusiness,
 } from "lucide-react";
 
-const ManageCommentsModal = ({isOpen,onClose}) => {
+const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDelete}) => {
     if(!isOpen) return;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
@@ -16,11 +16,11 @@ const ManageCommentsModal = ({isOpen,onClose}) => {
           <div>
 
             <h2 className="text-lg font-semibold">
-              Manage Comments
+             {title}
             </h2>
 
             <p className="mt-1 text-sm text-zinc-500">
-              Select one or more comments to delete.
+              {description}
             </p>
 
           </div>
@@ -57,7 +57,7 @@ const ManageCommentsModal = ({isOpen,onClose}) => {
           </label>
 
           <span className="text-sm text-zinc-500">
-            6 Comments
+            5 Workspaces
           </span>
 
         </div>
@@ -92,11 +92,11 @@ const ManageCommentsModal = ({isOpen,onClose}) => {
                 <div>
 
                   <p className="font-medium">
-                    Hey this done
+                    StackOps
                   </p>
 
                   <p className="text-xs text-zinc-500">
-                    
+                    12 Tasks
                   </p>
 
                 </div>
@@ -156,5 +156,4 @@ const ManageCommentsModal = ({isOpen,onClose}) => {
   );
 };
 
-export default ManageCommentsModal;
-
+export default ManageItemsModal;
