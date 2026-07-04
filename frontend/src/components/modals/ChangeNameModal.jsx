@@ -1,7 +1,31 @@
 import { X, Pencil } from "lucide-react";
+import { useState,useEffect } from "react";
+import api from "../../api/axios.js"
 
 const ChangeNameModal = ({isOpen,onClose}) => {
    if(!isOpen) return;
+
+   const [changing, setChanging] = useState(false)
+   const [name, setName] = useState("")
+   
+
+   const handleChangeName = async()=>{
+    try{
+      if(!name.trim()){
+        throw new Error("Name cannot be empty")
+      }
+        setChanging(true)
+        const res = await api.put('/settings/updateName',{
+            name
+        })
+        setName("")
+        onClose()
+    }catch(e){
+        console.log(e)
+    }finally{
+      setChanging(false)
+    }
+   }
   return (
     <div className="fixed inset-0 z-50 flex items-center  bg-black/30 backdrop-blur-sm">
 
@@ -44,7 +68,7 @@ const ChangeNameModal = ({isOpen,onClose}) => {
               New Name
             </label>
 
-            <input
+            <input value={name} onChange={(e)=>setName(e.target.value)}
               type="text"
               placeholder="Enter new name"
               className="
@@ -78,7 +102,8 @@ const ChangeNameModal = ({isOpen,onClose}) => {
             Cancel
           </button>
 
-          <button
+          <button onClick={handleChangeName} 
+                  disabled={changing}
             className="
               rounded-xl
               bg-orange-500
@@ -88,9 +113,11 @@ const ChangeNameModal = ({isOpen,onClose}) => {
               text-white
               transition
               hover:bg-orange-600
+              disabled:cursor-not-allowed 
+              disabled:opacity-50
             "
           >
-            Save Changes
+            {changing?"Saving...":"Save"}
           </button>
 
         </div>
