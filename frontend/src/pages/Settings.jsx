@@ -6,6 +6,11 @@ import DangerZoneCard from "../components/settings/DangerZoneCard.jsx"
 import { useState,useEffect } from "react";
 import ChangeNameModal from "../components/modals/ChangeNameModal.jsx";
 import ChangePasswordModal from "../components/modals/ChangePasswordModal.jsx"
+import ManageWorkspaceModal from "../components/modals/ManageWorkspaceModal.jsx";
+import ManageTasksModal from "../components/modals/ManageTasksModal.jsx";
+import ManageCommentModal from "../components/modals/ManageCommentModal.jsx";
+import ManageActivityModal from "../components/modals/ManageActivityModal.jsx";
+import DeleteAccountModal from "../components/modals/DeleteAccountModal.jsx";
 
 const Settings = () => {
   const [openModal, setOpenModal] = useState(null)
@@ -36,7 +41,12 @@ const Settings = () => {
           onClickName={()=>setOpenModal("name")}
           onClickPassword={()=>setOpenModal("password")}
             />
-          <QuickActionsCard/>
+          <QuickActionsCard
+          onWorkspaces={()=>setOpenModal("workspaces")}
+          onTasks={()=>setOpenModal("tasks")}
+          onComments={()=>setOpenModal("comments")}
+          onActivities={()=>setOpenModal("activities")}
+          />
           <AboutCard/>
           <DangerZoneCard/>
         </div>
@@ -48,6 +58,18 @@ const Settings = () => {
       )}
       {openModal === "password" &&(
         <ChangePasswordModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
+      )}
+      {openModal === "workspaces" &&(
+        <ManageWorkspaceModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
+      )}
+      {openModal === "tasks" &&(
+        <ManageTasksModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
+      )}
+      {openModal === "comments" &&(
+        <ManageCommentModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
+      )}
+      {openModal === "activities" &&(
+        <ManageActivityModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
       )}
     </div>
   );

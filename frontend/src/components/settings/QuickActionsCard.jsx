@@ -6,7 +6,7 @@ import {
   History,
 } from "lucide-react";
 
-const QuickActionsCard = () => {
+const QuickActionsCard = ({onWorkspaces,onTasks,onComments,onActivities}) => {
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40">
 
@@ -27,7 +27,8 @@ const QuickActionsCard = () => {
 
         {/* Workspace */}
 
-        <button className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
+        <button onClick={onWorkspaces}
+        className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
 
           <div className="flex items-center gap-3">
 
@@ -66,7 +67,8 @@ const QuickActionsCard = () => {
 
         {/* Tasks */}
 
-        <button className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
+        <button onClick={onTasks}
+        className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
 
           <div className="flex items-center gap-3">
 
@@ -105,7 +107,8 @@ const QuickActionsCard = () => {
 
         {/* Comments */}
 
-        <button className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
+        <button onClick={onComments}
+        className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
 
           <div className="flex items-center gap-3">
 
@@ -144,7 +147,8 @@ const QuickActionsCard = () => {
 
         {/* Activities */}
 
-        <button className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
+        <button onClick={onActivities}
+        className="flex w-full items-center justify-between px-5 py-4 transition-colors hover:bg-zinc-800/40">
 
           <div className="flex items-center gap-3">
 

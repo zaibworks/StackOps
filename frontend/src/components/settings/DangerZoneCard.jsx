@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react";
 
-const DangerZoneCard = () => {
+const DangerZoneCard = ({onClickDanger}) => {
   return (
     <div className="rounded-2xl border border-red-500/20 bg-zinc-900/40">
 
@@ -17,7 +17,7 @@ const DangerZoneCard = () => {
 
       {/* Action */}
 
-      <button
+      <button onClick={onClickDanger}
         className="
           flex w-full items-center justify-between
           px-5 py-4
