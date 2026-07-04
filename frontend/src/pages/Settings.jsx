@@ -48,7 +48,7 @@ const Settings = () => {
           onActivities={()=>setOpenModal("activities")}
           />
           <AboutCard/>
-          <DangerZoneCard/>
+          <DangerZoneCard onClickDanger={()=>setOpenModal("danger")} />
         </div>
 
       </main>
@@ -70,6 +70,9 @@ const Settings = () => {
       )}
       {openModal === "activities" &&(
         <ManageActivityModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
+      )}
+      {openModal === "danger" &&(
+        <DeleteAccountModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
       )}
     </div>
   );
