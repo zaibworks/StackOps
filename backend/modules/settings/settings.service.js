@@ -230,3 +230,68 @@ export const deleteUserAccount = async(userId,currentPassword)=>{
 
    return deleted
 }
+
+export const getOwnedWorkspaces = async (userId) => {
+  const workspaces = await prisma.membership.findMany({
+    where: {
+      userId: Number(userId),
+      role: "admin",
+    },
+    select: {
+      workspace: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
+  });
+
+  return workspaces.map((m) => m.workspace);
+};
+
+export const getMyTasks = async (userId) => {
+  return await prisma.task.findMany({
+    where: {
+      userId: Number(userId),
+    },
+    select: {
+      id: true,
+      title: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+export const getMyComments = async (userId) => {
+  return await prisma.comment.findMany({
+    where: {
+      userId: Number(userId),
+    },
+    select: {
+      id: true,
+      content: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+export const getMyActivities = async (userId) => {
+  return await prisma.activity.findMany({
+    where: {
+      userId: Number(userId),
+    },
+    select: {
+      id: true,
+      action: true,
+      createdAt: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};

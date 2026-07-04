@@ -4,7 +4,11 @@ import {
     deleteSelectedWorkspaces,
     deleteSelectedTasks,
     deleteSelectedComments,
-    deleteUserAccount
+    deleteUserAccount,
+    getOwnedWorkspaces,
+    getMyTasks,
+    getMyComments,
+    getMyActivities
 
 } from "./settings.service.js";
 
@@ -83,3 +87,73 @@ export const deleteUserAccountController = async(req,res)=>{
     res.status(402).json({message:e.message})
   }
 }
+
+
+export const getOwnedWorkspacesController = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const workspaces = await getOwnedWorkspaces(userId);
+
+    res.status(200).json({
+      message: "Owned workspaces fetched successfully",
+      data: workspaces,
+    });
+  } catch (e) {
+    res.status(400).json({
+      message: e.message,
+    });
+  }
+};
+
+export const getMyTasksController = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const tasks = await getMyTasks(userId);
+
+    res.status(200).json({
+      message: "Tasks fetched successfully",
+      data: tasks,
+    });
+  } catch (e) {
+    res.status(400).json({
+      message: e.message,
+    });
+  }
+};
+
+export const getMyCommentsController = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const comments = await getMyComments(userId);
+
+    res.status(200).json({
+      message: "Comments fetched successfully",
+      data: comments,
+    });
+  } catch (e) {
+    res.status(400).json({
+      message: e.message,
+    });
+  }
+};
+
+
+export const getMyActivitiesController = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const activities = await getMyActivities(userId);
+
+    res.status(200).json({
+      message: "Activities fetched successfully",
+      data: activities,
+    });
+  } catch (e) {
+    res.status(400).json({
+      message: e.message,
+    });
+  }
+};
