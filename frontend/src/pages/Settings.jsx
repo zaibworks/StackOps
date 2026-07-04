@@ -10,6 +10,9 @@ import ChangePasswordModal from "../components/modals/ChangePasswordModal.jsx"
 import DeleteAccountModal from "../components/modals/DeleteAccountModal.jsx";
 import ManageItemsModal from "../components/modals/ManageItemsModal.jsx";
 
+
+
+
 const fetchOwnedWorkspaces = async()=>{
 const res = await api.get('/settings/workspaces')
 return res.data
@@ -56,10 +59,14 @@ const modalConfig ={
 const Settings = () => {
   const [openModal, setOpenModal] = useState(null)
   const [currentType, setCurrentType] = useState(null);
+  const [items, setItems] = useState([])
 
   const config = modalConfig[currentType];
 
-  const handleManage = (type) => {
+  const handleManage = async (type) => {
+  const config = modalConfig[type];
+  const data = await config.fetch()
+  setItems(data)
   setCurrentType(type);
   setOpenModal("manage");
 };
@@ -114,6 +121,7 @@ const Settings = () => {
   onClose={()=>setOpenModal(null)}
   title={config.title}
   description={config.description}
+  items={items}
   />
 )}
     </div>
