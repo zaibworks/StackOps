@@ -4,30 +4,52 @@ import ProfileCard from "../components/settings/ProfileCard.jsx";
 import QuickActionsCard from "../components/settings/QuickActionsCard.jsx";
 import DangerZoneCard from "../components/settings/DangerZoneCard.jsx"
 import { useState,useEffect } from "react";
+import api from "../api/axios.js";
 import ChangeNameModal from "../components/modals/ChangeNameModal.jsx";
 import ChangePasswordModal from "../components/modals/ChangePasswordModal.jsx"
 import DeleteAccountModal from "../components/modals/DeleteAccountModal.jsx";
 import ManageItemsModal from "../components/modals/ManageItemsModal.jsx";
 
+const fetchOwnedWorkspaces = async()=>{
+const res = await api.get('/settings/workspaces')
+return res.data
+}
+const fetchMyTasks = async()=>{
+  const res = await api.get('/settings/tasks')
+  return res.data
+}
+const fetchMyComments = async()=>{
+  const res = await api.get('/settings/comments')
+  return res.data
+}
+const fetchMyActivities = async()=>{
+  const res = await api.get('/settings/activities')
+  return res.data
+}
+
 const modalConfig ={
    workspaces: {
     title: "Manage your Workspaces",
     description: "Select one or more workspaces to delete",
+    fetch: fetchOwnedWorkspaces
   },
 
   tasks: {
     title: "Manage your tasks",
     description: "Select one or more tasks to delete",
+    fetch: fetchMyTasks
   },
 
   comments: {
-    title: "...",
-    description: "...",
+    title: "Manage your comments",
+    description: "Select one or more comments to delete",
+    fetch: fetchMyComments
   },
 
   activities: {
-    title: "...",
-    description: "...",
+    title: "Manage your activities",
+    description: "Select one or more activities to delete",
+    fetch: fetchMyActivities
   }
 }
 
