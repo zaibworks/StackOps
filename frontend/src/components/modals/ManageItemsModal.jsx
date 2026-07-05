@@ -2,9 +2,20 @@ import {
   X,
   BriefcaseBusiness,
 } from "lucide-react";
+import { useState } from "react";
 
-const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDelete}) => {
-    if(!isOpen) return;
+const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDelete,typeName}) => {
+    if(!isOpen) return null;
+
+    const [selectedIds, setSelectedIds] = useState([])
+
+    const toggleSelect =(id)=>{
+      if(selectedIds.includes(id)){
+       setSelectedIds( selectedIds.filter(selectedId=>selectedId !==id))
+      }else{
+          setSelectedIds([...selectedIds,id])
+      }
+    }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
 
@@ -47,7 +58,7 @@ const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDe
 
             <input
               type="checkbox"
-              className="h-4 w-4 accent-orange-500"
+              className="h-4 w-4 accent-zinc-500"
             />
 
             <span className="text-sm font-medium">
@@ -57,18 +68,18 @@ const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDe
           </label>
 
           <span className="text-sm text-zinc-500">
-            5 Workspaces
+            {`${items.length} ${typeName}`} 
           </span>
 
         </div>
 
-        {/* Workspace List */}
+        {/* Items List */}
         <div className="max-h-80 overflow-y-auto">
 
-          {[1, 2, 3, 4, 5].map((workspace) => (
+          {items.map((item) => (
 
             <label
-              key={workspace}
+              key={item.id}
               className="
                 flex cursor-pointer items-center justify-between
                 border-b border-zinc-800
@@ -82,6 +93,8 @@ const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDe
 
                 <input
                   type="checkbox"
+                    checked={selectedIds.includes(item.id)}
+                    onChange={() => toggleSelect(item.id)}
                   className="h-4 w-4 accent-orange-500"
                 />
 
@@ -92,12 +105,12 @@ const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDe
                 <div>
 
                   <p className="font-medium">
-                    StackOps
+                    {item[itemLabel]}
                   </p>
 
-                  <p className="text-xs text-zinc-500">
+                  {/* <p className="text-xs text-zinc-500">
                     12 Tasks
-                  </p>
+                  </p> */}
 
                 </div>
 

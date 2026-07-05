@@ -15,44 +15,52 @@ import ManageItemsModal from "../components/modals/ManageItemsModal.jsx";
 
 const fetchOwnedWorkspaces = async()=>{
 const res = await api.get('/settings/workspaces')
-return res.data
+return res.data.data
 }
 const fetchMyTasks = async()=>{
   const res = await api.get('/settings/tasks')
-  return res.data
+  return res.data.data
 }
 const fetchMyComments = async()=>{
   const res = await api.get('/settings/comments')
-  return res.data
+  return res.data.data
 }
 const fetchMyActivities = async()=>{
   const res = await api.get('/settings/activities')
-  return res.data
+  return res.data.data
 }
 
 const modalConfig ={
    workspaces: {
     title: "Manage your Workspaces",
     description: "Select one or more workspaces to delete",
-    fetch: fetchOwnedWorkspaces
+    fetch: fetchOwnedWorkspaces,
+    itemLabel:"name",
+    typeName:"Workspaces"
   },
 
   tasks: {
     title: "Manage your tasks",
     description: "Select one or more tasks to delete",
-    fetch: fetchMyTasks
+    fetch: fetchMyTasks,
+    itemLabel:"title",
+    typeName:"Tasks"
   },
 
   comments: {
     title: "Manage your comments",
     description: "Select one or more comments to delete",
-    fetch: fetchMyComments
+    fetch: fetchMyComments,
+    itemLabel:"content",
+    typeName:"Comments"
   },
 
   activities: {
     title: "Manage your activities",
     description: "Select one or more activities to delete",
-    fetch: fetchMyActivities
+    fetch: fetchMyActivities,
+    itemLabel:"action",
+    typeName:"Activities"
   }
 }
 
@@ -122,6 +130,8 @@ const Settings = () => {
   title={config.title}
   description={config.description}
   items={items}
+  itemLabel={config.itemLabel}
+  typeName={config.typeName}
   />
 )}
     </div>
