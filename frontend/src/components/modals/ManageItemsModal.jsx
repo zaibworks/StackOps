@@ -136,7 +136,7 @@ const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDe
         <div className="flex items-center justify-between border-t border-zinc-800 p-5">
 
           <p className="text-sm text-zinc-500">
-            2 selected
+            {`${selectedIds.length} Selected`}
           </p>
 
           <div className="flex gap-3">
