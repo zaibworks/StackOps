@@ -30,13 +30,16 @@ const fetchMyActivities = async()=>{
   return res.data.data
 }
 
+
+
 const modalConfig ={
    workspaces: {
     title: "Manage your Workspaces",
     description: "Select one or more workspaces to delete",
     fetch: fetchOwnedWorkspaces,
     itemLabel:"name",
-    typeName:"Workspaces"
+    typeName:"Workspaces",
+    onDelete:deleteWorkspaces
   },
 
   tasks: {
@@ -44,7 +47,8 @@ const modalConfig ={
     description: "Select one or more tasks to delete",
     fetch: fetchMyTasks,
     itemLabel:"title",
-    typeName:"Tasks"
+    typeName:"Tasks",
+    onDelete:deleteTasks
   },
 
   comments: {
@@ -52,7 +56,8 @@ const modalConfig ={
     description: "Select one or more comments to delete",
     fetch: fetchMyComments,
     itemLabel:"content",
-    typeName:"Comments"
+    typeName:"Comments",
+    onDelete:deleteComments
   },
 
   activities: {
@@ -60,7 +65,8 @@ const modalConfig ={
     description: "Select one or more activities to delete",
     fetch: fetchMyActivities,
     itemLabel:"action",
-    typeName:"Activities"
+    typeName:"Activities",
+    onDelete:deleteActivities
   }
 }
 
