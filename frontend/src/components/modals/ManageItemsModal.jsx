@@ -16,6 +16,14 @@ const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDe
           setSelectedIds([...selectedIds,id])
       }
     }
+
+   const selectAll = () => {
+  if (selectedIds.length === items.length) {
+    setSelectedIds([]);
+  } else {
+    setSelectedIds(items.map(item => item.id));
+  }
+}
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
 
@@ -58,6 +66,8 @@ const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDe
 
             <input
               type="checkbox"
+              checked={selectedIds.length===items.length}
+              onChange={selectAll}
               className="h-4 w-4 accent-zinc-500"
             />
 
