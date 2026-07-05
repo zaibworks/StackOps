@@ -4,7 +4,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDelete,typeName}) => {
+const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDelete,typeName,setItems}) => {
     if(!isOpen) return null;
 
     const [selectedIds, setSelectedIds] = useState([])
@@ -24,6 +24,14 @@ const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDe
     setSelectedIds(items.map(item => item.id));
   }
 }
+
+  const handleDeleteClick = async () => {
+    await onDelete(selectedIds);              
+    setItems(items.filter(item => !selectedIds.includes(item.id)));  
+    setSelectedIds([]);                      
+    onClose();                               
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
 
@@ -155,6 +163,7 @@ const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDe
             </button>
 
             <button
+            onClick={handleDeleteClick}
               className="
                 rounded-xl
                 bg-red-500

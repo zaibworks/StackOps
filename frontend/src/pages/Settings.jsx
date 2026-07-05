@@ -30,6 +30,25 @@ const fetchMyActivities = async()=>{
   return res.data.data
 }
 
+const deleteWorkspaces = async (ids) => {
+  const res = await api.delete('/settings/deleteWorkspaces', { data: { ids } });
+  return res.data;
+};
+
+const deleteTasks = async (ids) => {
+  const res = await api.delete('/settings/deleteTasks', { data: { ids } });
+  return res.data;
+};
+
+const deleteComments = async (ids) => {
+  const res = await api.delete('/settings/deleteComments', { data: { ids } });
+  return res.data;
+};
+
+const deleteActivities = async (ids) => {
+  const res = await api.delete('/settings/deleteActivities', { data: { ids } });
+  return res.data;
+};
 
 
 const modalConfig ={
@@ -138,6 +157,8 @@ const Settings = () => {
   items={items}
   itemLabel={config.itemLabel}
   typeName={config.typeName}
+  onDelete={config.onDelete}
+  setItems={setItems}
   />
 )}
     </div>
