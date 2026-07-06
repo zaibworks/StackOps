@@ -10,6 +10,7 @@ import {
   Pencil,
   Trash2,
   Bolt,
+  CheckSquare
 } from "lucide-react";
 import Navbar from '../components/Navbar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
@@ -366,11 +367,13 @@ const statusStyles = {
             Manage all workspace tasks
           </p>
         </div>
-
+{workspace.tasks.length ===0?null:(
         <button onClick={()=> setShowFilters(!showFilters)}
         className="rounded-xl border border-zinc-800 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-800 cursor-pointer">
           Filters
         </button>
+
+)}
 
         {showFilters && (
   <div className="absolute right-5 top-20 w-40 rounded-2xl border border-zinc-800 bg-zinc-950 p-4 shadow-xl space-y-2">
@@ -462,7 +465,36 @@ const statusStyles = {
 )}
       {/* Tasks Area */}
       <div className="flex-1 min-h-0 overflow-y-auto p-5 space-y-2 custom-scrollbar">
-  {filteredTasks.map((t, index) => {
+        {workspace.tasks.length===0?(
+           <div className="flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-zinc-800 text-center py-12">
+      <div className="rounded-full bg-orange-500/10 p-3 text-orange-400">
+        <CheckSquare size={22} />
+      </div>
+      <div>
+        <p className="font-medium text-zinc-200">
+          {workspace?.tasks?.length === 0 ? "No tasks yet" : "No tasks match your filters"}
+        </p>
+        <p className="mt-1 text-sm text-zinc-500">
+          {workspace?.tasks?.length === 0
+            ? "Create your first task to get this workspace moving."
+            : "Try adjusting or clearing your filters."}
+        </p>
+      </div>
+      {workspace?.tasks?.length === 0 && (
+        <button
+          onClick={() => {
+            setOpenAddTask(true)
+            setError("")
+          }}
+          className="mt-1 rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-white cursor-pointer"
+        >
+          Add Task
+        </button>
+      )}
+    </div>
+        ):(
+          <>
+ {filteredTasks.map((t, index) => {
     const isNearBottom =
       filteredTasks.length > 3 && index >= filteredTasks.length - 2
 
@@ -557,6 +589,9 @@ const statusStyles = {
       </div>
     )
   })}
+          </>
+        )}
+ 
 </div>
     </div>
   </section>
