@@ -1,8 +1,32 @@
-import { X, Trash2, Eye } from "lucide-react";
+import { X, Trash2, Eye,EyeOff } from "lucide-react";
+import { useState } from "react";
+import api from "../../api/axios.js";
+import { useNavigate } from "react-router-dom";
 
 const DeleteAccountModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
+  const [showPass, setShowPass] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState("")
+  const [error, setError] = useState("")
+  const [deleting, setDeleting] = useState(false)
+  const navigate = useNavigate()
 
+  const handleDelete = async()=>{
+    setError("")
+    setDeleting(true)
+    try {
+        await api.delete('/settings/deleteUser',{data:{
+          currentPassword
+        }})
+        localStorage.removeItem('token')
+        onClose()
+        navigate('/signup')
+    } catch (e) {
+      setError(e?.response?.data?.message)
+    }finally{
+      setDeleting(false)
+    }
+  }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
       <div className="w-full max-w-md rounded-3xl border border-zinc-800 bg-zinc-950 shadow-2xl">
@@ -46,8 +70,10 @@ const DeleteAccountModal = ({ isOpen, onClose }) => {
             </label>
 
             <div className="relative">
-              <input
-                type="password"
+              <input 
+              value={currentPassword}
+              onChange={(e)=>setCurrentPassword(e.target.value)}
+                type={showPass ? "text" : "password"}
                 placeholder="Enter your password"
                 className="
                   w-full rounded-xl border border-zinc-700
@@ -57,7 +83,7 @@ const DeleteAccountModal = ({ isOpen, onClose }) => {
                 "
               />
 
-              <button
+              <button onClick={()=>setShowPass(!showPass)}
                 type="button"
                 className="
                   absolute right-3 top-1/2
@@ -66,7 +92,11 @@ const DeleteAccountModal = ({ isOpen, onClose }) => {
                   hover:text-zinc-300
                 "
               >
-                <Eye size={18} />
+                {showPass ? (
+            <EyeOff size={18} />
+        ) : (
+            <Eye size={18} />
+        )}
               </button>
             </div>
           </div>
@@ -74,6 +104,12 @@ const DeleteAccountModal = ({ isOpen, onClose }) => {
           <p className="text-xs text-red-400">
             ⚠ This action cannot be undone.
           </p>
+
+          <div className="h-2">
+               {error&&(
+                <p className="text-sm text-red-600">{error}</p>
+               )}
+          </div>
 
         </div>
 
@@ -93,16 +129,19 @@ const DeleteAccountModal = ({ isOpen, onClose }) => {
             Cancel
           </button>
 
-          <button
+          <button onClick={handleDelete}
+          disabled={deleting}
             className="
               rounded-xl bg-red-500
               px-5 py-2
               font-medium text-white
               transition
               hover:bg-red-600
+              disabled:cursor-not-allowed
+              isabled:opacity-50
             "
           >
-            Delete Account
+           {deleting? "Deleting..":"Delete Account"}
           </button>
 
         </div>

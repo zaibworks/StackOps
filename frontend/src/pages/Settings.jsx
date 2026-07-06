@@ -31,23 +31,28 @@ const fetchMyActivities = async()=>{
 }
 
 const deleteWorkspaces = async (ids) => {
-  const res = await api.delete('/settings/deleteWorkspaces', { data: { ids } });
+  const res = await api.delete('/settings/deleteWorkspaces', { data: { workspaceIds : ids } });
   return res.data;
 };
 
 const deleteTasks = async (ids) => {
-  const res = await api.delete('/settings/deleteTasks', { data: { ids } });
+  const res = await api.delete('/settings/deleteTasks', { data: { taskIds : ids } });
   return res.data;
 };
 
 const deleteComments = async (ids) => {
-  const res = await api.delete('/settings/deleteComments', { data: { ids } });
+  const res = await api.delete('/settings/deleteComments', { data: { commentIds : ids } });
   return res.data;
 };
 
 const deleteActivities = async (ids) => {
-  const res = await api.delete('/settings/deleteActivities', { data: { ids } });
-  return res.data;
+  try {
+    const res = await api.delete('/settings/deleteActivities', { data: { activityIds : ids } });
+    return res.data;
+    
+  } catch (e) {
+    console.log(e) 
+  }
 };
 
 
@@ -93,6 +98,31 @@ const Settings = () => {
   const [openModal, setOpenModal] = useState(null)
   const [currentType, setCurrentType] = useState(null);
   const [items, setItems] = useState([])
+  
+  const [counts, setCounts] = useState({
+  workspaces: 0,
+  tasks: 0,
+  comments: 0,
+  activities: 0
+});
+
+useEffect(() => {
+  const fetchCounts = async () => {
+    const workspaces = await fetchOwnedWorkspaces();
+    const tasks = await fetchMyTasks();
+    const comments = await fetchMyComments();
+    const activities = await fetchMyActivities();
+
+    setCounts({
+      workspaces: workspaces.length,
+      tasks: tasks.length,
+      comments: comments.length,
+      activities: activities.length
+    });
+  };
+
+  fetchCounts();
+}, []);
 
   const config = modalConfig[currentType];
 
@@ -135,6 +165,7 @@ const Settings = () => {
   onTasks={() => handleManage("tasks")}
   onComments={() => handleManage("comments")}
   onActivities={() => handleManage("activities")}
+  counts={counts}
 />
           <AboutCard/>
           <DangerZoneCard onClickDanger={()=>setOpenModal("danger")} />
@@ -147,6 +178,9 @@ const Settings = () => {
       )}
       {openModal === "password" &&(
         <ChangePasswordModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
+      )}
+      {openModal === "danger" &&(
+        <DeleteAccountModal isOpen={setOpenModal} onClose={()=>setOpenModal(null)}/>
       )}
       {openModal === "manage" && (
   <ManageItemsModal 

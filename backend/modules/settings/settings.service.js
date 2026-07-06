@@ -208,7 +208,7 @@ if (myActivityIds.length !== activityIds.length) {
 
 export const deleteUserAccount = async(userId,currentPassword)=>{
   
-  if (!currentPassword.trim()) {
+  if (!currentPassword) {
     throw new Error("Password is required");
 }
 

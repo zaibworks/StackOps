@@ -8,11 +8,11 @@ import DeleteWorkspaceModal from "../components/DeleteWorkspaceModal.jsx";
 import LeaveWorkspaceModal from "../components/LeaveWorkspaceModal.jsx";
 import Navbar from "../components/Navbar.jsx";
 import Sidebar from "../components/Sidebar.jsx";
-import { useWorkspace } from "../context/WorkspaceContext.jsx";
+import Loader from "../components/Loader.jsx"
 
 const Dashboard = () => {
-  // const [workspaces, setWorkspaces] = useState([])
-  // const [loading, setLoading] = useState(false)       
+  const [workspaces, setWorkspaces] = useState([])
+  const [loading, setLoading] = useState(true)       
   const [error, setError] = useState('')
   const [showCreateModal, setshowCreateModal] = useState(false)
   const [creating, setCreating] = useState(false)
@@ -25,7 +25,20 @@ const Dashboard = () => {
 
   const navigate = useNavigate()
   const {user,setUser} = useAuth()
-  const {workspaces,setWorkspaces,loading} = useWorkspace();
+
+  useEffect(() => {
+    const fetchWorkspaces = async () => {
+      try {
+        const response = await api.get('/workspace')
+        setWorkspaces(response.data)
+      } catch (e) {
+        console.log(e)
+      }finally{
+        setLoading(false)
+      }
+    }
+    fetchWorkspaces()
+  }, [])
 
   const searchData = workspaces.map(w => ({
   id: w.id,
@@ -94,7 +107,7 @@ const handleWorkspaceLeft = (workspace) => {
   setOpenMenuId(null);
 };
 
-  if (loading) return <h1>Loading...</h1>
+  if (loading) return <Loader text="Loading your Workspaces" />
   return (
     <>
     <div className="h-screen flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">

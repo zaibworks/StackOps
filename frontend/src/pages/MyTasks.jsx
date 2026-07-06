@@ -7,8 +7,11 @@ import {useWorkspace} from '../context/WorkspaceContext.jsx'
 import api from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
 import TaskCard from "../components/TaskCard.jsx";
+import Loader from "../components/Loader.jsx";
 
 const MyTasks = () => {
+
+  const [loading, setLoading] = useState(true)
 
   const [selectedTask, setSelectedTask] = useState(null)
 const [selectedWorkspace, setSelectedWorkspace] = useState(null)
@@ -49,6 +52,7 @@ const [selectedWorkspace, setSelectedWorkspace] = useState(null)
       })
       setTasks(res.data.data)
       setTotalPages(res.data.totalPages)
+      setLoading(false)
     }catch(e){
       console.log(e)
     }
@@ -75,6 +79,9 @@ const handleTaskUpdate = async () => {
   
   setSelectedWorkspace(updatedWorkspace)
   if(updatedTask) setSelectedTask(updatedTask)
+}
+if(loading){
+  return <Loader text={"Getting your tasks"}/>
 }
   
 return (

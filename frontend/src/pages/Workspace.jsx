@@ -9,13 +9,14 @@ import {
   ChevronDown,
   Pencil,
   Trash2,
-  Bolt
+  Bolt,
 } from "lucide-react";
 import Navbar from '../components/Navbar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
 import MemberCard from '../components/MemberCard.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import WorkspaceSettingsModal from '../components/WorkspaceSettingsModal.jsx';
+import Loader from '../components/Loader.jsx';
 
 const Workspace = () => {
   const [workspace, setWorkspace] = useState(null)
@@ -238,7 +239,7 @@ const memberSelect=(memberId)=>{
   }
 }
 
-  if(loading) return <h1>Loading...</h1>
+  if(loading) return <Loader text = "Loading your workspace"/>
 
   return (
     <>

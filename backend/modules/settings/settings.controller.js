@@ -4,6 +4,7 @@ import {
     deleteSelectedWorkspaces,
     deleteSelectedTasks,
     deleteSelectedComments,
+    deleteSelectedActivities,
     deleteUserAccount,
     getOwnedWorkspaces,
     getMyTasks,
@@ -81,7 +82,8 @@ export const deleteSelectedActivitiesController = async(req,res)=>{
 export const deleteUserAccountController = async(req,res)=>{
   try {
     const userId = req.user.userId
-    const removed = await deleteUserAccount(userId)
+    const {currentPassword} = req.body
+    const removed = await deleteUserAccount(userId,currentPassword)
      res.status(200).json({message:"Account permanently deleted"})
   } catch (e) {
     res.status(402).json({message:e.message})

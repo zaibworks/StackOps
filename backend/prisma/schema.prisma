@@ -46,10 +46,10 @@ priority Priority
 status Status
 
   userId Int
-  user      User     @relation("CreatedTask",fields: [userId], references: [id])
+  user      User     @relation("CreatedTask",fields: [userId], references: [id],onDelete: Cascade)
 
 assignedToId Int?
-  assignedTo User? @relation("AssignedTask",fields: [assignedToId],references: [id])
+  assignedTo User? @relation("AssignedTask",fields: [assignedToId],references: [id],onDelete: Cascade)
 
   workspaceId Int
   workspace Workspace @relation(fields: [workspaceId],references: [id],onDelete: Cascade)
@@ -84,12 +84,13 @@ userId Int
 workspaceId Int
 role Role @default(member)
 
-user User @relation(fields: [userId],references: [id])
+user User @relation(fields: [userId],references: [id],onDelete: Cascade)
 workspace Workspace @relation(fields: [workspaceId],references: [id],onDelete:Cascade)
 
   @@unique([userId, workspaceId])
 
   createdAt DateTime @default(now())
+  lastOpenedAt DateTime?
 }
 
 model Comment{
@@ -99,7 +100,7 @@ model Comment{
   taskId Int
   userId Int
   task Task @relation(fields: [taskId],references: [id],onDelete: Cascade)
-  user User @relation(fields: [userId],references: [id])
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
@@ -109,7 +110,7 @@ model Activity{
   action String
 
   userId Int
-  user User @relation(fields: [userId],references: [id])
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
 
   workspaceId Int
   workspace Workspace @relation(fields: [workspaceId],references: [id],onDelete: Cascade)

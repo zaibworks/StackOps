@@ -76,7 +76,16 @@ const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDe
               type="checkbox"
               checked={selectedIds.length===items.length}
               onChange={selectAll}
-              className="h-4 w-4 accent-zinc-500"
+              className="
+    appearance-none 
+    h-4 w-4 
+    rounded 
+    border border-zinc-600 
+    bg-zinc-800 
+    checked:bg-red-500 
+    checked:border-zinc-300
+    cursor-pointer
+  "
             />
 
             <span className="text-sm font-medium">
@@ -113,7 +122,16 @@ const ManageItemsModal = ({isOpen,onClose,title,description,items,itemLabel,onDe
                   type="checkbox"
                     checked={selectedIds.includes(item.id)}
                     onChange={() => toggleSelect(item.id)}
-                  className="h-4 w-4 accent-orange-500"
+                    className="
+    appearance-none 
+    h-4 w-4 
+    rounded 
+    border border-zinc-600 
+    bg-zinc-800 
+    checked:bg-blue-500 
+    checked:border-zinc-300
+    cursor-pointer
+  "
                 />
 
                 <div className="rounded-lg bg-orange-500/10 p-2 text-orange-400">

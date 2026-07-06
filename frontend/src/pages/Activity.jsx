@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { ActivityIcon } from "lucide-react";
 import { useWorkspace } from "../context/WorkspaceContext.jsx";
+import Loader from "../components/Loader.jsx";
 
 const Activity = () => {
 const [activities, setActivities] = useState([]);
@@ -38,11 +39,7 @@ setUser(null);
 };
 
 if (loading) {
-return (
-<div className="h-screen bg-zinc-950 text-zinc-100 flex items-center justify-center">
-Loading...
-</div>
-);
+return <Loader text={"Getting your activities"}/>;
 }
 
 return (

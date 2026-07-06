@@ -6,7 +6,7 @@ import {
   History,
 } from "lucide-react";
 
-const QuickActionsCard = ({onWorkspaces,onTasks,onComments,onActivities}) => {
+const QuickActionsCard = ({onWorkspaces,onTasks,onComments,onActivities,counts}) => {
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40">
 
@@ -54,7 +54,7 @@ const QuickActionsCard = ({onWorkspaces,onTasks,onComments,onActivities}) => {
           <div className="flex items-center gap-3">
 
             <span className="text-sm text-zinc-500">
-              12
+              {counts.workspaces}
             </span>
 
             <ChevronRight size={16} />
@@ -94,7 +94,7 @@ const QuickActionsCard = ({onWorkspaces,onTasks,onComments,onActivities}) => {
           <div className="flex items-center gap-3">
 
             <span className="text-sm text-zinc-500">
-              48
+              {counts.tasks}
             </span>
 
             <ChevronRight size={16} />
@@ -134,7 +134,7 @@ const QuickActionsCard = ({onWorkspaces,onTasks,onComments,onActivities}) => {
           <div className="flex items-center gap-3">
 
             <span className="text-sm text-zinc-500">
-              163
+             {counts.comments}
             </span>
 
             <ChevronRight size={16} />
@@ -174,7 +174,7 @@ const QuickActionsCard = ({onWorkspaces,onTasks,onComments,onActivities}) => {
           <div className="flex items-center gap-3">
 
             <span className="text-sm text-zinc-500">
-              521
+              {counts.activities}
             </span>
 
             <ChevronRight size={16} />
