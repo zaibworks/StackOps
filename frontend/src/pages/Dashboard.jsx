@@ -22,9 +22,29 @@ const Dashboard = () => {
   const [selectedWorkspace, setSelectedWorkspace] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showLeaveModal, setShowLeaveModal] = useState(false)
+ const [mystats, setMyStats] = useState({
+  totalWorkspaces: 0,
+  ownedWorkspaces: 0,
+  assignedTasks: 0,
+  totalActivities: 0
+});
 
   const navigate = useNavigate()
   const {user,setUser} = useAuth()
+
+
+  useEffect(() => {
+   const fetchStats = async()=>{
+    try {
+       const response = await api.get('/user/stats')
+        setMyStats(response?.data?.data)
+    } catch (e) {
+       console.log(e)
+    }
+   }
+   fetchStats()
+  }, [])
+  
 
   useEffect(() => {
     const fetchWorkspaces = async () => {
@@ -107,7 +127,12 @@ const handleWorkspaceLeft = (workspace) => {
   setOpenMenuId(null);
 };
 
-  if (loading) return <Loader text="Loading your Workspaces" />
+const lastOpenedWorkspace = async ({workspaceId})=>{
+    const res = await api.patch(`/workspace/${workspaceId}/open`);
+  return res.data;
+}
+
+  if (loading) return <Loader text="Loading your Dashboard Panel" />
   return (
     <>
     <div className="h-screen flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
@@ -133,23 +158,23 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
   <div className="rounded-2xl p-5">
     <p className="text-sm text-zinc-500"><FolderKanban size={18}/>Workspaces</p>
     <h2 className="mt-2 text-3xl font-semibold">
-      {workspaces?.length}
+      {mystats.totalWorkspaces}
     </h2>
   </div>
 
   <div className="rounded-2xl p-5">
     <p className="text-sm text-zinc-500"><Users size={18}/>Owned</p>
-    <h2 className="mt-2 text-3xl font-semibold">{workspaces.filter(w=>w.members[0]?.role==='admin').length}</h2>
+    <h2 className="mt-2 text-3xl font-semibold">{mystats.ownedWorkspaces}</h2>
   </div>
 
   <div className="rounded-2xl p-5">
     <p className="text-sm text-zinc-500"><CheckSquare size={18}/>Assigned Tasks</p>
-    <h2 className="mt-2 text-3xl font-semibold">0</h2>
+    <h2 className="mt-2 text-3xl font-semibold">{mystats.assignedTasks}</h2>
   </div>
 
   <div className="rounded-2xl p-5">
     <p className="text-sm text-zinc-500"><Activity size={18}/>Activity</p>
-    <h2 className="mt-2 text-3xl font-semibold">0</h2>
+    <h2 className="mt-2 text-3xl font-semibold">{mystats.totalActivities}</h2>
   </div>
 </div>
 
@@ -166,8 +191,10 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
       return(
       <div
         key={workspace.id}
-        onClick={(e) => 
-          navigate(`/workspace/${workspace.id}`)}
+        onClick={(e) => {
+          navigate(`/workspace/${workspace.id}`)
+          // lastOpenedWorkspace(workspace.id)
+        }}
         className="flex relative w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-4.5 px-5 text-left transition-all hover:bg-zinc-900/70 hover:border-orange-500/30 cursor-pointer"
       >
         <div className="flex items-center gap-10">

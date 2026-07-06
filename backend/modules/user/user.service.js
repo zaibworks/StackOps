@@ -32,3 +32,26 @@ return await prisma.workspace.findMany({
   }
 })
 }
+export const getMyStats = async (userId) => {
+  const [totalWorkspaces, ownedWorkspaces, assignedTasks, totalActivities] = await Promise.all([
+    prisma.membership.count({
+      where: { userId: Number(userId) }
+    }),
+    prisma.membership.count({
+      where: { userId: Number(userId), role: 'admin' }
+    }),
+    prisma.task.count({
+      where: { assignedToId: Number(userId) }
+    }),
+    prisma.activity.count({
+      where: { userId: Number(userId) }
+    })
+  ]);
+
+  return {
+    totalWorkspaces,
+    ownedWorkspaces,
+    assignedTasks,
+    totalActivities
+  };
+};

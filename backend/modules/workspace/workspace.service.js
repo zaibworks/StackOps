@@ -49,37 +49,69 @@ if (existingWorkspace) {
   return workspace
 }
 
-export const getMyWorkspace = async (userId)=>{
- return await prisma.workspace.findMany({
-  where:{
-    members:{
-      some:{ userId }
-    }
-  },orderBy:{lastOpenedAt:'desc'},
-  include:{
-    _count:{
-      select:{
-        members:true,
-        tasks:true
-      }
-    },
-     tasks: {
+// export const getMyWorkspace = async (userId)=>{
+//  return await prisma.workspace.findMany({
+//   where:{
+//     members:{
+//       some:{ userId }
+//     }
+//   },orderBy:{lastOpenedAt:'desc'},
+//   include:{
+//     _count:{
+//       select:{
+//         members:true,
+//         tasks:true
+//       }
+//     },
+//      tasks: {
+//     select: {
+//       assignedToId: true,
+//       status: true
+//     }
+//   },
+//     members:{
+//       where:{
+//         userId
+//       },
+//       select:{
+//         role:true
+//       } 
+//     }
+//   }
+// })
+// }
+
+export const getMyWorkspace = async (userId) => {
+  const memberships = await prisma.membership.findMany({
+    where: { userId },
+    orderBy: { lastOpenedAt: 'desc' },
     select: {
-      assignedToId: true,
-      status: true
-    }
-  },
-    members:{
-      where:{
-        userId
-      },
-      select:{
-        role:true
+      role: true,
+      workspace: {
+        include: {
+          _count: {
+            select: {
+              members: true,
+              tasks: true
+            }
+          },
+          tasks: {
+            select: {
+              assignedToId: true,
+              status: true
+            }
+          }
+        }
       }
     }
+  });
+
+ return memberships.map((m) => ({
+  ...m.workspace,
+  members: [{ role: m.role }]}));
   }
-})
-}
+   ;
+
 
 export const inviteMember = async(userId, workspaceId, email, role)=>{
   const parsedWorkspaceId = parseInt(workspaceId)
