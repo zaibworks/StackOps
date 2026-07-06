@@ -68,6 +68,8 @@ const [selectedWorkspace, setSelectedWorkspace] = useState(null)
   high: 'text-red-500'
 }
 
+const hasActiveFilters = filter !== 'all' || status !== '' || workspaceId !== '';
+
 const handleTaskUpdate = async () => {
   await fetchTasks()
   
@@ -80,6 +82,8 @@ const handleTaskUpdate = async () => {
   setSelectedWorkspace(updatedWorkspace)
   if(updatedTask) setSelectedTask(updatedTask)
 }
+
+
 if(loading){
   return <Loader text={"Getting your tasks"}/>
 }
@@ -170,7 +174,24 @@ return (
 
       {/* Task Cards */}
       <div className="mt-8 flex-1 min-h-0 overflow-y-auto px-2 p-4 space-y-2 custom-scrollbar">
-{tasks?.map(t=>(
+          {tasks.length === 0 ? (
+    <div className="flex h-full flex-col items-center justify-center gap-3 py-16 text-center">
+      <div className="rounded-full bg-orange-500/10 p-3 text-orange-400">
+        <CheckSquare size={22} />
+      </div>
+      <div>
+        <p className="font-medium text-zinc-200">
+          {hasActiveFilters ? "No tasks match your filters" : "No tasks yet"}
+        </p>
+        <p className="mt-1 text-sm text-zinc-500">
+          {hasActiveFilters
+            ? "Try adjusting or clearing your filters."
+            : "Tasks assigned to you or created by you will show up here."}
+        </p>
+      </div>
+    </div>
+  ) : (<>
+     {tasks?.map(t=>(
 
   <div  key={t.id} onClick={() => handleTaskClick(t)}
   className="cursor-pointer rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 py-3 transition-all hover:border-zinc-800 hover:bg-zinc-900/40">
@@ -208,10 +229,12 @@ return (
 </div>
 
 ))}
+  </>)}
 
 
       </div>
 {/* pages change  */}
+{tasks.length > 0 && (
   <div className="flex border-y border-zinc-500 justify-center items-center gap-3 py-3">
   <button
     onClick={() => setpage(page - 1)}
@@ -225,12 +248,14 @@ return (
 
   <button
     onClick={() => setpage(page + 1)}
-    disabled={page === totalPages}
+    disabled={page === totalPages || totalPages === 0}
     className="px-4 py-2 rounded-xl border border-zinc-800 text-sm hover:bg-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed"
   >
     Next
   </button>
 </div>
+
+)}
 
     </main>
 

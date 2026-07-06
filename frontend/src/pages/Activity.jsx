@@ -65,16 +65,19 @@ return (
       <div className="flex-1 overflow-y-auto rounded-2xl border border-zinc-800 main-scrollbar">
 
         {activities.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Activity
-              size={48}
-              className="text-zinc-700"
-            />
-
-            <p className="mt-4 text-zinc-500">
-              No activity yet
-            </p>
-          </div>
+        <div className="flex h-full flex-col items-center justify-center gap-3 py-20 text-center">
+    <div className="rounded-full bg-orange-500/10 p-3 text-orange-400">
+      <ActivityIcon size={22} />
+    </div>
+    <div>
+      <p className="font-medium text-zinc-200">
+        No activity yet
+      </p>
+      <p className="mt-1 text-sm text-zinc-500">
+        Actions across your workspaces will show up here.
+      </p>
+    </div>
+  </div>
         ) : (
           activities.map((activity) => (
             <div
