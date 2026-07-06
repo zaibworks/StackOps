@@ -12,7 +12,8 @@ import Loader from "../components/Loader.jsx"
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
-  const [loading, setLoading] = useState(true)       
+  const [loading, setLoading] = useState(true)
+  const [userLoading, setuserLoading] = useState(true)       
   const [error, setError] = useState('')
   const [showCreateModal, setshowCreateModal] = useState(false)
   const [creating, setCreating] = useState(false)
@@ -22,6 +23,7 @@ const Dashboard = () => {
   const [selectedWorkspace, setSelectedWorkspace] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [showLeaveModal, setShowLeaveModal] = useState(false)
+  const [user, setUser] = useState(null)
  const [mystats, setMyStats] = useState({
   totalWorkspaces: 0,
   ownedWorkspaces: 0,
@@ -30,20 +32,6 @@ const Dashboard = () => {
 });
 
   const navigate = useNavigate()
-  const {user,setUser} = useAuth()
-
-
-  useEffect(() => {
-   const fetchStats = async()=>{
-    try {
-       const response = await api.get('/user/stats')
-        setMyStats(response?.data?.data)
-    } catch (e) {
-       console.log(e)
-    }
-   }
-   fetchStats()
-  }, [])
   
 
   useEffect(() => {
@@ -57,7 +45,32 @@ const Dashboard = () => {
         setLoading(false)
       }
     }
+    const fetchStats = async()=>{
+    try {
+       const response = await api.get('/user/stats')
+        setMyStats(response?.data?.data)
+    } catch (e) {
+       console.log(e)
+    }
+   }
+     const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) return;
+
+      try {
+        const response = await api.get("/user/me");
+        setUser(response.data);
+      } catch (err) {
+        console.log(err);
+        localStorage.removeItem("token");
+      }finally{
+        setuserLoading(false)
+      }
+    };
+    fetchUser()
     fetchWorkspaces()
+    fetchStats()
   }, [])
 
   const searchData = workspaces.map(w => ({
@@ -132,7 +145,7 @@ const lastOpenedWorkspace = async ({workspaceId})=>{
   return res.data;
 }
 
-  if (loading) return <Loader text="Loading your Dashboard Panel" />
+  if (loading && userLoading) return <Loader text="Loading your Dashboard Panel" />
   return (
     <>
     <div className="h-screen flex flex-col bg-zinc-950 text-zinc-100 overflow-hidden">
@@ -186,7 +199,28 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
     </h2>
   </div>
    <div className="h-[240px] overflow-visible scrollbar-hide space-y-3 pr-2">
-    {workspaces.slice(0, 3).map((workspace,index) => {
+    {workspaces.length === 0 ? (
+    <div className="flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-zinc-800 text-center">
+      <div className="rounded-full bg-orange-500/10 p-3 text-orange-400">
+        <FolderKanban size={22} />
+      </div>
+      <div>
+        <p className="font-medium text-zinc-200">No workspaces yet</p>
+        <p className="mt-1 text-sm text-zinc-500">
+          Create your first workspace to start organizing tasks.
+        </p>
+      </div>
+      <button
+        onClick={() => setshowCreateModal(true)}
+        className="mt-1 flex items-center gap-2 rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-white cursor-pointer"
+      >
+        <Plus size={16} />
+        Create Workspace
+      </button>
+    </div>
+  ) : (
+    <>
+     {workspaces.slice(0, 3).map((workspace,index) => {
       const isNearBottom = index>= workspaces.slice(0, 3).length - 2 
       return(
       <div
@@ -280,6 +314,8 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
 }
       </div>
     )})}
+    </>
+  )}
   </div>
 </div>
  </main>

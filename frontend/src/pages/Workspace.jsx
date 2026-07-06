@@ -13,10 +13,10 @@ import {
 } from "lucide-react";
 import Navbar from '../components/Navbar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
-import MemberCard from '../components/MemberCard.jsx'
-import { useAuth } from '../context/AuthContext.jsx'
 import WorkspaceSettingsModal from '../components/WorkspaceSettingsModal.jsx';
 import Loader from '../components/Loader.jsx';
+import MemberCard from "../components/MemberCard.jsx"
+import { useAuth } from '../context/AuthContext.jsx';
 
 const Workspace = () => {
   const [workspace, setWorkspace] = useState(null)
@@ -34,6 +34,16 @@ const Workspace = () => {
   const [selectedMember, setSelectedMember] = useState(null)
   const [isOpenWorkspaceSettings, setisOpenWorkspaceSettings] = useState(false)
 
+    const {user} = useAuth()
+
+const currentMember = workspace?.members?.find(m => m.user.id === user?.id);
+const isAdmin = currentMember?.role === "admin";
+
+
+  const fetchTasks =async()=>{
+     const res = api.get()
+  }
+
 
   const [openTaskMenuId, setopenTaskMenuId] = useState(null)
   const [editMode, seteditMode] = useState(false)
@@ -49,8 +59,6 @@ const Workspace = () => {
   unassigned:false,
   overdue:false,
   })
-
-  const {user} = useAuth()
 
 const filteredTasks = workspace?.tasks?.filter((task) => {
   const statusMatch =
@@ -239,6 +247,18 @@ const memberSelect=(memberId)=>{
   }
 }
 
+const priorityStyles = {
+  low: "border-emerald-500/20 bg-emerald-500/10 text-emerald-400",
+  medium: "border-amber-500/20 bg-amber-500/10 text-amber-400",
+  high: "border-red-500/20 bg-red-500/10 text-red-400",
+};
+
+const statusStyles = {
+  todo: "border-zinc-600/30 bg-zinc-600/10 text-zinc-400",
+  inprogress: "border-blue-500/20 bg-blue-500/10 text-blue-400",
+  done: "border-emerald-500/20 bg-emerald-500/10 text-emerald-400",
+};
+
   if(loading) return <Loader text = "Loading your workspace"/>
 
   return (
@@ -295,6 +315,7 @@ const memberSelect=(memberId)=>{
       Add Task
     </button>
 
+{isAdmin&&(
 <div className='relative'>
   <button onClick={()=>setisOpenWorkspaceSettings(prev=>!prev)}
   className='text-zinc-400 hover:text-zinc-100 transition-colors p-2 hover:bg-zinc-400/30 rounded-xl'>
@@ -311,6 +332,8 @@ const memberSelect=(memberId)=>{
   </>
 )}
 </div>
+)}
+
   </div>
 
 </div>
@@ -439,123 +462,101 @@ const memberSelect=(memberId)=>{
 )}
       {/* Tasks Area */}
       <div className="flex-1 min-h-0 overflow-y-auto p-5 space-y-2 custom-scrollbar">
-     {filteredTasks.map((t,index) => {
-      const isNearBottom =
-  filteredTasks.length > 3 &&
-  index >= filteredTasks.length - 2
-      return(
-  <div
-    key={t.id}
-    onClick={() => setSelectedTask(t)}
-    className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-4 hover:border-zinc-700 transition-all"
-  >
-    {/* Top Row */}
-    <div className="flex items-start justify-between">
-      <div>
-        <h3 className="font-medium text-zinc-100">
-          {t.title}
-        </h3>
+  {filteredTasks.map((t, index) => {
+    const isNearBottom =
+      filteredTasks.length > 3 && index >= filteredTasks.length - 2
 
-        <p className="mt-1 text-sm text-zinc-500 line-clamp-1">
-          {t.content || "No description"}
-        </p>
-      </div>
-          <div className='relative'>
-      <button onClick={(e)=>{
-  e.stopPropagation()
-  setopenTaskMenuId(
-    openTaskMenuId === t.id
-      ? null
-      : t.id
-  )
-}}
-      className="text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60 p-2 rounded-2xl cursor-pointer">
-        ⋮
-      </button>
-      {openTaskMenuId ===t.id&&(
-         <div
-  className={`absolute right-0 z-50 w-40 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl ${
-    isNearBottom
-      ? "bottom-8"
-      : "top-8"
-  }`}
->
-            <button
-        onClick={() => handleEdit(t)}
-        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+    const isCreator = t.user?.id === user?.id;
+    const canEditTask = isAdmin || isCreator;
+
+    const priorityAccent = {
+      low: "border-l-emerald-500",
+      medium: "border-l-amber-500",
+      high: "border-l-red-500",
+    };
+
+    const statusDot = {
+      todo: "bg-zinc-500",
+      inprogress: "bg-blue-500",
+      done: "bg-emerald-500",
+    };
+
+    return (
+      <div
+        key={t.id}
+        onClick={() => setSelectedTask(t)}
+        className={`rounded-2xl border border-zinc-800 border-l-[3px] ${priorityAccent[t.priority]} bg-zinc-900/30 p-4 transition-all hover:border-zinc-700 hover:bg-zinc-900/50 hover:scale-[1.01] cursor-pointer`}
       >
-        <Pencil size={14} />
-        Edit
-      </button>
-
-            <select
-        onClick={(e) =>{
-          e.stopPropagation()
-        }} value={newStatus} onChange={(e)=>{handleStatus(t.id,e.target.value)}}
-        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
-      >
-        <option value="todo">Todo</option>
-        <option value="inprogress">Inprogress</option>
-        <option value="done">Done</option>
-      </select>
-
-        <button
-        onClick={(e) => {e.stopPropagation() 
-          handleDelete(t)
-
-        }}
-        className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-zinc-800"
-      >
-        <Trash2 size={14} />
-        Delete
-      </button>
-
-         </div>
-      )}
+        {/* Top Row */}
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-medium text-zinc-100">
+              {t.title}
+            </h3>
+            <p className="mt-1 text-sm text-zinc-500 line-clamp-1">
+              {t.content || "No description"}
+            </p>
           </div>
 
-    </div>
+          {canEditTask && (
+            <div className='relative'>
+              <button onClick={(e) => {
+                e.stopPropagation()
+                setopenTaskMenuId(openTaskMenuId === t.id ? null : t.id)
+              }}
+                className="text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60 p-2 rounded-2xl cursor-pointer">
+                ⋮
+              </button>
+              {openTaskMenuId === t.id && (
+                <div className={`absolute right-0 z-50 w-40 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl ${isNearBottom ? "bottom-8" : "top-8"}`}>
+                  <button onClick={() => handleEdit(t)}
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800">
+                    <Pencil size={14} />
+                    Edit
+                  </button>
+                  <select onClick={(e) => e.stopPropagation()} value={newStatus}
+                    onChange={(e) => handleStatus(t.id, e.target.value)}
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800">
+                    <option value="todo">Todo</option>
+                    <option value="inprogress">Inprogress</option>
+                    <option value="done">Done</option>
+                  </select>
+                  <button onClick={(e) => { e.stopPropagation(); handleDelete(t) }}
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-zinc-800">
+                    <Trash2 size={14} />
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
-    {/* Bottom Row */}
-    <div className="mt-4 flex items-center justify-between">
+        {/* Bottom Row */}
+        <div className="mt-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className={`rounded-full border px-2 py-1 text-xs ${priorityStyles[t.priority]}`}>
+              {t.priority.charAt(0).toUpperCase() + t.priority.slice(1)}
+            </span>
 
-      <div className="flex items-center gap-2">
+            <span className="flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-800/50 px-2 py-1 text-xs text-zinc-300">
+              <span className={`h-1.5 w-1.5 rounded-full ${statusDot[t.status]}`} />
+              {t.status.charAt(0).toUpperCase() + t.status.slice(1)}
+            </span>
+          </div>
 
-        {/* Priority */}
-        <span className="rounded-full border border-orange-500/20 bg-orange-500/10 px-2 py-1 text-xs text-orange-400">
-          {t.priority.charAt(0).toUpperCase()+t.priority.slice(1)}
-        </span>
-
-        {/* Status */}
-        <span className="rounded-full border border-blue-500/20 bg-blue-500/10 px-2 py-1 text-xs text-blue-400">
-          {t.status.charAt(0).toUpperCase()+t.status.slice(1)}
-        </span>
-
+          <div className="flex items-center gap-4 text-xs text-zinc-500">
+            <span>{t.assignedTo?.name || "Unassigned"}</span>
+            <span>
+              {t.dueDate
+                ? new Date(t.dueDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
+                : "No Due Date"}
+            </span>
+          </div>
+        </div>
       </div>
-
-      <div className="flex items-center gap-4 text-xs text-zinc-500">
-
-        {/* Assignee */}
-        <span>
-          {t.assignedTo?.name || "Unassigned"}
-        </span>
-
-        {/* Due Date */}
-        <span>
-          {t.dueDate
-    ? new Date(t.dueDate).toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
-    : "No Due Date"}
-        </span>
-
-      </div>
-
-    </div>
-  </div>
-)})}
+    )
+  })}
 </div>
     </div>
   </section>

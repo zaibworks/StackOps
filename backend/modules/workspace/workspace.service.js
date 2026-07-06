@@ -279,6 +279,8 @@ export const getWorkspacebyId = async(userId,workspaceId)=>{
             name:true,
             email:true
           }
+        },user:{
+          select:{id:true,name:true,email:true}
         }
       }
     }
