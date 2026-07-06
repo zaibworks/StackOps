@@ -55,7 +55,7 @@ export const getMyWorkspace = async (userId)=>{
     members:{
       some:{ userId }
     }
-  },orderBy:{updatedAt:'desc'},
+  },orderBy:{lastOpenedAt:'desc'},
   include:{
     _count:{
       select:{
@@ -372,4 +372,19 @@ export const deleteWorkspace = async(workspaceId,userId)=>{
      })
 
      return deletetion
+}
+
+export const lastOpenedUpdated = async(userId,workspaceId)=>{
+const updated = await prisma.membership.update({
+  where: {
+    userId_workspaceId: {   
+      userId: Number(userId),
+      workspaceId: Number(workspaceId)
+    }
+  },
+  data: {
+    lastOpenedAt: new Date()
+  }
+});
+
 }

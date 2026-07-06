@@ -9,7 +9,8 @@ import { createWorkspaceController,
     getWorkspacebyIdController,
     leaveWorkspaceController,
     changeMemberRoleController,
-    deleteWorkspaceController
+    deleteWorkspaceController,
+    lastOpenedUpdatedController
 } from './workspace.controller.js'
 
 import { workspaceMemberMiddlware } from '../middleware/workspace.middleware.js'
@@ -28,6 +29,7 @@ router.put('/:workspaceId/member/:memberId',authMiddlware,workspaceMemberMiddlwa
 router.delete('/:workspaceId/leave',authMiddlware,workspaceMemberMiddlware,leaveWorkspaceController)
 router.get('/:workspaceId',authMiddlware,workspaceMemberMiddlware,getWorkspacebyIdController)
 router.delete('/:workspaceId',authMiddlware,workspaceMemberMiddlware,deleteWorkspaceController)
+router.patch('/:workspaceId/open',authMiddlware,workspaceMemberMiddlware,lastOpenedUpdatedController)
 
 
 export default router

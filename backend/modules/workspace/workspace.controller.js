@@ -8,7 +8,8 @@ import { createWorkspace,
     getWorkspacebyId,
     leaveWorkspace,
     changeMemberRole,
-    deleteWorkspace
+    deleteWorkspace,
+    lastOpenedUpdated
     
  } from "./workspace.service.js";
 
@@ -131,4 +132,17 @@ export const deleteWorkspaceController = async (req,res)=>{
     } catch (e) {
         res.status(403).json({message:e.message})
     }
+}
+
+export const lastOpenedUpdatedController = async(req,res)=>{
+ try {
+    const userId = req.user.userId;
+    const { workspaceId } = req.params;   
+
+    await lastOpenedUpdated(userId, workspaceId);
+
+    res.status(200).json({ message: "Workspace marked as opened" });
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
 }
