@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Activity from "./pages/Activity";
 import MyTasks from "./pages/MyTasks";
 import Settings from "./pages/Settings";
+import Home from "./pages/Home.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { WorkspaceProvider } from "./context/WorkspaceContext.jsx";
 
@@ -18,9 +19,10 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="activity" element={<Activity />} />
-            <Route path="mytasks" element={<MyTasks />} />
-            <Route path="settings" element={<Settings />} />
+            <Route path="/activity" element={<Activity />} />
+            <Route path="/mytasks" element={<MyTasks />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/" element={<Home/>}/>
             <Route
               path="/dashboard"
               element={

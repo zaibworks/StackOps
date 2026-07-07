@@ -36,6 +36,9 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate,startInEditMode,
 
   const [isMetaEditing, setisMetaEditing] = useState(startInEditMode || false);
 
+  const [headerUpdating, setHeaderUpdating] = useState(false)
+  const [taskMetaUpdating, setTaskMetaUpdating] = useState(false)
+
   const deleteTask = async () => {
     try {
       const res = await api.delete(`/task/${workspace.id}/${task.id}`);
@@ -47,15 +50,24 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate,startInEditMode,
   };
 
   const updateTaskHeader = async () => {
-    await api.put(`/task/${workspace.id}/${task.id}`, {
+    setHeaderUpdating(true)
+    try {
+       await api.put(`/task/${workspace.id}/${task.id}`, {
       title: editTitle,
       content: editContent,
     });
     await onTaskUpdate();
     setisEditing(false);
+    } catch (e) {
+      console.log(e)
+    }finally{
+      setHeaderUpdating(false)
+    }
+   
   };
 
   const updateTaskMeta = async () => {
+    setTaskMetaUpdating(true)
     try {
       await api.put(`/task/${workspace.id}/${task.id}`, {
         priority: editPriority,
@@ -67,6 +79,8 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate,startInEditMode,
       setisMetaEditing(false);
     } catch (e) {
       console.log(e);
+    }finally{
+      setTaskMetaUpdating(false)
     }
   };
 
@@ -151,10 +165,11 @@ pb-1"
                 </button>
 
                 <button
+                disabled={headerUpdating}
                   onClick={updateTaskHeader}
-                  className="rounded-xl border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-cyan-800"
+                  className="rounded-xl cursor-pointer border border-none px-4 py-2 text-sm text-zinc-300 hover:bg-cyan-800 disabled:opacity-50"
                 >
-                  Save
+                  {headerUpdating?"Saving..":"Save"}
                 </button>
               </>
             ) : (
@@ -240,10 +255,11 @@ custom-scrollbar
                     </button>
 
                     <button
+                    disabled={taskMetaUpdating}
                       onClick={updateTaskMeta}
-                      className="rounded-lg bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-900 hover:bg-white"
+                      className="rounded-lg cursor-pointer bg-zinc-300 px-3 py-1.5 text-xs font-medium text-zinc-900 hover:bg-white disabled:opacity-50"
                     >
-                      Save
+                      {taskMetaUpdating?"Saving..":"Save"}
                     </button>
                   </div>
                 </>
