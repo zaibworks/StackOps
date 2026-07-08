@@ -12,25 +12,12 @@ import cors from 'cors'
 const app = express()
 const PORT = 3000;
 
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://stack-b0jsbrle8-zaib1.vercel.app'
-]
-
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}))
-
-app.options('*', cors())
+  origin: [
+    'https://stack-ops-one.vercel.app/' // production frontend
+  ],
+    credentials: true
+}));
 
 app.use(express.json())
 
