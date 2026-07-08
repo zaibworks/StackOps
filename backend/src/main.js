@@ -12,11 +12,13 @@ import cors from 'cors'
 const app = express()
 const PORT = 3000;
 
-app.use(cors({
+app.options('*', cors({
   origin: [
-    'https://stack-ops-one.vercel.app/' // production frontend
-  ]
-}));
+    'http://localhost:5173',
+    'https://stack-ops-one.vercel.app'
+  ],
+  credentials: true
+}))
 
 app.use(express.json())
 
