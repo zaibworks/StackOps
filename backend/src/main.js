@@ -15,7 +15,7 @@ const PORT = 3000;
 app.use(cors({
   origin: [
     'http://localhost:5173', // local development
-    'https://stack-6ha887kco-zaib1.vercel.app/' // production frontend
+    'https://stack-ops-one.vercel.app/' // production frontend
   ]
 }));
 
