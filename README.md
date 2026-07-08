@@ -4,7 +4,7 @@ A multi-tenant project management SaaS built from scratch — workspaces, role-b
 
 > Self-taught, built end-to-end (database schema, API, auth, and UI) as a portfolio project to demonstrate production-style engineering decisions, not just CRUD.
 
-**[Live demo](#) · [Video walkthrough](#)**
+**[Live demo](https://stackops4.vercel.app/)**
 
 ---
 
