@@ -14,7 +14,7 @@ const PORT = process.env.PORT  || 3000
 const allowedOrigins = [
   'http://localhost:5173',
   'https://stackops4.vercel.app',
-  'https://stackops4-dui24hcf0-zaib1.vercel.app'
+  'https://stackops4-6m883mx44-zaib1.vercel.app'
 ]
 
 // Debug ke liye origin log karo (optional, but helpful)
