@@ -66,12 +66,12 @@ const filteredResults =
         <div className="flex items-center gap-4">
 
           {/* Logo */}
-          <Link
-            to="/stackOps.png"
+          <div
+           onClick={navigate('/')}
             className="text-lg font-bold text-zinc-100"
           >
             Stack<span className="text-orange-400">Ops</span>
-          </Link>
+          </div>
 
           <div className="h-5 w-px bg-zinc-800" />
 
