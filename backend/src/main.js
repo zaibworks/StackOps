@@ -11,12 +11,37 @@ import cors from 'cors'
 
 const app = express()
 const PORT = process.env.PORT  || 3000
-app.use(cors({
-  origin: [
-    'https://stackops4.vercel.app'
-  ],
-  credentials: true
-}))
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://stackops4.vercel.app',
+  'https://stackops4-dui24hcf0-zaib1.vercel.app'
+]
+
+// Debug ke liye origin log karo (optional, but helpful)
+app.use((req, res, next) => {
+  console.log('ORIGIN:', req.headers.origin, 'METHOD:', req.method, 'PATH:', req.path)
+  next()
+})
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // origin null ho sakta hai (Postman, curl, direct browser hit)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      console.log('BLOCKED ORIGIN:', origin)
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}
+
+// Global CORS
+app.use(cors(corsOptions))
+// Preflight ke liye
+app.options('*', cors(corsOptions))
 
 app.use(express.json())
 
