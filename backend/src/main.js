@@ -13,8 +13,11 @@ const app = express()
 const PORT = 3000;
 
 app.use(cors({
-  origin: 'http://localhost:5173'  
-}))
+  origin: [
+    'http://localhost:5173', // local development
+    'https://your-frontend.vercel.app' // production frontend
+  ]
+}));
 
 app.use(express.json())
 
