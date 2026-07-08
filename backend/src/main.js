@@ -10,8 +10,7 @@ import settingsRoutes from '../modules/settings/settings.routes.js'
 import cors from 'cors'
 
 const app = express()
-const PORT = process.env.PORT 
-
+const PORT = process.env.PORT  || 3000
 app.use(cors({
   origin: [
     'https://stack-ops-one.vercel.app/' // production frontend
@@ -40,6 +39,6 @@ app.get('/', async(req,res)=>{
  res.json(allUsers)
 })
 
-app.listen(PORT,()=>{
-    console.log(`Server is running on port ${PORT}`)
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`)
 })
