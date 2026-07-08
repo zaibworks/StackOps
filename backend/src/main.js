@@ -13,10 +13,10 @@ const app = express()
 const PORT = process.env.PORT  || 3000
 app.use(cors({
   origin: [
-    'https://stack-ops-one.vercel.app/' // production frontend
+    'https://stackops4.vercel.app'
   ],
-    credentials: true
-}));
+  credentials: true
+}))
 
 app.use(express.json())
 
