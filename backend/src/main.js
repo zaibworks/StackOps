@@ -17,7 +17,7 @@ const allowedOrigins = [
   'https://stackops4-6m883mx44-zaib1.vercel.app'
 ]
 
-// Debug ke liye origin log karo (optional, but helpful)
+
 app.use((req, res, next) => {
   console.log('ORIGIN:', req.headers.origin, 'METHOD:', req.method, 'PATH:', req.path)
   next()
@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // origin null ho sakta hai (Postman, curl, direct browser hit)
+   
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true)
     } else {

@@ -67,7 +67,7 @@ const filteredResults =
 
           {/* Logo */}
           <div
-           onClick={navigate('/')}
+           onClick={()=>navigate('/')}
             className="text-lg font-bold text-zinc-100"
           >
             Stack<span className="text-orange-400">Ops</span>
