@@ -5,8 +5,8 @@ import authMiddleware from '../middleware/auth.middleware.js'
 import { validate } from '../middleware/validation.middleware.js'
 import { signupSchema,loginSchema } from './auth.schema.js'
 
-router.post('/signup',validate(signupSchema,"Signup failed"),signupController)
-router.post('/login',validate(loginSchema,"Login failed"),loginController)
+router.post('/signup',validate(signupSchema),signupController)
+router.post('/login',validate(loginSchema),loginController)
 
 router.get('/me', authMiddleware, (req, res) => {
   res.json({
