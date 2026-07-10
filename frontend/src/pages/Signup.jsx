@@ -23,8 +23,8 @@ const Signup = () => {
         })
           navigate('/login')
        }catch(e){
-       setError(e.response?.error?.message)
-       console.log(e.response?.error?.message)
+       setError(e.response?.data?.error?.message)
+      //  console.log(e.response?.error?.message)
        }finally{
         setLoading(false)
        }
