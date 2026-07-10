@@ -21,8 +21,6 @@ const Signup = () => {
           email,
           password
         })
-          // const token = response.data.token
-          // localStorage.setItem('token',token)
           navigate('/login')
        }catch(e){
        setError(e.response?.error?.message)
