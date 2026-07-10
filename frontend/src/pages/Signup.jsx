@@ -25,8 +25,8 @@ const Signup = () => {
           // localStorage.setItem('token',token)
           navigate('/login')
        }catch(e){
-       setError(e.response?.data?.error?.message)
-       console.log(e.response?.data?.error?.message)
+       setError(e.response?.error?.message)
+       console.log(e.response?.error?.message)
        }finally{
         setLoading(false)
        }
