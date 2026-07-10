@@ -64,7 +64,7 @@ const Signup = () => {
          type="password" placeholder='Create a password' value={password} onChange={(e)=>setPassword(e.target.value)} />
         </div>
          {error&&(
-          <p className='text-sm font-medium text-red-400/90'>{error}</p>
+          <p className='text-sm font-sm text-red-400'>{error}</p>
          )  }
         <button  className=' mt-4 w-full rounded-xl bg-orange-500  px-4 py-3 font-medium text-zinc-950 transition-all duration-200 hover:bg-orange-400 disabled:cursor-not-allowed
 disabled-opacity-50'
