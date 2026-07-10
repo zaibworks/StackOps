@@ -28,6 +28,7 @@ const Signup = () => {
         setLoading(false)
        }
   }
+  // r 
   return (
     <div className='relative min-h-screen flex justify-center items-center bg-zinc-950 overflow-hidden px-4'>
       <div className='absolute inset-0'>
