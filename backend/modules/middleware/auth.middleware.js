@@ -1,21 +1,26 @@
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
-const authMiddleware = (req,res,next) =>{
-try{
-    const authHeader = req.headers.authorization
+const authMiddleware = (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
 
-    if(!authHeader){
-        res.status(401).json({message:'No token provided'})
+    if (!authHeader) {
+      return res.status(401).json({ message: "No token provided" });
     }
-    const token = authHeader.split(" ")[1];
 
-    const decoded = jwt.verify(token,process.env.JWT_SECRET)
+    const parts = authHeader.split(" ");
+    if (parts.length !== 2 || parts[0] !== "Bearer") {
+      return res.status(401).json({ message: "Invalid authorization header" });
+    }
 
-    req.user = decoded
-    next()
-}catch (error) {
-  res.status(401).json({ message: error.message })
-}
-}
+    const token = parts[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    req.user = decoded;
+    return next();
+  } catch (error) {
+    return res.status(401).json({ message: error.message });
+  }
+};
 
-export default authMiddleware
+export default authMiddleware;
