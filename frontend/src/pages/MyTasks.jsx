@@ -83,6 +83,13 @@ const handleTaskUpdate = async () => {
   if(updatedTask) setSelectedTask(updatedTask)
 }
 
+const lastOpenedWorkspace = async (workspaceId)=>{
+  console.log("Hitting API with:", workspaceId)
+    const res = await api.patch(`/workspace/${workspaceId}/open`);
+    console.log("Response:", res.data)
+  return res.data;
+}
+
 
 if(loading){
   return <Loader text={"Getting your tasks"}/>
@@ -204,8 +211,9 @@ return (
       </h3>
 
       <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500">
-        <span  onClick={(e) => { 
+        <span  onClick={async(e) => { 
   e.stopPropagation() 
+  await lastOpenedWorkspace(t.workspace.id)
   navigate(`/workspace/${t.workspace.id}`) 
 }}
         className="font-medium hover:text-zinc-300">📁 {t.workspace.name}</span>

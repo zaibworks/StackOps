@@ -1,11 +1,18 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { FolderKanban, CheckSquare, Activity, LogOut } from "lucide-react"
+import api from "../api/axios.js"
 
 const Sidebar = ({ user, workspaces, onLogout }) => {
   const navigate = useNavigate()
   const [shoWorkspace, setshoWorkspace] = useState(false)
   
+const lastOpenedWorkspace = async (workspaceId)=>{
+  console.log("Hitting API with:", workspaceId)
+    const res = await api.patch(`/workspace/${workspaceId}/open`);
+    console.log("Response:", res.data)
+  return res.data;
+}
 
   return (
     <aside className="relative flex w-64 flex-col border-r border-zinc-800 bg-zinc-950/50">
@@ -51,7 +58,12 @@ const Sidebar = ({ user, workspaces, onLogout }) => {
             {workspaces.map((w) => (
               <button
                 key={w.id}
-                onClick={() => navigate(`/workspace/${w.id}`)}
+                onClick={async(e) => {
+                  await lastOpenedWorkspace(w.id)
+                  navigate(`/workspace/${w.id}`)
+                }
+
+                }
                 className="w-full truncate rounded-sm px-3 py-1.5 text-left text-zinc-500 transition-colors hover:text-zinc-300 cursor-pointer"
               >
                 {w.name}
