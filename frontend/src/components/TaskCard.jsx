@@ -28,9 +28,9 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate,startInEditMode,
   const [editDueDate, setEditDueDate] = useState(
     task.dueDate ? new Date(task.dueDate).toISOString().split("T")[0] : "",
   );
-  const [editAssignedToId, setEditAssignedToId] = useState(
-    task.assignedTo?.id || "",
-  );
+ const [editAssignedToId, setEditAssignedToId] = useState(
+  task.assignedTo?.id || null,   
+);
   const [editPriority, setEditPriority] = useState(task.priority);
   const [editStatus, setEditStatus] = useState(task.status);
 
@@ -73,7 +73,7 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate,startInEditMode,
         priority: editPriority,
         status: editStatus,
         dueDate: editDueDate ? new Date(editDueDate).toISOString() : null,
-        assignedToId: editAssignedToId,
+  assignedToId: editAssignedToId ? Number(editAssignedToId) : null,
       });
       await onTaskUpdate();
       setisMetaEditing(false);
@@ -282,7 +282,7 @@ custom-scrollbar
                 </div>
                 {isMetaEditing ? (
                   <select
-                    value={editAssignedToId}
+                    value={editAssignedToId??""}
                     onChange={(e) =>
                       setEditAssignedToId(
                         e.target.value ? Number(e.target.value) : null,
