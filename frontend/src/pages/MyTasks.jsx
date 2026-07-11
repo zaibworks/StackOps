@@ -211,10 +211,10 @@ return (
       </h3>
 
       <div className="mt-1 flex items-center gap-3 text-xs text-zinc-500">
-        <span  onClick={async(e) => { 
+        <span  onClick={(e) => { 
   e.stopPropagation() 
-  await lastOpenedWorkspace(t.workspace.id)
   navigate(`/workspace/${t.workspace.id}`) 
+  lastOpenedWorkspace(t.workspace.id)
 }}
         className="font-medium hover:text-zinc-300">📁 {t.workspace.name}</span>
 

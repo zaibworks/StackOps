@@ -58,9 +58,9 @@ const lastOpenedWorkspace = async (workspaceId)=>{
             {workspaces.map((w) => (
               <button
                 key={w.id}
-                onClick={async(e) => {
-                  await lastOpenedWorkspace(w.id)
+                onClick={(e) => {
                   navigate(`/workspace/${w.id}`)
+                  lastOpenedWorkspace(w.id)
                 }
 
                 }
