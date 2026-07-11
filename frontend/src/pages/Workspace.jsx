@@ -113,6 +113,23 @@ useEffect(() => {
 fetchWorkspace()
 }, [])
 
+const refreshWorkspace = async () => {
+  try {
+    const response = await api.get(`/workspace/${workspaceId}`)
+    const updatedWorkspace = response.data.data
+    setWorkspace(updatedWorkspace)
+
+    // selectedTask ko bhi fresh data se sync kiya isme
+    setSelectedTask(prev => {
+      if (!prev) return prev
+      const updatedTask = updatedWorkspace.tasks.find(t => t.id === prev.id)
+      return updatedTask || prev
+    })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 const addTask = async(e)=>{
   setAddingTask(true)
   e.preventDefault()
@@ -189,7 +206,6 @@ const handleDelete = async (task) => {
 }
 
 const handleStatus = async (taskId,status) => {
-  console.log(taskId,status)
   try {
     await api.put(`/task/${workspaceId}/${taskId}`, {
       status
@@ -602,7 +618,7 @@ const statusStyles = {
     task={selectedTask}
     workspace={workspace}
     onClose={handleClose}
-    onTaskUpdate={fetchWorkspace}
+    onTaskUpdate={refreshWorkspace}
     startInEditMode={editMode}
   />
 )}

@@ -27,6 +27,7 @@ export const getTasksController= async(req,res)=>{
 }
 
 export const updateTaskController= async(req,res)=>{
+  console.log(req.body)
  try{
    const { taskId } = req.params
    const userId = req.user.userId
