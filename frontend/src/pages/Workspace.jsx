@@ -211,7 +211,7 @@ const handleStatus = async (taskId,status) => {
       status
     })
 
-    await fetchWorkspace()
+    await refreshWorkspace()
 
   } catch (err) {
     console.log(err)
