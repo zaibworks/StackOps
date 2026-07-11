@@ -140,8 +140,10 @@ const handleWorkspaceLeft = (workspace) => {
   setOpenMenuId(null);
 };
 
-const lastOpenedWorkspace = async ({workspaceId})=>{
+const lastOpenedWorkspace = async (workspaceId)=>{
+  console.log("Hitting API with:", workspaceId)
     const res = await api.patch(`/workspace/${workspaceId}/open`);
+    console.log("Response:", res.data)
   return res.data;
 }
 
@@ -225,9 +227,10 @@ className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 
       return(
       <div
         key={workspace.id}
-        onClick={(e) => {
+        onClick={async(e) => {
+          await lastOpenedWorkspace(workspace.id)
           navigate(`/workspace/${workspace.id}`)
-          // lastOpenedWorkspace(workspace.id)
+          console.log("lastOpenedWorkspace called with:", workspace.id)
         }}
         className="flex relative w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-4.5 px-5 text-left transition-all hover:bg-zinc-900/70 hover:border-orange-500/30 cursor-pointer"
       >
