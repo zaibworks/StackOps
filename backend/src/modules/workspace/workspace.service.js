@@ -1,7 +1,7 @@
 import { tr } from 'zod/v4/locales';
 import prisma from '../../db.js';
 import { isValidBase64 } from 'zod/v4/core';
-import createActivity from '../../utils/createActivity.ts';
+import createActivity from '../../utils/createActivity.js';
 
 export const createWorkspace = async (name, userId) => {
   const existingWorkspace =

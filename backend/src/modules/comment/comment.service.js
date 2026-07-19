@@ -1,5 +1,5 @@
 import prisma from "../../db.js"
-import createActivity from "../../utils/createActivity.ts"
+import createActivity from "../../utils/createActivity.js"
 
 export const addComment = async(userId,taskId,content)=>{
 
