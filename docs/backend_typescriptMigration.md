@@ -1,19 +1,17 @@
-# File: createActivity.ts
+# createActivity.ts
 
-## Problem
-What was TypeScript complaining about?
+## Purpose
+Creates an activity log after CRUD operations.
 
-## Why?
-Why did that error happen?
+## Converted
+- .js → .ts
+- Added interface for function parameter.
+- Added Promise<void> return type.
 
-## Solution
-How did I solve it?
+## Topics Learned
+- Interface
+- Object parameter typing
+- Promise<void>
+- Async return types
+--------------------------------------------------------
 
-## How did I know the correct type?
-Where did I trace the type from?
-
-## Rule Learned
-One reusable rule.
-
-## Example
-Small code snippet (5–10 lines max).

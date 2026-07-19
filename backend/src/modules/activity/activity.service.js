@@ -1,4 +1,4 @@
-import prisma from "../../src/db.js";
+import prisma from "../../db.js";
 
 export const getActivities = async(userId)=>{
     const memberships = await prisma.membership.findMany({

@@ -1,6 +1,12 @@
 import prisma from '../db.js'
 
-const createActivity=async({userId,workspaceId,action})=>{
+interface activityType{
+    userId:number;
+    workspaceId:number;
+    action:string;
+}
+
+const createActivity = async ({userId,workspaceId,action}:activityType):Promise<void>=>{
     await prisma.activity.create({
         data:{
             userId,
