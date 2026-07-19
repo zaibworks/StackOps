@@ -1,4 +1,4 @@
-import prisma from '../src/db.js'
+import prisma from '../db.js'
 
 const createActivity=async({userId,workspaceId,action})=>{
     await prisma.activity.create({

@@ -1,5 +1,5 @@
 import { tr } from 'zod/v4/locales';
-import prisma from '../../src/db.js';
+import prisma from '../../db.js';
 import { isValidBase64 } from 'zod/v4/core';
 import createActivity from '../../utils/createActivity.js';
 
