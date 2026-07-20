@@ -1,8 +1,10 @@
-import {z} from 'zod'
+import type { Response,Request,NextFunction, RequestHandler } from 'express'
+import  type { ZodType } from 'zod'
+import type { ZodSchema } from 'zod/v3'
 
-export const validate =(schema,errorMessage = "Validation failed")=>{
-    return (req,res,next)=>{
-        const result = schema.safeParse(req.body)
+export const validate =<T>(schema:ZodType<T>,errorMessage:string = "Validation failed"):RequestHandler=>{
+    return (req:Request,res:Response,next:NextFunction)=>{
+        const result= schema.safeParse(req.body)
 
         if(!result.success){
             return res.status(400).json({
