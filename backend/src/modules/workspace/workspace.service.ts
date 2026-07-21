@@ -1,11 +1,10 @@
-import { tr } from 'zod/v4/locales';
 import prisma from '../../db.js';
-import { isValidBase64 } from 'zod/v4/core';
 import createActivity from '../../utils/createActivity.js';
+import type { CreateWorkspaceInput,UpdateWorksapceInput } from './workspace.schema.js';
+import { Role } from '@prisma/client';
 
-export const createWorkspace = async (name, userId) => {
-  const existingWorkspace =
-  await prisma.workspace.findFirst({
+export const createWorkspace = async ({name}:CreateWorkspaceInput, userId:number) => {
+  const existingWorkspace =await prisma.workspace.findFirst({
     where: {
       name,
       members:{
@@ -49,7 +48,7 @@ if (existingWorkspace) {
   return workspace
 }
 
-export const getMyWorkspace = async (userId) => {
+export const getMyWorkspace = async (userId:number) => {
   const memberships = await prisma.membership.findMany({
     where: { userId },
     orderBy: { lastOpenedAt: 'desc' },
@@ -81,13 +80,12 @@ export const getMyWorkspace = async (userId) => {
    ;
 
 
-export const inviteMember = async(userId, workspaceId, email, role)=>{
-  const parsedWorkspaceId = parseInt(workspaceId)
+export const inviteMember = async(userId:number, workspaceId:number, email:string, role:Role)=>{
 
      const  admin = await prisma.membership.findFirst({
       where:{
         userId,
-       workspaceId: parsedWorkspaceId,
+       workspaceId,
         role:'admin'
       }
      })
@@ -107,7 +105,7 @@ const existingMember = await prisma.membership.findUnique({
   where:{
     userId_workspaceId:{
       userId:invitedUser.id,
-      workspaceId: parsedWorkspaceId
+      workspaceId
     }
   }
 })
@@ -118,21 +116,21 @@ if (existingMember) {
 const newMember = await prisma.membership.create({
   data:{
    userId:invitedUser.id,
-   workspaceId:parsedWorkspaceId,
+   workspaceId,
    role
   }
 })
 
 await createActivity({
   userId,
-  workspaceId: parsedWorkspaceId,
+  workspaceId,
   action: `Invited ${invitedUser.name} as ${role}`
 })
 
 return newMember
 }
 
-export const getWorkspaceMembers =async (workspaceId)=>{
+export const getWorkspaceMembers =async (workspaceId:number)=>{
 const allUsers = await prisma.membership.findMany({
   where:{workspaceId},
   include:{
@@ -149,7 +147,7 @@ const allUsers = await prisma.membership.findMany({
 return allUsers
 }
 
-export const removeMember = async(adminId,workspaceId,membershipId)=>{
+export const removeMember = async(adminId:number,workspaceId:number,membershipId:number)=>{
   const admin = await prisma.membership.findFirst({
     where:{
       userId:adminId,
@@ -185,6 +183,9 @@ export const removeMember = async(adminId,workspaceId,membershipId)=>{
     id:workspaceId
   }
 })
+if(!workspace){
+  throw new Error("Worksapce is unidentifiable")
+}
 
   await createActivity({
   userId:adminId, 
@@ -195,7 +196,7 @@ export const removeMember = async(adminId,workspaceId,membershipId)=>{
   return deleteMember
 }
 
-export const updateWorkspace = async(adminId,workspaceId,name)=>{
+export const updateWorkspace = async(adminId:number,workspaceId:number,{name}:UpdateWorksapceInput)=>{
       const admin = await prisma.membership.findFirst({
     where:{
       userId:adminId,
@@ -212,6 +213,9 @@ export const updateWorkspace = async(adminId,workspaceId,name)=>{
       id:workspaceId
     }
   })
+  if(!workspace){
+    throw new Error("Workspace is unidentifiable")
+  }
 
   const updateName = await prisma.workspace.update({
   where:{
@@ -231,7 +235,7 @@ export const updateWorkspace = async(adminId,workspaceId,name)=>{
   return updateName
 }
 
-export const getWorkspacebyId = async(userId,workspaceId)=>{
+export const getWorkspacebyId = async(userId:number,workspaceId:number)=>{
  return await  prisma.workspace.findUnique({
   where:{id:workspaceId},
   include: {
@@ -256,7 +260,7 @@ export const getWorkspacebyId = async(userId,workspaceId)=>{
  })
 }
 
-export const leaveWorkspace = async(userId,workspaceId)=>{
+export const leaveWorkspace = async(userId:number,workspaceId:number)=>{
         const membership = await prisma.membership.findFirst({
           where:{
             workspaceId:workspaceId,
@@ -291,6 +295,10 @@ export const leaveWorkspace = async(userId,workspaceId)=>{
     }
   })
 
+   if(!workspace){
+    throw new Error("Workspace is unidentifiable")
+  }
+
     await createActivity({
   userId, 
   workspaceId:workspaceId,
@@ -304,7 +312,7 @@ export const leaveWorkspace = async(userId,workspaceId)=>{
    })
 }
 
-export const changeMemberRole = async(memberId,adminId,workspaceId,role)=>{
+export const changeMemberRole = async(memberId:number,adminId:number,workspaceId:number,role:Role)=>{
          const admin = await prisma.membership.findFirst({
           where:{
             userId:adminId,
@@ -322,6 +330,9 @@ export const changeMemberRole = async(memberId,adminId,workspaceId,role)=>{
     user:true
   }
 })
+ if(!member){
+    throw new Error("Member is unidentifiable")
+  }
           if(!admin){
     throw new Error('Not allowed: You are not the admin')
   }else if(adminId === memberId){
@@ -346,7 +357,7 @@ return update
 
 }
 
-export const deleteWorkspace = async(workspaceId,userId)=>{
+export const deleteWorkspace = async(workspaceId:number,userId:number)=>{
      const isAdmin = await prisma.membership.findFirst({
       where:{
         userId,
@@ -376,7 +387,7 @@ export const deleteWorkspace = async(workspaceId,userId)=>{
      return deletetion
 }
 
-export const lastOpenedUpdated = async(userId,workspaceId)=>{
+export const lastOpenedUpdated = async(userId:number,workspaceId:number)=>{
 const updated = await prisma.membership.update({
   where: {
     userId_workspaceId: {   

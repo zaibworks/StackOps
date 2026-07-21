@@ -42,7 +42,7 @@ try{
 export const inviteMemberController= async(req,res)=>{
     try{
         const {role,email} = req.body
-        const {workspaceId} = req.params
+        const workspaceId = parseInt(req.params.workspaceId)
         const adminId = req.user.userId
         const invite = await inviteMember(adminId,workspaceId,email,role)
        res.status(201).json({message:"Invitation sent successfully ",data:invite})

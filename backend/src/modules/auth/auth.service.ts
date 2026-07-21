@@ -17,15 +17,9 @@ export const signup = async ({name,email,password}:SignupInput)=>{
 
   const hashedPassword = await bcrypt.hash(password,10)
 
-  const nameInput = name
-
-  if(typeof nameInput !=="string"){
-    throw new Error("Name characters must contain valid meaning")
-  }
-
   const user = await prisma.user.create({
     data:{
-        name:nameInput,
+        name,
         email,
         password:hashedPassword
     }

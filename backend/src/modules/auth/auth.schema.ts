@@ -1,9 +1,9 @@
 import {z} from "zod";
 
 export const signupSchema = z.object({
+  name: z.string().min(1,"Name in madatory in StackOps"),
     email: z.string().email("Invalid email"),
-    password :z.string().min(6,"Password must be 6 characters"),
-    name: z.string().optional()
+    password :z.string().min(6,"Password must be 6 characters")
 })
 
 export const loginSchema = z.object({
