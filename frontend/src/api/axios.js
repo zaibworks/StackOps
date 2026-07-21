@@ -1,10 +1,10 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL:'http://localhost:5001/'
+    baseURL:import.meta.env.VITE_API_URL
 })
 // added some comment in typescript branch
-// baseURL:import.meta.env.VITE_API_URL
+// baseURL:'http://localhost:5001/'
 console.log("API URL =", import.meta.env.VITE_API_URL);
 
 //interceptors
