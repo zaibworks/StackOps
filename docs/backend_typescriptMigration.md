@@ -104,6 +104,44 @@ Checks whether the authenticated user is a member of the requested workspace bef
 - Temporarily used a custom request interface for `req.user`; this will later be replaced with **Declaration Merging** across the project.
 ---------------------------------------------------------------
 
+# validate.middleware.ts
+
+## Purpose
+Creates a reusable validation middleware for any Zod schema. It validates `req.body` before the request reaches the controller. If validation fails, it returns a `400 Bad Request`; otherwise, it replaces `req.body` with the validated data and calls `next()`.
+
+## Converted
+- .js → .ts
+- Added `Request`, `Response`, `NextFunction`, and `RequestHandler` types from Express.
+- Typed `errorMessage` as `string`.
+- Typed `schema` as `ZodType<T>` using a Generic.
+- Converted `validate()` into a Generic function (`<T>`) so it works with any Zod schema.
+- Used `RequestHandler` as the return type because the function returns an Express middleware.
+- Used `import type` for type-only imports.
+
+## Topics Learned
+- Generic Functions (`<T>`)
+- `ZodType<T>`
+- Type Inference
+- Express `RequestHandler`
+- Type-only Imports (`import type`)
+- Middleware Factory Pattern
+
+## Mistakes Faced
+- Initially tried to place `<T>` on the variable (`const validate: <T>`) instead of on the function (`const validate = <T>(...)`).
+- Thought the function should return `T`, but learned that `validate()` returns an Express middleware, so its return type is `RequestHandler`.
+- Confused `result` with `result.data`. Learned that `safeParse()` always returns a result object, while only `result.data` changes based on the provided schema.
+- Tried to think of Generics as a return type, but learned that they describe the relationship between the input schema and the validated output (`result.data`), not what the outer function returns.
+
+## Pending
+- Improve the schema type further with more specific Zod helper types if needed after learning advanced Zod typings.
+---------------------------------------------------------
+---------------------------------------------------------
+-----------------------------------------------------------------
+
+
+
+
+
 
 
 
