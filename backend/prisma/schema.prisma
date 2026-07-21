@@ -78,6 +78,7 @@ enum Role{
   admin
   member
 }
+
 model Membership{
 id Int @id @default(autoincrement())
 userId Int
