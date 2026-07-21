@@ -1,8 +1,9 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import prisma from '../../db.js'
+import type { SignupInput,LoginInput } from './auth.schema.js'
 
-export const signup = async ({name,email,password})=>{
+export const signup = async ({name,email,password}:SignupInput)=>{
 
     const existingUser = await prisma.user.findUnique({
         where:{
@@ -16,9 +17,15 @@ export const signup = async ({name,email,password})=>{
 
   const hashedPassword = await bcrypt.hash(password,10)
 
+  const nameInput = name
+
+  if(typeof nameInput !=="string"){
+    throw new Error("Name characters must contain valid meaning")
+  }
+
   const user = await prisma.user.create({
     data:{
-        name,
+        name:nameInput,
         email,
         password:hashedPassword
     }
@@ -30,7 +37,7 @@ export const signup = async ({name,email,password})=>{
   }
 }
 
-export const login = async ({name,email,password})=>{
+export const login = async ({email,password}:LoginInput)=>{
     const user = await prisma.user.findUnique({
         where:{
             email
@@ -41,15 +48,27 @@ export const login = async ({name,email,password})=>{
         throw new Error('User not found')
     }
 
-    const isMatch = await bcrypt.compare(password,user.password)
+    const userPassword = user.password
+
+    if(typeof userPassword !=="string"){
+      throw new Error("Password must contain valid characters")
+    }
+
+
+    const isMatch = await bcrypt.compare(password,userPassword)
 
       if (!isMatch) {
     throw new Error('Invalid password')
   }
 
+  const secretKey =  process.env.JWT_SECRET
+if(!secretKey){
+  throw new Error("Secret key is not available")
+}
+
   const token = jwt.sign(
     {userId:user.id},
-    process.env.JWT_SECRET
+    secretKey
   )
 
       return {

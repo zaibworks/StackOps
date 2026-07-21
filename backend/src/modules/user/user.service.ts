@@ -1,6 +1,6 @@
 import prisma from "../../db.js"
 
-export const getCurrentUser = async (userId)=>{
+export const getCurrentUser = async (userId:number)=>{
 
     const user = await prisma.user.findUnique({
         where:{
@@ -15,7 +15,7 @@ export const getCurrentUser = async (userId)=>{
       return user
 }
 
-export const getUserOverview =async(userId)=>{
+export const getUserOverview =async(userId:number)=>{
 return await prisma.workspace.findMany({
   where:{
       members:{
@@ -32,7 +32,7 @@ return await prisma.workspace.findMany({
   }
 })
 }
-export const getMyStats = async (userId) => {
+export const getMyStats = async (userId:number) => {
   const [totalWorkspaces, ownedWorkspaces, assignedTasks, totalActivities] = await Promise.all([
     prisma.membership.count({
       where: { userId: Number(userId) }

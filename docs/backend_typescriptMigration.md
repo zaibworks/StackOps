@@ -135,8 +135,34 @@ Creates a reusable validation middleware for any Zod schema. It validates `req.b
 ## Pending
 - Improve the schema type further with more specific Zod helper types if needed after learning advanced Zod typings.
 ---------------------------------------------------------
----------------------------------------------------------
+
+# *.schema.ts
+
+## Purpose
+Defines the validation rules for incoming request data using Zod. Each module has its own schema to validate request bodies before they reach the controller or service.
+
+## Converted
+- .js → .ts
+- Exported TypeScript types using `z.infer<typeof schema>`.
+- Followed TypeScript naming convention by using `PascalCase` for inferred types (e.g. `SignupInput`, `TaskInput`).
+- Removed unnecessary imports where applicable.
+
+## Topics Learned
+- `z.infer`
+- Type Inference
+- Single Source of Truth
+- Runtime Validation vs Compile-time Type Safety
+
+## Mistakes Faced
+- Initially thought `z.infer` types should be passed into `validate<T>()`.
+- Learned that `validate()` already infers the type from the provided Zod schema automatically.
+- Understood that `z.infer` is mainly used to create reusable TypeScript types for validated data in services, controllers, or other parts of the application.
+- Learned that there is no need to manually create duplicate interfaces for request bodies because `z.infer` generates them directly from the Zod schema.
+
+## Pending
+- Use inferred types (`SignupInput`, `TaskInput`, `WorkspaceInput`, etc.) in service function parameters and other places where validated request objects are used.
 -----------------------------------------------------------------
+
 
 
 
