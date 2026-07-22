@@ -1,6 +1,6 @@
 import prisma from "../../db.js";
 
-export const getActivities = async(userId)=>{
+export const getActivities = async(userId:number)=>{
     const memberships = await prisma.membership.findMany({
       where:{
         userId

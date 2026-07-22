@@ -2,7 +2,7 @@ import prisma from "../../db.js";
 import createActivity from "../../utils/createActivity.js";
 import bcrypt from 'bcrypt'
 
-export const updateProfileName = async (userId, name) => {
+export const updateProfileName = async (userId:number, name:string) => {
   const currentUser = await prisma.user.findUnique({
     where: {
       id: Number(userId)
@@ -33,14 +33,18 @@ export const updateProfileName = async (userId, name) => {
   return updatedUser;
 };
 
-export const updatePassword = async(currentPassword,userId,newPassword)=>{
+export const updatePassword = async(currentPassword:string,userId:number,newPassword:string)=>{
     const user = await prisma.user.findUnique({
         where:{
             id:Number(userId)
         }
     })
+    const userPassword = user?.password
+    if(!userPassword){
+      throw new Error("Cannot compare password")
+    }
 
-    const isMatch = await bcrypt.compare(currentPassword,user.password)
+    const isMatch = await bcrypt.compare(currentPassword,userPassword)
 
     if(!isMatch){
       throw new Error("Incorrect password")
@@ -65,7 +69,7 @@ export const updatePassword = async(currentPassword,userId,newPassword)=>{
     return updatedPass
 }
 
-export const deleteSelectedWorkspaces =  async(userId,workspaceIds)=>{
+export const deleteSelectedWorkspaces =  async(userId:number,workspaceIds:number[])=>{
   if(!workspaceIds || workspaceIds.length === 0){
     throw new Error("Select atleast one workspace")
    }
@@ -101,7 +105,7 @@ if (myWorkspaceIds.length === 0) {
 }
 }
 
-export const deleteSelectedTasks = async(userId,taskIds)=>{
+export const deleteSelectedTasks = async(userId:number,taskIds:number[])=>{
   if(!taskIds || taskIds.length === 0){
     throw new Error("Select atleast one task")
   }
@@ -136,7 +140,7 @@ if (myTasksIds.length !== taskIds.length) {
   }
 }
 
-export const deleteSelectedComments = async(userId,commentIds)=>{
+export const deleteSelectedComments = async(userId:number,commentIds:number[])=>{
     if(!commentIds || commentIds.length === 0){
     throw new Error("Select atleast one comment")
   }
@@ -171,7 +175,7 @@ if (myCommentIds.length !== commentIds.length) {
   }
 }
 
-export const deleteSelectedActivities = async(userId,activityIds)=>{
+export const deleteSelectedActivities = async(userId:number,activityIds:number[])=>{
   if(!activityIds || activityIds.length === 0){
     throw new Error("Select atleast one activity")
   }
@@ -206,7 +210,7 @@ if (myActivityIds.length !== activityIds.length) {
   }
 }
 
-export const deleteUserAccount = async(userId,currentPassword)=>{
+export const deleteUserAccount = async(userId:number,currentPassword:string)=>{
   
   if (!currentPassword) {
     throw new Error("Password is required");
@@ -217,7 +221,11 @@ export const deleteUserAccount = async(userId,currentPassword)=>{
       id:Number(userId)
     }
   })
-   const passMatch = await bcrypt.compare(currentPassword,user.password)
+  const userPassword = user?.password
+  if(!userPassword){
+    throw new Error("User password is not updated correctly")
+  }
+   const passMatch = await bcrypt.compare(currentPassword,userPassword)
    if(!passMatch){
     throw new Error("Type correct password")
    }
@@ -231,7 +239,7 @@ export const deleteUserAccount = async(userId,currentPassword)=>{
    return deleted
 }
 
-export const getOwnedWorkspaces = async (userId) => {
+export const getOwnedWorkspaces = async (userId:number) => {
   const workspaces = await prisma.membership.findMany({
     where: {
       userId: Number(userId),
@@ -250,7 +258,7 @@ export const getOwnedWorkspaces = async (userId) => {
   return workspaces.map((m) => m.workspace);
 };
 
-export const getMyTasks = async (userId) => {
+export const getMyTasks = async (userId:number) => {
   return await prisma.task.findMany({
     where: {
       userId: Number(userId),
@@ -265,7 +273,7 @@ export const getMyTasks = async (userId) => {
   });
 };
 
-export const getMyComments = async (userId) => {
+export const getMyComments = async (userId:number) => {
   return await prisma.comment.findMany({
     where: {
       userId: Number(userId),
@@ -280,7 +288,7 @@ export const getMyComments = async (userId) => {
   });
 };
 
-export const getMyActivities = async (userId) => {
+export const getMyActivities = async (userId:number) => {
   return await prisma.activity.findMany({
     where: {
       userId: Number(userId),
