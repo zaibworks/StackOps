@@ -1,7 +1,7 @@
 import prisma from "../../db.js"
 import createActivity from "../../utils/createActivity.js"
 
-export const addComment = async(userId,taskId,content)=>{
+export const addComment = async(userId:number,taskId:number,content:string)=>{
 
     const task = await prisma.task.findUnique({
   where:{
@@ -12,6 +12,9 @@ export const addComment = async(userId,taskId,content)=>{
     workspaceId:true
   }
 })
+if(!task){
+    throw new Error("Task not found")
+}
 
     const comment = await prisma.comment.create({
         data:{
@@ -36,7 +39,7 @@ export const addComment = async(userId,taskId,content)=>{
     return comment
 }
 
-export const getComments = async(taskId)=>{
+export const getComments = async(taskId:number)=>{
     return await prisma.comment.findMany({
         where:{
             taskId
@@ -48,7 +51,7 @@ export const getComments = async(taskId)=>{
     })
 }
 
-export const deleteComment = async(commentId,userId,workspaceId)=>{
+export const deleteComment = async(commentId:number,userId:number,workspaceId:number)=>{
       const comment = await prisma.comment.findUnique({
         where:{
             id:commentId
