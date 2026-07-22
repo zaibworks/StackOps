@@ -1,7 +1,9 @@
+import type { Priority, Status } from "@prisma/client";
 import prisma from "../../db.js";
 import createActivity from "../../utils/createActivity.js";
+import type { CreateTaskInput,UpdateTaskInput } from "./task.schema.js";
 
-export const createTask = async (userId,workspaceId,taskData) => {
+export const createTask = async (userId:number,workspaceId:number,taskData:CreateTaskInput) => {
 
   const {title,content,priority,status,dueDate,assignedToId} = taskData
 
@@ -17,19 +19,18 @@ where:{
   throw new Error("Member do not exist")
 }
   }
- 
 
 
   const create = await prisma.task.create({
     data: {
       title,
-      content,
       userId,
       priority,
       status,
-      assignedToId,
-      dueDate,
-      workspaceId
+      workspaceId,
+      ...(content !== undefined && { content }),
+      ...(assignedToId !== undefined &&{assignedToId}),
+      ...(dueDate !== undefined &&{dueDate})
     }
   })
 
@@ -41,7 +42,18 @@ where:{
  return create
 }
 
-export const getTasks = async (workspaceId, filters, pagination) => {
+interface FilterType{
+    status:Status
+    priority:Priority
+    assignedToId:number
+}
+
+interface PaginationType{
+  page:number
+  limit:number
+}
+
+export const getTasks = async (workspaceId:number, filters:FilterType, pagination:PaginationType) => {
   const { status, priority, assignedToId } = filters
   const { page, limit } = pagination
   const skip = (page - 1) * limit
@@ -78,7 +90,9 @@ export const getTasks = async (workspaceId, filters, pagination) => {
   }
 }
 
-export const updateTask= async(taskId,userId,taskData,workspaceId)=>{
+export const updateTask= async(taskId:number,userId:number,taskData:UpdateTaskInput,workspaceId:number)=>{
+
+  const {title,content,priority,status,dueDate,assignedToId} = taskData
 
    const isAdmin = await prisma.membership.findFirst({
       where:{
@@ -104,7 +118,16 @@ export const updateTask= async(taskId,userId,taskData,workspaceId)=>{
 
     const updatedTask = await prisma.task.update({
         where:{ id: Number(taskId)},
-        data:taskData
+      data: {
+        userId,
+        workspaceId,
+     ...( title !== undefined && {title}),
+     ...( priority !== undefined && {priority}),
+      ...(status !== undefined && {status}),
+      ...(content !== undefined && { content }),
+      ...(assignedToId !== undefined &&{assignedToId}),
+      ...(dueDate !== undefined &&{dueDate})
+    }
     })
     
 
@@ -182,7 +205,7 @@ else if (contentChanged) {
   return updatedTask
 }
 
-export const deleteTask = async (userId,workspaceId,taskId) => {
+export const deleteTask = async (userId:number,workspaceId:number,taskId:number) => {
 
    const task = await prisma.task.findUnique({
       where:{
@@ -214,7 +237,16 @@ export const deleteTask = async (userId,workspaceId,taskId) => {
   return result
 }
 
-export const getMyTasks = async (userId,page,limit,filter,status,workspaceId)=>{
+interface GetMytaskTypes{
+  userId:number
+  page:number
+  limit:number
+  filter:"all" | "assignedToMe" | "createdByMe"
+  status:Status
+  workspaceId:number
+}
+
+export const getMyTasks = async ({userId,page,limit,filter,status,workspaceId}:GetMytaskTypes)=>{
   const skip = (page - 1) * limit
 
    let filterCondition = {}
@@ -232,15 +264,15 @@ export const getMyTasks = async (userId,page,limit,filter,status,workspaceId)=>{
     ...filterCondition, // spreading filter condition
     workspace: {
       members: { some: { userId } }
-    }
+    },
+    ...(status !== undefined && {
+      status
+   }),
+   ...(workspaceId !== undefined && {
+      workspaceId
+   })
   }
 
-   if(status){
-    where.status = status
-  }
-  if(workspaceId){
-    where.workspaceId = workspaceId
-  }
     const tasks = await prisma.task.findMany({
     where,  // dynamic where
     include: { workspace: { select: { id: true, name: true } } },
