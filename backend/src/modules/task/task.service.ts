@@ -2,6 +2,7 @@ import type { Priority, Status } from "@prisma/client";
 import prisma from "../../db.js";
 import createActivity from "../../utils/createActivity.js";
 import type { CreateTaskInput,UpdateTaskInput } from "./task.schema.js";
+import type { GetMytaskTypes } from "../../types/task.types.js";
 
 export const createTask = async (userId:number,workspaceId:number,taskData:CreateTaskInput) => {
 
@@ -48,47 +49,36 @@ interface FilterType{
     assignedToId:number
 }
 
-interface PaginationType{
-  page:number
-  limit:number
-}
+// export const getTasks = async (workspaceId:number, filters:FilterType) => {
+//   const { status, priority, assignedToId } = filters
 
-export const getTasks = async (workspaceId:number, filters:FilterType, pagination:PaginationType) => {
-  const { status, priority, assignedToId } = filters
-  const { page, limit } = pagination
-  const skip = (page - 1) * limit
+//   const tasks = await prisma.task.findMany({
+//     where: {
+//       workspaceId,
+//       status,
+//       priority,
+//       assignedToId
+//     },
+//     orderBy: { updatedAt : 'desc' },
+//     include: {
+//       user: {
+//         select: { id: true, name: true, email: true }
+//       },
+//       assignedTo: {
+//         select: { id: true, name: true, email: true }
+//       }
+//     }
+//   })
 
-  const tasks = await prisma.task.findMany({
-    where: {
-      workspaceId,
-      status,
-      priority,
-      assignedToId
-    },
-    orderBy: { updatedAt : 'desc' },
-    skip,
-    take: limit,
-    include: {
-      user: {
-        select: { id: true, name: true, email: true }
-      },
-      assignedTo: {
-        select: { id: true, name: true, email: true }
-      }
-    }
-  })
+//   const total = await prisma.task.count({
+//     where: { workspaceId, status, priority }
+//   })
 
-  const total = await prisma.task.count({
-    where: { workspaceId, status, priority }
-  })
-
-  return {
-    tasks,
-    total,
-    page,
-    totalPages: Math.ceil(total / limit)
-  }
-}
+//   return {
+//     tasks,
+//     total
+//   }
+// }
 
 export const updateTask= async(taskId:number,userId:number,taskData:UpdateTaskInput,workspaceId:number)=>{
 
@@ -235,15 +225,6 @@ export const deleteTask = async (userId:number,workspaceId:number,taskId:number)
   })
 
   return result
-}
-
-interface GetMytaskTypes{
-  userId:number
-  page:number
-  limit:number
-  filter:"all" | "assignedToMe" | "createdByMe"
-  status:Status
-  workspaceId:number
 }
 
 export const getMyTasks = async ({userId,page,limit,filter,status,workspaceId}:GetMytaskTypes)=>{

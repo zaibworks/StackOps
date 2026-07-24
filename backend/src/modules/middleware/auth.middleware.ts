@@ -6,7 +6,7 @@ interface TokenPayload {
 }
 
 interface CustomRequest extends Request {
-    user: JwtPayload
+    user: TokenPayload
 }
 
 
@@ -41,7 +41,7 @@ const authMiddleware = (req:CustomRequest, res:Response, next:NextFunction) => {
     throw new Error("Decoded is not string bro")
       }
     
-    req.user = decoded;
+   req.user = decoded as TokenPayload;
 
     return next();
 
