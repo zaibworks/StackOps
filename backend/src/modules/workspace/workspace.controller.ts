@@ -12,6 +12,7 @@ import { createWorkspace,
     lastOpenedUpdated
     
  } from "./workspace.service.js";
+ import type { AuthenticatedReq } from "../../types/auth.types.js";
 
 export const createWorkspaceController= async(req,res)=>{
     try{
