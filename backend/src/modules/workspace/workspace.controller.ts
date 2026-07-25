@@ -12,11 +12,13 @@ import { createWorkspace,
     lastOpenedUpdated
     
  } from "./workspace.service.js";
- import type { AuthenticatedReq } from "../../types/auth.types.js";
  import type { Response,Request } from "express";
 
-export const createWorkspaceController= async(req:AuthenticatedReq,res:Response)=>{
+export const createWorkspaceController= async(req:Request,res:Response)=>{
     try{
+          if (!req.user) {
+    throw new Error("Unauthorized");
+}
          const userId = req.user.userId
         const {name} = req.body
 
@@ -33,8 +35,11 @@ export const createWorkspaceController= async(req:AuthenticatedReq,res:Response)
 }
 
 
-export const getMyWorkspaceController = async(req:AuthenticatedReq,res:Response)=>{
+export const getMyWorkspaceController = async(req:Request,res:Response)=>{
 try{
+      if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId
     console.log(userId)
     const workspaces = await getMyWorkspace(userId)
@@ -47,8 +52,11 @@ try{
 }
 
 
-export const inviteMemberController= async(req:AuthenticatedReq,res:Response)=>{
+export const inviteMemberController= async(req:Request,res:Response)=>{
     try{
+          if (!req.user) {
+    throw new Error("Unauthorized");
+}
         const {role,email} = req.body
         const workspaceParams = req.params.workspaceId
         if(typeof workspaceParams !=="string"){
@@ -87,8 +95,11 @@ export const getWorkspaceMembersController= async (req:Request,res:Response)=>{
 }
 
 
-export const removeMemberController = async (req:AuthenticatedReq,res:Response)=>{
+export const removeMemberController = async (req:Request,res:Response)=>{
     try {
+          if (!req.user) {
+    throw new Error("Unauthorized");
+}
          const workspaceParams = req.params.workspaceId
          const memberParams = req.params.memberId
         if(typeof workspaceParams !=="string" || typeof memberParams !=="string"){
@@ -107,8 +118,11 @@ export const removeMemberController = async (req:AuthenticatedReq,res:Response)=
 }
 
 
-export const updateWorkspaceController = async (req:AuthenticatedReq,res:Response)=>{
+export const updateWorkspaceController = async (req:Request,res:Response)=>{
     try{
+          if (!req.user) {
+    throw new Error("Unauthorized");
+}
          const workspaceParams = req.params.workspaceId
         if(typeof workspaceParams !=="string"){
             throw new Error("WorkspaceID is invalid")
@@ -127,8 +141,11 @@ export const updateWorkspaceController = async (req:AuthenticatedReq,res:Respons
 }
 
 
-export const getWorkspacebyIdController =async(req:AuthenticatedReq,res:Response)=>{
+export const getWorkspacebyIdController =async(req:Request,res:Response)=>{
     try{
+          if (!req.user) {
+    throw new Error("Unauthorized");
+}
    const workspaceParams = req.params.workspaceId
         if(typeof workspaceParams !=="string"){
             throw new Error("WorkspaceID is invalid")
@@ -145,8 +162,11 @@ export const getWorkspacebyIdController =async(req:AuthenticatedReq,res:Response
 }
 
 
-export const leaveWorkspaceController=async(req:AuthenticatedReq,res:Response)=>{
+export const leaveWorkspaceController=async(req:Request,res:Response)=>{
        try {
+          if (!req.user) {
+    throw new Error("Unauthorized");
+}
       const workspaceParams = req.params.workspaceId
         if(typeof workspaceParams !=="string"){
             throw new Error("WorkspaceID is invalid")
@@ -163,8 +183,11 @@ export const leaveWorkspaceController=async(req:AuthenticatedReq,res:Response)=>
 }
 
 
-export const changeMemberRoleController = async(req:AuthenticatedReq,res:Response)=>{
+export const changeMemberRoleController = async(req:Request,res:Response)=>{
     try {
+          if (!req.user) {
+    throw new Error("Unauthorized");
+}
         const workspaceParams = req.params.workspaceId
          const memberParams = req.params.memberId
         if(typeof workspaceParams !=="string" || typeof memberParams !=="string"){
@@ -184,8 +207,11 @@ export const changeMemberRoleController = async(req:AuthenticatedReq,res:Respons
 }
 
 
-export const deleteWorkspaceController = async (req:AuthenticatedReq,res:Response)=>{
+export const deleteWorkspaceController = async (req:Request,res:Response)=>{
     try {
+          if (!req.user) {
+    throw new Error("Unauthorized");
+}
         const workspaceParams = req.params.workspaceId
         if(typeof workspaceParams!=="string"){
             throw new Error("WorkspaceID is invalid")
@@ -202,8 +228,11 @@ export const deleteWorkspaceController = async (req:AuthenticatedReq,res:Respons
 }
 
 
-export const lastOpenedUpdatedController = async(req:AuthenticatedReq,res:Response)=>{
+export const lastOpenedUpdatedController = async(req:Request,res:Response)=>{
  try {
+      if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId;
     const { workspaceId } = req.params; 
     if(typeof workspaceId !=="number"){

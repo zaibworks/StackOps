@@ -1,16 +1,12 @@
 import prisma from "../../db.js";
 import type { Request,Response,NextFunction } from "express";
 
-interface TokenPayload {
-    userId: number;
-}
 
-interface CustomRequest extends Request {
-    user: TokenPayload
-}
-
-export const workspaceMemberMiddlware = async (req:CustomRequest,res:Response,next:NextFunction)=>{
+export const workspaceMemberMiddlware = async (req:Request,res:Response,next:NextFunction)=>{
     try{
+        if (!req.user) {
+    throw new Error("Unauthorized");
+}
         const workspaceParams= req.params.workspaceId
         if(typeof workspaceParams !=="string"){
             return res.status(400).json({

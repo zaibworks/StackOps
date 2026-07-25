@@ -1,12 +1,14 @@
 import { createTask,updateTask,deleteTask,getMyTasks} from "./task.service.js";
 import type { AuthenticatedReq } from "../../types/auth.types.js";
-import type { Response } from "express";
-import { intersection } from "zod";
+import type { Response ,Request} from "express";
 import { Status, type Priority } from "@prisma/client";
 import type { GetMytaskTypes,TaskFilter } from "../../types/task.types.js";
 
-export const createTaskController=async(req:AuthenticatedReq,res:Response)=>{
+export const createTaskController=async(req:Request,res:Response)=>{
     try{
+      if (!req.user) {
+    throw new Error("Unauthorized");
+}
         const userId = req.user.userId
         const workspaceParam = req.params.workspaceId
               if(typeof workspaceParam !=="string"){
@@ -29,25 +31,11 @@ workspaceId:number
  assignedToId:number
 }
 
-// export const getTasksController= async(req:AuthenticatedReq,res:Response)=>{
-//   try{
-//     const workspaceParam = req.params.workspaceId
-//     if(typeof workspaceParam !=="string"){
-//       throw new Error("Workspace ID in invalid")
-//     }
-//      const workspaceId = parseInt(workspaceParam)
-//       const { status, priority, assignedToId, page = 1, limit = 10 } = req.query
-     
-//        const tasks = await getTasks(workspaceId,{ status, priority, assignedToId: assignedToId ? parseInt(assignedToId) : undefined }})
-//          res.json({ message:"Workspace Tasks",data:tasks})
-//    }catch(e){
-//     res.status(500).json({message:e.message})
-//    }
-// }
-
-export const updateTaskController= async(req:AuthenticatedReq,res:Response)=>{
-  console.log(req.body)
+export const updateTaskController= async(req:Request,res:Response)=>{
  try{
+  if (!req.user) {
+    throw new Error("Unauthorized");
+}
    const { taskId } = req.params
    if(typeof taskId !=="number"){
     throw new Error("TaskID is NAN")
@@ -71,8 +59,11 @@ export const updateTaskController= async(req:AuthenticatedReq,res:Response)=>{
 }
 
 
-export const deleteTaskController= async(req:AuthenticatedReq,res:Response)=>{
+export const deleteTaskController= async(req:Request,res:Response)=>{
    try{
+    if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const {taskId} = req.params
     if(typeof taskId !=="number"){
     throw new Error("TaskID is NAN")
@@ -92,8 +83,11 @@ export const deleteTaskController= async(req:AuthenticatedReq,res:Response)=>{
      }
 }
 
-export const getMyTasksController = async(req:AuthenticatedReq,res:Response)=>{
+export const getMyTasksController = async(req:Request,res:Response)=>{
   try {
+    if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId
   const filter =
   typeof req.query.filter === "string"

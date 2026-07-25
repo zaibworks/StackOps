@@ -12,11 +12,13 @@ import {
     getMyActivities
 
 } from "./settings.service.js";
-import type { Response } from "express";
-import type { AuthenticatedReq } from "../../types/auth.types.js";
+import type { Response ,Request} from "express";
 
-export const updateProfileNameController = async (req:AuthenticatedReq,res:Response)=>{
+export const updateProfileNameController = async (req:Request,res:Response)=>{
  try {
+  if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId
     const {name} = req.body
     const user = await updateProfileName(userId,name)
@@ -29,8 +31,11 @@ export const updateProfileNameController = async (req:AuthenticatedReq,res:Respo
 }
 
 
-export const updatePasswordController = async(req:AuthenticatedReq,res:Response)=>{
+export const updatePasswordController = async(req:Request,res:Response)=>{
     try {
+      if (!req.user) {
+    throw new Error("Unauthorized");
+}
         const userId = req.user.userId
         const {currentPassword,newPassword} = req.body
         const user = await updatePassword(currentPassword,userId,newPassword)
@@ -43,8 +48,11 @@ export const updatePasswordController = async(req:AuthenticatedReq,res:Response)
   }
 
 
-export const deleteSelectedWorkspaceController =async(req:AuthenticatedReq,res:Response)=>{
+export const deleteSelectedWorkspaceController =async(req:Request,res:Response)=>{
     try {
+      if (!req.user) {
+    throw new Error("Unauthorized");
+}
         const userId = req.user.userId
         const {workspaceIds} = req.body
         const workspace = await deleteSelectedWorkspaces(userId,workspaceIds)
@@ -57,8 +65,11 @@ export const deleteSelectedWorkspaceController =async(req:AuthenticatedReq,res:R
   }
         
 
-export const deleteSelectedTasksController = async(req:AuthenticatedReq,res:Response)=>{
+export const deleteSelectedTasksController = async(req:Request,res:Response)=>{
     try {
+      if (!req.user) {
+    throw new Error("Unauthorized");
+}
          const userId = req.user.userId
           const {taskIds} = req.body
           const tasks = await deleteSelectedTasks(userId,taskIds)
@@ -71,8 +82,11 @@ export const deleteSelectedTasksController = async(req:AuthenticatedReq,res:Resp
   }
 
 
-export const deleteSelectedCommentsController = async(req:AuthenticatedReq,res:Response)=>{
+export const deleteSelectedCommentsController = async(req:Request,res:Response)=>{
     try {
+      if (!req.user) {
+    throw new Error("Unauthorized");
+}
          const userId = req.user.userId
           const {commentIds} = req.body
           const comment = await deleteSelectedComments(userId,commentIds)
@@ -85,8 +99,11 @@ export const deleteSelectedCommentsController = async(req:AuthenticatedReq,res:R
   }
 
 
-export const deleteSelectedActivitiesController = async(req:AuthenticatedReq,res:Response)=>{
+export const deleteSelectedActivitiesController = async(req:Request,res:Response)=>{
     try {
+      if (!req.user) {
+    throw new Error("Unauthorized");
+}
          const userId = req.user.userId
           const {activityIds} = req.body
           const activities = await deleteSelectedActivities(userId,activityIds)
@@ -99,8 +116,11 @@ export const deleteSelectedActivitiesController = async(req:AuthenticatedReq,res
   }
 
 
-export const deleteUserAccountController = async(req:AuthenticatedReq,res:Response)=>{
+export const deleteUserAccountController = async(req:Request,res:Response)=>{
   try {
+    if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId
     const {currentPassword} = req.body
     const removed = await deleteUserAccount(userId,currentPassword)
@@ -114,8 +134,11 @@ export const deleteUserAccountController = async(req:AuthenticatedReq,res:Respon
       
 
 
-export const getOwnedWorkspacesController = async (req:AuthenticatedReq,res:Response) => {
+export const getOwnedWorkspacesController = async (req:Request,res:Response) => {
   try {
+    if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId;
 
     const workspaces = await getOwnedWorkspaces(userId);
@@ -132,8 +155,11 @@ export const getOwnedWorkspacesController = async (req:AuthenticatedReq,res:Resp
 };
       
 
-export const getMyTasksController = async (req:AuthenticatedReq, res:Response) => {
+export const getMyTasksController = async (req:Request, res:Response) => {
   try {
+    if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId;
 
     const tasks = await getMyTasks(userId);
@@ -150,8 +176,11 @@ export const getMyTasksController = async (req:AuthenticatedReq, res:Response) =
 };
 
 
-export const getMyCommentsController = async (req:AuthenticatedReq, res:Response) => {
+export const getMyCommentsController = async (req:Request, res:Response) => {
   try {
+    if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId;
 
     const comments = await getMyComments(userId);
@@ -169,8 +198,11 @@ export const getMyCommentsController = async (req:AuthenticatedReq, res:Response
     
 
 
-export const getMyActivitiesController = async (req:AuthenticatedReq, res:Response) => {
+export const getMyActivitiesController = async (req:Request, res:Response) => {
   try {
+    if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId;
 
     const activities = await getMyActivities(userId);

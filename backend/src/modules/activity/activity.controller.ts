@@ -1,12 +1,13 @@
 import { getActivities } from "./activity.service.js";
-import type { AuthenticatedReq } from "../../types/auth.types.js";
-import type { Response } from "express";
+import type { Response,Request} from "express";
 
 
 
-export const getActivitiesController = async(req:AuthenticatedReq,res:Response)=>{
+export const getActivitiesController = async(req:Request,res:Response)=>{
   try {
-
+if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId
 
     const activities = await getActivities(userId)

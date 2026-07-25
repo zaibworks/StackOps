@@ -8,12 +8,6 @@ import { signupSchema,loginSchema } from './auth.schema.js'
 router.post('/signup',validate(signupSchema),signupController)
 router.post('/login',validate(loginSchema),loginController)
 
-router.get('/me', authMiddleware, (req, res) => {
-  res.json({
-    message: "Middleware working",
-    user: req.user
-  })
-})
 
 export default router
 

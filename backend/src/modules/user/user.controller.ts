@@ -1,9 +1,13 @@
 import {getCurrentUser,getUserOverview,getMyStats} from "./user.service.js";
 import type { AuthenticatedReq } from "../../types/auth.types.js";
-import type {Response } from "express";
+import type {Response ,Request} from "express";
 
-export const getMe = async(req:AuthenticatedReq,res:Response)=>{
+export const getMe = async(req:Request,res:Response)=>{
     try{
+      if (!req.user) {
+    throw new Error("Unauthorized");
+}
+      
         const userId = req.user.userId;
 
         const user = await getCurrentUser(userId)
@@ -20,8 +24,11 @@ export const getMe = async(req:AuthenticatedReq,res:Response)=>{
   }
         
 
-export const getUserOverviewController =async(req:AuthenticatedReq,res:Response)=>{
+export const getUserOverviewController =async(req:Request,res:Response)=>{
 try{
+    if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId
     const details = await getUserOverview(userId)
     console.log(details)
@@ -34,8 +41,11 @@ try{
 }
   
 
-export const getMyStatsController = async (req:AuthenticatedReq, res:Response) => {
-  try {
+export const getMyStatsController = async (req:Request, res:Response) => {
+  try {   
+    if (!req.user) {
+    throw new Error("Unauthorized");
+}
     const userId = req.user.userId;
     const stats = await getMyStats(userId);
     res.status(200).json({ message: "Stats fetched", data: stats });

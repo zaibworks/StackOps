@@ -1,16 +1,10 @@
 import type { NextFunction,Request,Response } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
-
-interface TokenPayload {
-    userId: number;
-}
-
-interface CustomRequest extends Request {
-    user: TokenPayload
-}
+import type { AuthenticatedReq,TokenPayload } from "../../types/auth.types.js";
 
 
-const authMiddleware = (req:CustomRequest, res:Response, next:NextFunction) => {
+
+const authMiddleware = (req:Request, res:Response, next:NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
  

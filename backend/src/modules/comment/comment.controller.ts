@@ -1,10 +1,12 @@
 import { addComment,getComments,deleteComment } from "./comment.service.js";
-import type { AuthenticatedReq } from "../../types/auth.types.js";
-import { response, type Response } from "express";
+import type { Response, Request } from "express";
 
 
-export const addCommentController = async(req:AuthenticatedReq,res:Response)=>{
+export const addCommentController = async(req:Request,res:Response)=>{
     try{
+        if (!req.user) {
+    throw new Error("Unauthorized");
+}
         const taskParams = req.params.taskId
         const userParams = req.user.userId
         if(typeof taskParams!=="number" || typeof userParams!=="string"){
@@ -23,7 +25,7 @@ export const addCommentController = async(req:AuthenticatedReq,res:Response)=>{
 }
 
 
-export const getCommentsController = async(req:AuthenticatedReq,res:Response)=>{
+export const getCommentsController = async(req:Request,res:Response)=>{
     try {
         const taskParams = req.params.taskId
         if(typeof taskParams !=="string"){
@@ -40,8 +42,11 @@ export const getCommentsController = async(req:AuthenticatedReq,res:Response)=>{
 }
 
 
-export const deleteCommentController = async(req:AuthenticatedReq,res:Response)=>{
+export const deleteCommentController = async(req:Request,res:Response)=>{
     try {
+        if (!req.user) {
+    throw new Error("Unauthorized");
+}
         const workspaceParams = req.params.workspaceId
         const commentParams = req.params.commentId
         if(typeof workspaceParams!=='string' || typeof commentParams !=='string'){
