@@ -209,7 +209,6 @@ export const lastOpenedUpdatedController = async(req:AuthenticatedReq,res:Respon
     if(typeof workspaceId !=="number"){
         throw new Error("WorkspaceID is invalid")
     }  
-
     await lastOpenedUpdated(userId, workspaceId);
 
     res.status(200).json({ message: "Workspace marked as opened" });
