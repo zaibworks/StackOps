@@ -49,37 +49,6 @@ interface FilterType{
     assignedToId:number
 }
 
-// export const getTasks = async (workspaceId:number, filters:FilterType) => {
-//   const { status, priority, assignedToId } = filters
-
-//   const tasks = await prisma.task.findMany({
-//     where: {
-//       workspaceId,
-//       status,
-//       priority,
-//       assignedToId
-//     },
-//     orderBy: { updatedAt : 'desc' },
-//     include: {
-//       user: {
-//         select: { id: true, name: true, email: true }
-//       },
-//       assignedTo: {
-//         select: { id: true, name: true, email: true }
-//       }
-//     }
-//   })
-
-//   const total = await prisma.task.count({
-//     where: { workspaceId, status, priority }
-//   })
-
-//   return {
-//     tasks,
-//     total
-//   }
-// }
-
 export const updateTask= async(taskId:number,userId:number,taskData:UpdateTaskInput,workspaceId:number)=>{
 
   const {title,content,priority,status,dueDate,assignedToId} = taskData
