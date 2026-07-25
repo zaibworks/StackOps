@@ -8,13 +8,13 @@ import commentRoutes from './modules/comment/comment.routes.js'
 import activityRoutes from './modules/activity/activity.routes.js'
 import settingsRoutes from './modules/settings/settings.routes.js'
 import cors from 'cors'
+import type { CorsOptions } from 'cors'
 
 const app = express()
-const PORT = process.env.PORT  || 3000
+const PORT = Number(process.env.PORT)  || 3000
 const allowedOrigins = [
   'http://localhost:5173',
   'https://stackops4.vercel.app',
-  'https://stackops4-6m883mx44-zaib1.vercel.app'
 ]
 
 
@@ -23,7 +23,7 @@ app.use((req, res, next) => {
   next()
 })
 
-const corsOptions = {
+const corsOptions:CorsOptions = {
   origin: function (origin, callback) {
    
     if (!origin || allowedOrigins.includes(origin)) {

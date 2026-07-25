@@ -1,0 +1,1 @@
+{"version":3,"file":"createActivity.js","sourceRoot":"","sources":["../../src/utils/createActivity.ts"],"names":[],"mappings":"AAAA,OAAO,MAAM,MAAM,UAAU,CAAA;AAQ7B,MAAM,cAAc,GAAG,KAAK,EAAE,EAAC,MAAM,EAAC,WAAW,EAAC,MAAM,EAAc,EAAe,EAAE;IACnF,MAAM,MAAM,CAAC,QAAQ,CAAC,MAAM,CAAC;QACzB,IAAI,EAAC;YACD,MAAM;YACN,WAAW;YACX,MAAM;SACT;KACJ,CAAC,CAAA;AACN,CAAC,CAAA;AAED,eAAe,cAAc,CAAA"}
