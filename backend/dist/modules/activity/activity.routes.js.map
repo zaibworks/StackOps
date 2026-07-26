@@ -1,0 +1,1 @@
+{"version":3,"file":"activity.routes.js","sourceRoot":"","sources":["../../../src/modules/activity/activity.routes.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,MAAM,SAAS,CAAA;AAC7B,MAAM,MAAM,GAAG,OAAO,CAAC,MAAM,EAAE,CAAA;AAC/B,OAAO,EAAE,uBAAuB,EAAE,MAAM,0BAA0B,CAAC;AACnE,OAAO,cAAc,MAAM,kCAAkC,CAAC;AAE9D,MAAM,CAAC,GAAG,CAAC,GAAG,EAAC,cAAc,EAAC,uBAAuB,CAAC,CAAA;AAEtD,eAAe,MAAM,CAAA"}

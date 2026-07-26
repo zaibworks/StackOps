@@ -39,6 +39,13 @@ const [selectedWorkspace, setSelectedWorkspace] = useState(null)
   setSelectedTask(freshTask || tasks)
 }
 
+console.log({
+  page,
+  filter,
+  status,
+  workspaceId
+});
+
   const fetchTasks =async ()=>{
     try{
       const res = await api.get(`/task/getMy`,{
@@ -46,8 +53,8 @@ const [selectedWorkspace, setSelectedWorkspace] = useState(null)
           page:page,
           limit:10,
           filter,
-          status,
-          workspaceId
+           ...(status && { status }),
+          ...(workspaceId && { workspaceId }),
         }
       })
       setTasks(res.data.data)
