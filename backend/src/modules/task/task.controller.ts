@@ -36,18 +36,17 @@ export const updateTaskController= async(req:Request,res:Response)=>{
   if (!req.user) {
     throw new Error("Unauthorized");
 }
-   const { taskId } = req.params
-   if(typeof taskId !=="number"){
-    throw new Error("TaskID is NAN")
+   const taskParams = req.params.taskId
+   if(typeof taskParams !=="string"){
+    throw new Error("TaskID is invalid")
    }
+   const taskId = parseInt(taskParams)
    const userId = req.user.userId
     const workspaceParam = req.params.workspaceId
               if(typeof workspaceParam !=="string"){
                 throw new Error("Workspace Id is invalid")
               }
    const workspaceId = parseInt(workspaceParam)
-
-   console.log(req.body)
    
    const result = await updateTask(taskId,userId,req.body,workspaceId)
    res.json({message:"Task updated successfully",data:result})

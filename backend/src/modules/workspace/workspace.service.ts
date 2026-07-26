@@ -3,7 +3,7 @@ import createActivity from '../../utils/createActivity.js';
 import type { CreateWorkspaceInput,UpdateWorksapceInput } from './workspace.schema.js';
 import { Role } from '@prisma/client';
 
-export const createWorkspace = async ({name}:CreateWorkspaceInput, userId:number) => {
+export const createWorkspace = async (name:string, userId:number) => {
   const existingWorkspace =await prisma.workspace.findFirst({
     where: {
       name,

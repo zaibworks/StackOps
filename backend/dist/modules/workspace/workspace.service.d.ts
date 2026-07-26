@@ -1,6 +1,6 @@
-import type { CreateWorkspaceInput, UpdateWorksapceInput } from './workspace.schema.js';
+import type { UpdateWorksapceInput } from './workspace.schema.js';
 import { Role } from '@prisma/client';
-export declare const createWorkspace: ({ name }: CreateWorkspaceInput, userId: number) => Promise<{
+export declare const createWorkspace: (name: string, userId: number) => Promise<{
     members: {
         id: number;
         userId: number;
