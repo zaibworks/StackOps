@@ -7,8 +7,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Activity from "./pages/Activity";
 import MyTasks from "./pages/MyTasks";
 import Settings from "./pages/Settings";
-import Home from "./pages/Home.jsx";
-import { AuthProvider } from "./context/AuthContext.jsx";
+import Home from "./pages/Home";
+import { AuthProvider } from "./context/AuthContext";
 import { WorkspaceProvider } from "./context/WorkspaceContext.jsx";
 
 function App() {
