@@ -9,7 +9,7 @@ import MyTasks from "./pages/MyTasks";
 import Settings from "./pages/Settings";
 import Home from "./pages/Home";
 import { AuthProvider } from "./context/AuthContext";
-import { WorkspaceProvider } from "./context/WorkspaceContext.jsx";
+import { WorkspaceProvider } from "./context/WorkspaceContext";
 
 function App() {
   return (
