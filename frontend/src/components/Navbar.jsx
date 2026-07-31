@@ -34,10 +34,7 @@ const Navbar = ({
 };
 
 const filteredResults =
-  searchData?.filter(item =>
-    item.name
-      .toLowerCase()
-      .includes(query.toLowerCase())
+  searchData?.filter(item =>item.name.toLowerCase().includes(query.toLowerCase())
   ) || []
 
   const handleSearchClick = (item) => {

@@ -196,7 +196,7 @@ if(!workspace){
   return deleteMember
 }
 
-export const updateWorkspace = async(adminId:number,workspaceId:number,{name}:UpdateWorksapceInput)=>{
+export const updateWorkspace = async(adminId:number,workspaceId:number,name:string)=>{
       const admin = await prisma.membership.findFirst({
     where:{
       userId:adminId,

@@ -16,6 +16,7 @@ model User {
   email String   @unique
   name  String?
   password String?
+  
   createdTask   Task[]  @relation("CreatedTask")
   assignedTask  Task[]  @relation("AssignedTask")
   memberships Membership[]
