@@ -1,10 +1,63 @@
 import React from 'react'
 import { useState } from 'react'
 import { Settings,Pin,TrashIcon,Circle} from 'lucide-react'
-import { useAuth } from '../context/AuthContext.jsx'
+import { useAuth } from '../context/AuthContext.js'
 import api from '../api/axios.js'
 import LeaveWorkspaceModal from './LeaveWorkspaceModal.jsx'
 import { useNavigate } from 'react-router-dom'
+
+
+
+type memberType={
+  id: number;
+  userId: number;
+  workspaceId: number;
+  role: "admin" | "member";
+  createdAt: string;
+  lastOpenedAt: string | null;
+}
+type taskType={
+  id :number
+  title:string
+  content :string
+  completed:boolean
+
+dueDate :number
+priority : 'low'|'medium'|'high'
+status :'todo'|'inprogress'|'done'
+
+  userId Int
+  user      User     @relation("CreatedTask",fields: [userId], references: [id],onDelete: Cascade)
+
+assignedToId Int?
+  assignedTo User? @relation("AssignedTask",fields: [assignedToId],references: [id],onDelete: Cascade)
+
+  workspaceId Int
+  workspace Workspace @relation(fields: [workspaceId],references: [id],onDelete: Cascade)
+
+  comments Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+type worksapceType={
+   id :number
+  name:string
+
+  members :memberType[]
+  // tasks Task[]
+  
+  createdAt:string
+  updatedAt :string
+
+  activities Activity[]
+}
+
+interface memberCardType{
+  member:memberType
+  workspace:
+}
 
 
 
