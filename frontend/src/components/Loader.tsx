@@ -1,6 +1,10 @@
 import { LayoutGrid } from "lucide-react";
 
-const Loader = ({ text  }) => {
+interface textType{
+  text:String
+}
+
+const Loader = ({ text  }:textType) => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-900">
       <div className="flex flex-col items-center gap-5">
