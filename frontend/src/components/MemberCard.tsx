@@ -5,63 +5,18 @@ import { useAuth } from '../context/AuthContext.js'
 import api from '../api/axios.js'
 import LeaveWorkspaceModal from './LeaveWorkspaceModal.jsx'
 import { useNavigate } from 'react-router-dom'
+import type { Membership } from '../types/membership.types.js'
+import type { Workspace } from '../types/workspace.types.js'
+import type { User } from '../types/user.types.js'
 
-
-
-type memberType={
-  id: number;
-  userId: number;
-  workspaceId: number;
-  role: "admin" | "member";
-  createdAt: string;
-  lastOpenedAt: string | null;
-}
-type taskType={
-  id :number
-  title:string
-  content :string
-  completed:boolean
-
-dueDate :number
-priority : 'low'|'medium'|'high'
-status :'todo'|'inprogress'|'done'
-
-  userId Int
-  user      User     @relation("CreatedTask",fields: [userId], references: [id],onDelete: Cascade)
-
-assignedToId Int?
-  assignedTo User? @relation("AssignedTask",fields: [assignedToId],references: [id],onDelete: Cascade)
-
-  workspaceId Int
-  workspace Workspace @relation(fields: [workspaceId],references: [id],onDelete: Cascade)
-
-  comments Comment[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+interface MemberProps {
+  member: Membership;
+  workspace: Workspace;
+  onClose: () => void;
+  onMemberUpdate: () => void;
 }
 
-type worksapceType={
-   id :number
-  name:string
-
-  members :memberType[]
-  // tasks Task[]
-  
-  createdAt:string
-  updatedAt :string
-
-  activities Activity[]
-}
-
-interface memberCardType{
-  member:memberType
-  workspace:
-}
-
-
-
-const MemberCard = ({member,workspace,onClose,onMemberUpdate}) => {
+const MemberCard = ({member,workspace,onClose,onMemberUpdate}:MemberProps) => {
 
   const {user} = useAuth()
   const navigate = useNavigate()

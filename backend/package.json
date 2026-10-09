@@ -5,11 +5,11 @@
   "main": "src/main.js",
   "type": "module",
   "scripts": {
-      "dev": "tsx watch src/main.ts",
-       "build": "tsc",
-       "start": "node dist/main.js",
-        "check":"tsc --noEmit"
-},
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "check": "tsc --noEmit"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -19,9 +19,10 @@
     "@prisma/client": "^7.8.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
+    "dotenv": "^18.0.5",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+    "prisma": "^8.0.0-rc.20",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -31,7 +32,6 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^26.1.1",
     "nodemon": "^3.1.14",
-    "prisma": "^7.8.0",
     "tsx": "^4.23.1",
     "typescript": "^7.0.2"
   }
