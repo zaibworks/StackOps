@@ -1,5 +1,6 @@
 import React from 'react'
 import { Mail,User,Lock,ArrowRight,Check,Eye} from 'lucide-react'
+import { useState } from 'react';
 
 function GoogleLogo({ className = "h-5 w-5" }) {
   return (
@@ -32,6 +33,34 @@ function GoogleLogo({ className = "h-5 w-5" }) {
 }
 
 const SignupForm = ({onLogin}) => {
+
+  const [email, setEmail] = useState('')
+  const [password,setPassword] = useState('')
+  const [name, setName] = useState('')
+  const [error,setError]=useState('')
+  const [loading, setLoading] = useState(false)
+
+    const handleSignup = async (e)=>{
+       e.preventDefault()
+       setLoading(true)
+       setError('')
+       try{
+        const response = await api.post('/auth/signup',{
+          name,
+          email,
+          password
+        })
+        localStorage.setItem('token',response.token)
+          navigate('/dashboard')
+       }catch(e){
+       setError(e.response?.data?.error?.[0]?.message)
+       }finally{
+        setLoading(false)
+       }
+  }
+
+
+
   return (
     <>
      <div className="flex flex-1 items-center justify-center px-6 py-4 sm:px-10">
@@ -57,8 +86,8 @@ const SignupForm = ({onLogin}) => {
                   <User className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
 
                   <input
-                    readOnly
-                    value=""
+                    value={name}
+                    onChange={(e)=>setName(e.target.value)}
                     placeholder="Andrew Smith"
                     className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-10 pr-4 text-sm text-zinc-200 placeholder-zinc-600 outline-none focus:border-orange-500/50"
                   />
@@ -75,8 +104,8 @@ const SignupForm = ({onLogin}) => {
                   <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
 
                   <input
-                    readOnly
-                    value=""
+                    value={email}
+                    onChange={(e)=>setEmail(e.target.value)}
                     placeholder="name@company.com"
                     className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-10 pr-10 text-sm text-zinc-200 placeholder-zinc-600 outline-none focus:border-orange-500/50"
                   />
@@ -95,23 +124,22 @@ const SignupForm = ({onLogin}) => {
                   <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
 
                   <input
-                    readOnly
-                    value=""
+                    value={password}
+                    onChange={(e)=>setPassword(e.target.value)}
                     placeholder="Create a secure password"
                     className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-10 pr-10 text-sm text-zinc-200 placeholder-zinc-600 outline-none focus:border-orange-500/50"
                   />
 
                   <Eye className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500 cursor-pointer" />
                 </div>
-
-                <p className="mt-1.5 text-[11px] leading-relaxed text-zinc-500">
-                  At least 8 characters. Mix letters, numbers, and symbols for
-                  a stronger password.
-                </p>
               </div>
 
+               {error && <p className="text-sm font-sm text-[#6e1616]">{error}</p>}
+
               {/* Continue */}
-              <button className="group flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 cursor-pointer">
+              <button 
+              onClick={handleSignup}
+              className=" mt-3 group flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 cursor-pointer">
                 Continue
 
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -121,7 +149,10 @@ const SignupForm = ({onLogin}) => {
             {/* Login */}
             <p className="mt-3 text-center text-xs text-zinc-500">
               Already have an account?{" "}
-              <span onClick={onLogin} className="font-semibold text-orange-400 cursor-pointer">
+              <span 
+              onClick={onLogin} 
+               disabled={loading}
+              className="font-semibold text-orange-400 cursor-pointer">
                 Log in
               </span>
             </p>

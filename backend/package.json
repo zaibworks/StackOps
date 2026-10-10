@@ -21,8 +21,9 @@
     "cors": "^2.8.6",
     "dotenv": "^18.0.5",
     "express": "^5.2.1",
+    "googleapis": "^185.0.0",
     "jsonwebtoken": "^9.0.3",
-    "prisma": "^8.0.0-rc.20",
+    "prisma": "^7.8.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
