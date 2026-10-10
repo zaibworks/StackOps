@@ -94,19 +94,19 @@ export default function LoginForm({ onSignup }) {
                     className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-10 pr-10 text-sm text-zinc-200 placeholder-zinc-600 outline-none focus:border-orange-500/50"
                   />
 
-                  <Eye className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+                  <Eye className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500 cursor-pointer" />
                 </div>
 
               </div>
               <div className="-mt-1 flex justify-end"> 
-                <button type="button" className="text-xs font-medium text-orange-400 hover:text-orange-300" > 
+                <button type="button" className="text-xs font-medium text-orange-400 hover:text-orange-300 cursor-pointer" > 
                     Forgot password? 
                     </button> 
                     </div>
 
 
               {/* Continue */}
-              <button className="group flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40">
+              <button className="group flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 cursor-pointer">
                 Continue
 
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -133,14 +133,18 @@ export default function LoginForm({ onSignup }) {
             </div>
 
             {/* Google */}
-            <button className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-700 bg-zinc-100 py-3 text-sm font-semibold text-zinc-900 hover:bg-white">
+            <button className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-700 bg-zinc-100 py-3 text-sm font-semibold text-zinc-900 hover:bg-white cursor-pointer">
               <GoogleLogo />
 
              Continue with Google
             </button>
 
             {/* Terms */}
-           <p className="mt-4 text-center text-[11px] leading-relaxed text-zinc-600"> By continuing you agree to the StackOps{" "} <span className="text-orange-400"> Privacy Policy and Terms of Service </span> . </p>
+           <p className="mt-4 text-center text-[11px] leading-relaxed text-zinc-600"> 
+            By continuing you agree to the StackOps{" "} 
+            <span className="text-orange-400 cursor-pointer"> 
+              Privacy Policy and Terms of Service 
+              </span> . </p>
           </div>
         </div>
         </>

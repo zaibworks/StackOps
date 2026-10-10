@@ -42,7 +42,7 @@ const SignupForm = ({onLogin}) => {
                 fontFamily: "'Space Grotesk', sans-serif",
               }}
             >
-              Join Us
+              Create Account
             </h1>
 
             <div className="mt-6 flex flex-col gap-4">
