@@ -1,6 +1,7 @@
-import { signup, login } from './auth.service.js';
+import { signup, login,continueWithGoogle } from './auth.service.js';
 import type { Request,Response } from 'express';
 import { googleOAuthClient } from './google.oauth.js';
+
 
 const signupController =async(req:Request,res:Response)=>{
     try{
@@ -114,6 +115,12 @@ const googleCallbackController = async (
         message: "Google email is not verified",
       });
     }
+
+    const user = await continueWithGoogle({
+  googleId,
+  email,
+  name: typeof name === "string" ? name : null,
+});
 
     console.log("Google user:", {
       googleId,

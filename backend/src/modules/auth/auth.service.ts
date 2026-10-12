@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import prisma from '../../db.js'
 import type { SignupInput,LoginInput } from './auth.schema.js'
+import type { GoogleUserInput } from '../../types/auth.types.js'
 
 export const signup = async ({name,email,password}:SignupInput)=>{
 
@@ -69,4 +70,39 @@ if(!secretKey){
     message: "Login successful",
     token
   }
+}
+
+
+export const continueWithGoogle = async({googleId,email,name}:GoogleUserInput)=>{
+
+    const userByGoogleId = await prisma.user.findUnique({
+      where:{googleId}
+    })
+
+      if (userByGoogleId) {
+    return userByGoogleId;
+  }
+
+  const existingUser = await prisma.user.findUnique({
+          where:{email}
+  })
+
+   if (existingUser) {
+    return prisma.user.update({
+      where: { id: existingUser.id },
+      data: { googleId },
+    });
+  }
+
+   const newUser = await prisma.user.create({
+    data: {
+      email,
+      name,
+      googleId,
+      password: null,
+    },
+  });
+
+  return newUser;
+
 }
