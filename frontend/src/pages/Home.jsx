@@ -16,6 +16,7 @@ const STEPS = [
   { n: 2, text: "Set up your first workspace", active: false },
   { n: 3, text: "Invite your team and assign tasks", active: false },
 ];
+
 import SignupForm from "../components/SIgnupForm";
 import LoginForm from "../components/LoginForm";
 
