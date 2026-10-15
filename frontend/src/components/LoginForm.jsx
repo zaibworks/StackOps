@@ -3,10 +3,10 @@ import {
   Mail,
   Lock,
   Eye,
-  EyeOff,
   ArrowRight,
   User,
-  Check
+  Check,
+  EyeOff
 } from "lucide-react";
 
 function GoogleLogo({ className = "h-5 w-5" }) {
@@ -41,10 +41,34 @@ function GoogleLogo({ className = "h-5 w-5" }) {
 
 export default function LoginForm({ onSignup }) {
   const [showPassword, setShowPassword] = useState(false);
+ const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+
+  const handleSubmit = async(e)=>{
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    try{
+      const response = await api.post('/auth/login',{
+        email,
+        password
+      })
+      const token = response.data.token
+        localStorage.setItem('token', token)
+         navigate('/dashboard')
+    }catch(e){
+      setError(e.response?.data?.message ||'Login failed')
+    }finally{
+      setLoading(false)
+    }
+  }
 
   return (
     <>
-  <div className="flex flex-1 items-center justify-center px-6 py-4 sm:px-10">
+  <div className="flex w-full min-w-0 flex-1 items-center justify-center px-3 py-4 sm:px-10">
           <div className="w-full max-w-sm">
             <h1
               className="text-center text-3xl font-bold tracking-tight text-zinc-50"
@@ -68,13 +92,12 @@ export default function LoginForm({ onSignup }) {
                   <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
 
                   <input
-                    readOnly
-                    value=""
+                    onChange={(e)=>setEmail(e.target.value)}
+                    value={email}
                     placeholder="name@company.com"
                     className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-10 pr-10 text-sm text-zinc-200 placeholder-zinc-600 outline-none focus:border-orange-500/50"
                   />
 
-                  <Check className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-emerald-400" />
                 </div>
               </div>
 
@@ -88,14 +111,14 @@ export default function LoginForm({ onSignup }) {
                   <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
 
                   <input
-                    readOnly
-                    value=""
+                  type={showPassword ? "text" : "password"}
+                    onChange={(e)=>setPassword(e.target.value)}
+                    value={password}
                     placeholder="Enter your password"
                     className="w-full rounded-xl border border-zinc-800 bg-zinc-900 py-3 pl-10 pr-10 text-sm text-zinc-200 placeholder-zinc-600 outline-none focus:border-orange-500/50"
                   />
 
-                  <Eye className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500 cursor-pointer" />
-                </div>
+<button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer" aria-label={showPassword ? "Hide password" : "Show password"} > {showPassword ? ( <EyeOff size={16} /> ) : ( <Eye size={16} /> )} </button>                </div>
 
               </div>
               <div className="-mt-1 flex justify-end"> 
@@ -106,7 +129,8 @@ export default function LoginForm({ onSignup }) {
 
 
               {/* Continue */}
-              <button className="group flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 cursor-pointer">
+              <button onClick={handleSubmit}
+              className="group flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 cursor-pointer">
                 Continue
 
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -138,13 +162,6 @@ export default function LoginForm({ onSignup }) {
 
              Continue with Google
             </button>
-
-            {/* Terms */}
-           <p className="mt-4 text-center text-[11px] leading-relaxed text-zinc-600"> 
-            By continuing you agree to the StackOps{" "} 
-            <span className="text-orange-400 cursor-pointer"> 
-              Privacy Policy and Terms of Service 
-              </span> . </p>
           </div>
         </div>
         </>

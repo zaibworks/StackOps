@@ -116,7 +116,7 @@ const googleCallbackController = async (
       });
     }
 
-    const user = await continueWithGoogle({
+    const {user,token} = await continueWithGoogle({
   googleId,
   email,
   name: typeof name === "string" ? name : null,
@@ -129,15 +129,17 @@ const googleCallbackController = async (
       emailVerified,
     });
 
-    return res.status(200).json({
-      message: "Google user verified successfully",
-      user: {
-        googleId,
-        email,
-        name: typeof name === "string" ? name : null,
-        emailVerified,
-      },
-    });
+  res.cookie("token", token, {
+  httpOnly: true,
+  secure: false,
+  sameSite: "lax",
+});
+
+res.redirect("http://localhost:5173/dashboard");
+
+return res;
+
+  
   } catch (error: unknown) {
     console.error("Google OAuth error:", error);
 

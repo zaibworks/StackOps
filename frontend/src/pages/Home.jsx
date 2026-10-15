@@ -55,7 +55,7 @@ export default function Home() {
       <div className="relative flex h-full max-h-[760px] w-full max-w-6xl overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/40 p-2 shadow-2xl shadow-black/60">
 
         {/* Left gradient panel */}
-        <div className="relative hidden flex-1 flex-col justify-between overflow-hidden rounded-2xl bg-zinc-900 p-8 lg:flex">
+        <div className="relative hidden w-[58%] shrink-0 flex-col justify-between overflow-hidden rounded-2xl bg-zinc-900 p-8 lg:flex">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute -left-20 -top-20 h-96 w-96 rounded-full bg-cyan-500/50 blur-3xl" />
 
@@ -134,6 +134,7 @@ export default function Home() {
            <AnimatePresence mode="wait">
         {mode === "signup" ? (
           <motion.div
+           className="flex w-[42%] min-w-0 flex-col"
             key="signup"
             initial={{ opacity: 0, x: 25 }}
             animate={{ opacity: 1, x: 0 }}
@@ -149,6 +150,7 @@ export default function Home() {
           </motion.div>
         ) : (
           <motion.div
+           className="flex w-[42%] min-w-0 flex-col"
             key="login"
             initial={{ opacity: 0, x: 25 }}
             animate={{ opacity: 1, x: 0 }}
@@ -165,6 +167,7 @@ export default function Home() {
         )}
       </AnimatePresence>
       </div>
+
     </div>
   );
 }
