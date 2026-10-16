@@ -8,6 +8,7 @@ import {
   Check,
   EyeOff
 } from "lucide-react";
+import api from "../api/axios";
 
 function GoogleLogo({ className = "h-5 w-5" }) {
   return (
@@ -65,6 +66,11 @@ export default function LoginForm({ onSignup }) {
       setLoading(false)
     }
   }
+
+   const handleGoogleAuth = () => {
+  window.location.href = 'http://localhost:5001/auth/google';
+};
+
 
   return (
     <>
@@ -157,7 +163,8 @@ export default function LoginForm({ onSignup }) {
             </div>
 
             {/* Google */}
-            <button className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-700 bg-zinc-100 py-3 text-sm font-semibold text-zinc-900 hover:bg-white cursor-pointer">
+            <button onClick={handleGoogleAuth}
+            className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-700 bg-zinc-100 py-3 text-sm font-semibold text-zinc-900 hover:bg-white cursor-pointer">
               <GoogleLogo />
 
              Continue with Google

@@ -33,11 +33,6 @@ fetchActivities();
 
 }, []);
 
-const handleLogout = () => {
-localStorage.removeItem("token");
-setUser(null);
-};
-
 if (loading) {
 return <Loader text={"Getting your activities"}/>;
 }
@@ -47,7 +42,7 @@ return (
 <Navbar />
 
   <div className="flex flex-1 overflow-hidden">
-    <Sidebar user={user} onLogout={handleLogout} workspaces={workspaces} />
+    <Sidebar user={user} workspaces={workspaces} />
 
     <main className="flex-1 p-8 overflow-hidden flex flex-col">
 

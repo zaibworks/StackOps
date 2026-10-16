@@ -20,23 +20,19 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }:AuthProvideProps) => {
  const [user, setUser] = useState<userType | null>(null);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem("token");
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const response = await api.get("/user/me");
+      setUser(response.data);
+    } catch (err) {
+      console.log(err);
+      setUser(null);
+    }
+  };
 
-      if (!token) return;
-
-      try {
-        const response = await api.get("/user/me");
-        setUser(response.data);
-      } catch (err) {
-        console.log(err);
-        localStorage.removeItem("token");
-      }
-    };
-
-    fetchUser();
-  }, []);
+  fetchUser();
+}, []);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

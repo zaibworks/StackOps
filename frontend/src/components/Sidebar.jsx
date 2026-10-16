@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { FolderKanban, CheckSquare, Activity, LogOut } from "lucide-react"
 import api from "../api/axios.js"
 
-const Sidebar = ({ user, workspaces, onLogout }) => {
+const Sidebar = ({ user, workspaces}) => {
   const navigate = useNavigate()
   const [shoWorkspace, setshoWorkspace] = useState(false)
   
@@ -13,6 +13,17 @@ const lastOpenedWorkspace = async (workspaceId)=>{
     console.log("Response:", res.data)
   return res.data;
 }
+
+const handleLogout = async () => {
+  try {
+    await api.post('/auth/logout');
+    setUser(null);
+    setWorkspaces([]);
+    navigate('/');
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   return (
     <aside className="relative flex w-64 flex-col border-r border-zinc-800 bg-zinc-950/50">
@@ -89,7 +100,7 @@ const lastOpenedWorkspace = async (workspaceId)=>{
       <div className="absolute bottom-0 left-0 right-0 px-5 pb-4 backdrop-blur-md">
         <div className="border-t border-zinc-800/80 pt-4">
           <button
-            onClick={onLogout}
+            onClick={handleLogout}
             className="flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-medium text-zinc-400 transition-all hover:bg-zinc-800/50 hover:text-red-400 bg-zinc-900/70 cursor-pointer"
           >
             <LogOut size={16} />

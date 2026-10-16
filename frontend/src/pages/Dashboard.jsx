@@ -34,44 +34,43 @@ const Dashboard = () => {
   const navigate = useNavigate()
   
 
-  useEffect(() => {
-    const fetchWorkspaces = async () => {
-      try {
-        const response = await api.get('/workspace')
-        setWorkspaces(response.data)
-      } catch (e) {
-        console.log(e)
-      }finally{
-        setLoading(false)
-      }
-    }
-    const fetchStats = async()=>{
+ useEffect(() => {
+  const fetchWorkspaces = async () => {
     try {
-       const response = await api.get('/user/stats')
-        setMyStats(response?.data?.data)
+      const response = await api.get('/workspace')
+      setWorkspaces(response.data)
     } catch (e) {
-       console.log(e)
+      console.log(e)
+    } finally {
+      setLoading(false)
     }
-   }
-     const fetchUser = async () => {
-      const token = localStorage.getItem("token");
+  }
 
-      if (!token) return;
+  const fetchStats = async () => {
+    try {
+      const response = await api.get('/user/stats')
+      setMyStats(response?.data?.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
-      try {
-        const response = await api.get("/user/me");
-        setUser(response.data);
-      } catch (err) {
-        console.log(err);
-        localStorage.removeItem("token");
-      }finally{
-        setuserLoading(false)
-      }
-    };
-    fetchUser()
-    fetchWorkspaces()
-    fetchStats()
-  }, [])
+  const fetchUser = async () => {
+    try {
+      const response = await api.get("/user/me")
+      setUser(response.data)
+    } catch (err) {
+      console.log(err)
+      setUser(null)
+    } finally {
+      setuserLoading(false)
+    }
+  }
+
+  fetchUser()
+  fetchWorkspaces()
+  fetchStats()
+}, [])
 
   const searchData = workspaces.map(w => ({
   id: w.id,
@@ -81,11 +80,16 @@ const Dashboard = () => {
 
   console.log(user)
 
-  const handleLogout = () => {
-  localStorage.removeItem('token');
-  setUser(null);
-  setWorkspaces([]);
-  navigate('/login');
+
+const handleLogout = async () => {
+  try {
+    await api.post('/auth/logout');
+    setUser(null);
+    setWorkspaces([]);
+    navigate('/');
+  } catch (error) {
+    console.log(error);
+  }
 };
 
   const addWorkspace = async(e)=>{
@@ -154,7 +158,9 @@ const lastOpenedWorkspace = async (workspaceId)=>{
     <Navbar searchData={searchData} searchType="workspace"/>
       <div className="flex flex-1 overflow-hidden">
      {/* Sidebar component - extracted from lines 116-194 */}
-     <Sidebar user={user} workspaces={workspaces} onLogout={handleLogout} />
+     <Sidebar user={user} workspaces={workspaces}/>
+
+
  <main className="flex-1 p-8 overflow-y-auto main-scrollbar">
   <div className="flex items-center justify-between px-2 mb-8">
      <div>

@@ -9,6 +9,7 @@ import activityRoutes from './modules/activity/activity.routes.js'
 import settingsRoutes from './modules/settings/settings.routes.js'
 import cors from 'cors'
 import type { CorsOptions } from 'cors'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 const PORT = Number(process.env.PORT)  || 3000
@@ -43,6 +44,8 @@ app.use(cors(corsOptions))
 // Preflight ke liye
 
 app.use(express.json())
+
+app.use(cookieParser())
 
 
 app.use('/auth', authRoutes)

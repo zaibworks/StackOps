@@ -1,6 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Workspace from "./pages/Workspace";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -17,20 +15,11 @@ function App() {
       <WorkspaceProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
             <Route path="/activity" element={<Activity />} />
             <Route path="/mytasks" element={<MyTasks />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/" element={<Home/>}/>
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/dashboard" element={<Dashboard />}/>
             <Route
               path="/workspace/:workspaceId"
               element={
