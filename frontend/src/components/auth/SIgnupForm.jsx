@@ -1,7 +1,7 @@
 import React from 'react'
 import { Mail,User,Lock,ArrowRight,Check,Eye,EyeOff} from 'lucide-react'
 import { useState } from 'react';
-import api from '../api/axios';
+import api from '../../api/axios';
 
 function GoogleLogo({ className = "h-5 w-5" }) {
   return (
@@ -179,7 +179,7 @@ const SignupForm = ({onLogin}) => {
             className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-700 bg-zinc-100 py-3 text-sm font-semibold text-zinc-900 hover:bg-white cursor-pointer">
               <GoogleLogo />
 
-              Sign up with Google
+              Continue with Google
             </button>
 
             {/* Terms */}

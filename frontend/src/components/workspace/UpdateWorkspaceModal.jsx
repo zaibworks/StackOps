@@ -1,7 +1,7 @@
 import React from 'react'
 import { X } from 'lucide-react'
 import { useState,useEffect } from 'react'
-import api from '../api/axios.js'
+import api from '../../api/axios.js'
 
 const UpdateWorkspaceModal = ({isOpen,onClose,workspace,onSuccess}) => {
 

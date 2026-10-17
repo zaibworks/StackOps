@@ -3,11 +3,11 @@ import api from '../api/axios.js'
 import { useNavigate} from "react-router-dom"
 import { useAuth } from "../context/AuthContext";
 import { Plus,X,MoreVertical,Pencil,Trash2, FolderKanban, Users, CheckSquare, Activity, LogOut, Flag } from "lucide-react";
-import UpdateWorkspaceModal from "../components/UpdateWorkspaceModal.jsx";
-import DeleteWorkspaceModal from "../components/DeleteWorkspaceModal.jsx";
-import LeaveWorkspaceModal from "../components/LeaveWorkspaceModal.jsx";
-import Navbar from "../components/Navbar.jsx";
-import Sidebar from "../components/Sidebar.jsx";
+import UpdateWorkspaceModal from "../components/workspace/UpdateWorkspaceModal.jsx";
+import DeleteWorkspaceModal from "../components/workspace/DeleteWorkspaceModal.jsx";
+import LeaveWorkspaceModal from "../components/workspace/LeaveWorkspaceModal.jsx";
+import Navbar from "../components/major/Navbar.jsx";
+import Sidebar from "../components/major/Sidebar.jsx";
 import Loader from "../components/Loader.jsx"
 
 const Dashboard = () => {

@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar.jsx";
-import Sidebar from "../components/Sidebar.jsx";
+import Navbar from "../components/major/Navbar.jsx";
+import Sidebar from "../components/major/Sidebar.jsx";
 import { CheckSquare, Clock3, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { useState,useEffect } from "react";
 import { useAuth } from "../context/AuthContext.jsx";

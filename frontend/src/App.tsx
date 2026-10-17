@@ -19,7 +19,12 @@ function App() {
             <Route path="/mytasks" element={<MyTasks />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/" element={<Home/>}/>
-            <Route path="/dashboard" element={<Dashboard />}/>
+            <Route path="/dashboard" element={
+             
+                <Dashboard />
+           
+              }/>
+
             <Route
               path="/workspace/:workspaceId"
               element={

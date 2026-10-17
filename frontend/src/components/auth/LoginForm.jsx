@@ -8,7 +8,7 @@ import {
   Check,
   EyeOff
 } from "lucide-react";
-import api from "../api/axios";
+import api from "../../api/axios";
 
 function GoogleLogo({ className = "h-5 w-5" }) {
   return (

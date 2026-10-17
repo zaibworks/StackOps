@@ -12,11 +12,11 @@ import {
   Bolt,
   CheckSquare
 } from "lucide-react";
-import Navbar from '../components/Navbar.jsx'
-import InviteModal from '../components/InviteModal.jsx'
+import Navbar from '../components/major/Navbar.jsx'
+import InviteModal from '../components/workspace/InviteModal.jsx'
 import WorkspaceSettingsModal from '../components/WorkspaceSettingsModal.jsx';
 import Loader from '../components/Loader.jsx';
-import MemberCard from "../components/MemberCard.jsx"
+import MemberCard from "../components/workspace/MemberCard.js"
 import { useAuth } from '../context/AuthContext.jsx';
 
 const Workspace = () => {

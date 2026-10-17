@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios.js";
-import Navbar from "../components/Navbar.jsx";
-import Sidebar from "../components/Sidebar.jsx";
+import Navbar from "../components/major/Navbar.jsx";
+import Sidebar from "../components/major/Sidebar.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { ActivityIcon } from "lucide-react";
 import { useWorkspace } from "../context/WorkspaceContext.jsx";

@@ -1,7 +1,7 @@
 import {X,Pencil,Trash2,LogOut,Settings,ChevronRight, Flag,} from "lucide-react";
 import { useState } from "react";
-import DeleteWorkspaceModal from "./DeleteWorkspaceModal.jsx";
-import UpdateWorkspaceModal from "./UpdateWorkspaceModal.jsx";
+import DeleteWorkspaceModal from "./workspace/DeleteWorkspaceModal.jsx";
+import UpdateWorkspaceModal from "./workspace/UpdateWorkspaceModal.jsx";
 import { useWorkspace } from "../context/WorkspaceContext.jsx";
 import { useNavigate } from "react-router-dom";
 

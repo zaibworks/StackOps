@@ -17,8 +17,8 @@ const STEPS = [
   { n: 3, text: "Invite your team and assign tasks", active: false },
 ];
 
-import SignupForm from "../components/SIgnupForm";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../components/auth/LoginForm";
+import SignupForm from "../components/auth/SIgnupForm";
 
 export default function Home() {
   const [mode, setMode] = useState('signup')

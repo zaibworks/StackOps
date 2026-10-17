@@ -56,3 +56,15 @@ export const getMyStatsController = async (req:Request, res:Response) => {
   }
 };
 
+export const userLogoutController = (req:Request, res:Response) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "lax",
+  });
+
+  res.json({
+    message: "Logged out successfully",
+  });
+};
+

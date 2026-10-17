@@ -1,13 +1,13 @@
 import React from 'react'
 import { useState } from 'react'
 import { Settings,Pin,TrashIcon,Circle} from 'lucide-react'
-import { useAuth } from '../context/AuthContext.js'
-import api from '../api/axios.js'
+import { useAuth } from '../../context/AuthContext.js'
+import api from '../../api/axios.js'
 import LeaveWorkspaceModal from './LeaveWorkspaceModal.jsx'
 import { useNavigate } from 'react-router-dom'
-import type { Membership } from '../types/membership.types.js'
-import type { Workspace } from '../types/workspace.types.js'
-import type { User } from '../types/user.types.js'
+import type { Membership } from '../../types/membership.types.js'
+import type { Workspace } from '../../types/workspace.types.js'
+import type { User } from '../../types/user.types.js'
 
 interface MemberProps {
   member: Membership;
