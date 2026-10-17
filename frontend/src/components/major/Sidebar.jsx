@@ -17,7 +17,7 @@ const lastOpenedWorkspace = async (workspaceId)=>{
 const handleLogout = async () => {
   try {
     await api.post('/user/logout');
-    setUser(null);
+    setUser(null);~
     setWorkspaces([]);
     navigate('/');
   } catch (error) {
@@ -92,15 +92,6 @@ const handleLogout = async () => {
 
         {shoWorkspace && (
           <div className="mt-2 max-h-[300px] space-y-1 overflow-y-auto rounded-xl pl-3 scrollbar-hide">
-
-            <button
-              type="button"
-              className="w-full rounded-lg px-3 py-2 text-left text-sm text-zinc-500 transition-colors hover:bg-zinc-900/50 hover:text-zinc-300"
-            >
-              All Workspaces
-            </button>
-
-
             {workspaces.map((w) => (
               <button
                 key={w.id}
@@ -109,7 +100,7 @@ const handleLogout = async () => {
                   navigate(`/workspace/${w.id}`);
                   lastOpenedWorkspace(w.id);
                 }}
-                className="w-full truncate rounded-lg px-3 py-2 text-left text-sm text-zinc-500 transition-colors hover:bg-zinc-900/50 hover:text-zinc-300"
+                className="w-full truncate rounded-lg px-3 py-2 text-left text-xs text-zinc-500 transition-colors hover:bg-zinc-900/50 hover:text-zinc-300"
               >
                 {w.name}
               </button>
@@ -128,7 +119,7 @@ const handleLogout = async () => {
         <button
           type="button"
           onClick={() => navigate("/mytasks")}
-          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm text-zinc-400 transition-colors hover:bg-zinc-900/60 hover:text-zinc-200"
+          className="flex w-full items-center gap-3 rounded-lg px-4 py-2 text-left text-xs text-zinc-400 transition-colors hover:bg-zinc-900/60 hover:text-zinc-200"
         >
 
           <CheckSquare size={17} />
@@ -149,7 +140,7 @@ const handleLogout = async () => {
         <button
           type="button"
           onClick={() => navigate("/activity")}
-          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm text-zinc-400 transition-colors hover:bg-zinc-900/60 hover:text-zinc-200"
+          className="flex w-full items-center gap-3 rounded-lg px-4 py-2 text-left text-xs text-zinc-400 transition-colors hover:bg-zinc-900/60 hover:text-zinc-200"
         >
 
           <Activity size={17} />
