@@ -1,7 +1,7 @@
-import { useParams,useNavigate } from 'react-router-dom'
-import { useEffect,useState } from 'react'
-import api from '../api/axios.js'
-import TaskCard from '../components/TaskCard.jsx'
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../api/axios.js";
+import TaskCard from "../components/TaskCard.jsx";
 import {
   UserX,
   Clock3,
@@ -12,893 +12,876 @@ import {
   Bolt,
   CheckSquare,
   Users,
-  SquareCheckBig
+  SquareCheckBig,
+  UserPlus,
+  Plus,
+  Settings,
+  SlidersHorizontal,
+  MoreVertical,
+  X,
 } from "lucide-react";
-import Navbar from '../components/major/Navbar.jsx'
-import InviteModal from '../components/workspace/InviteModal.jsx'
-import WorkspaceSettingsModal from '../components/WorkspaceSettingsModal.jsx';
-import Loader from '../components/Loader.jsx';
-import MemberCard from "../components/workspace/MemberCard.js"
-import { useAuth } from '../context/AuthContext.jsx';
+import Navbar from "../components/major/Navbar.jsx";
+import InviteModal from "../components/workspace/InviteModal.jsx";
+import WorkspaceSettingsModal from "../components/WorkspaceSettingsModal.jsx";
+import Loader from "../components/Loader.jsx";
+import MemberCard from "../components/workspace/MemberCard.js";
+import { useAuth } from "../context/AuthContext.jsx";
+import AddTaskModal from "../components/workspace/AddTaskModal.jsx";
 
 const Workspace = () => {
-  const [workspace, setWorkspace] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [priority, setPriority] = useState('medium')
-  const [status, setStatus] = useState('todo')
-  const [dueDate, setdueDate] = useState('')
-  const [assignedToId, setAssignedToId] = useState('')
+  const [workspace, setWorkspace] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");;
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedMember, setSelectedMember] = useState(null);
   const [openAddTask, setOpenAddTask] = useState(false)
-  const [addingTask, setAddingTask] = useState(false)
-  const [selectedTask, setSelectedTask] = useState(null)
-  const [selectedMember, setSelectedMember] = useState(null)
-  const [isOpenWorkspaceSettings, setisOpenWorkspaceSettings] = useState(false)
+  const [isOpenWorkspaceSettings, setisOpenWorkspaceSettings] = useState(false);
 
-    const {user} = useAuth()
+  const { user } = useAuth();
 
-const currentMember = workspace?.members?.find(m => m.user.id === user?.id);
-const isAdmin = currentMember?.role === "admin";
+  const currentMember = workspace?.members?.find((m) => m.user.id === user?.id);
+  const isAdmin = currentMember?.role === "admin";
 
+  const fetchTasks = async () => {
+    const res = api.get();
+  };
 
-  const fetchTasks =async()=>{
-     const res = api.get()
-  }
+  const [openTaskMenuId, setopenTaskMenuId] = useState(null);
+  const [editMode, seteditMode] = useState(false);
 
+  const [openInviteModal, setopenInviteModal] = useState(false);
+  const [newStatus, setNewStatus] = useState("");
 
-  const [openTaskMenuId, setopenTaskMenuId] = useState(null)
-  const [editMode, seteditMode] = useState(false)
-
-  const [openInviteModal, setopenInviteModal] = useState(false)
-  const [newStatus, setNewStatus] = useState("")
-
-  const [showFilters, setShowFilters] = useState(false)
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     status: "",
-  priority: "",
-  assignedToId: "",
-  unassigned:false,
-  overdue:false,
-  })
+    priority: "",
+    assignedToId: "",
+    unassigned: false,
+    overdue: false,
+  });
 
-const filteredTasks = workspace?.tasks?.filter((task) => {
-  const statusMatch =
-    !filters.status ||
-    task.status === filters.status
+  const filteredTasks = workspace?.tasks?.filter((task) => {
+    const statusMatch = !filters.status || task.status === filters.status;
 
-  const priorityMatch =
-    !filters.priority ||
-    task.priority === filters.priority
+    const priorityMatch =
+      !filters.priority || task.priority === filters.priority;
 
-  const assigneeMatch =
-    !filters.assignedToId ||
-    task.assignedTo?.id === Number(filters.assignedToId)
+    const assigneeMatch =
+      !filters.assignedToId ||
+      task.assignedTo?.id === Number(filters.assignedToId);
 
-  const unassignedMatch =
-  !filters.unassigned ||
-  !task.assignedTo
+    const unassignedMatch = !filters.unassigned || !task.assignedTo;
 
-  const overdueMatch =
-  !filters.overdue ||
-  (
-    task.dueDate &&
-    new Date(task.dueDate) < new Date() &&
-    task.status !== "done"
-  )
+    const overdueMatch =
+      !filters.overdue ||
+      (task.dueDate &&
+        new Date(task.dueDate) < new Date() &&
+        task.status !== "done");
 
-  return (
-    statusMatch &&
-    priorityMatch &&
-    assigneeMatch &&
-    unassignedMatch &&
-    overdueMatch
-  )
-})
-  
-  const {workspaceId} = useParams()
-  const navigate = useNavigate()
+    return (
+      statusMatch &&
+      priorityMatch &&
+      assigneeMatch &&
+      unassignedMatch &&
+      overdueMatch
+    );
+  });
+
+  const { workspaceId } = useParams();
+  const navigate = useNavigate();
 
   const fetchWorkspace = async () => {
-  try {
-    const response = await api.get(`/workspace/${workspaceId}`)
-    setWorkspace(response.data.data)
-    setLoading(false)
-  } catch (e) {
-    console.log(e)
-    setLoading(false)
-  }
-}
-
-useEffect(() => {
-fetchWorkspace()
-}, [])
-
-const refreshWorkspace = async () => {
-  try {
-    const response = await api.get(`/workspace/${workspaceId}`)
-    const updatedWorkspace = response.data.data
-    setWorkspace(updatedWorkspace)
-
-    // selectedTask ko bhi fresh data se sync kiya isme
-    setSelectedTask(prev => {
-      if (!prev) return prev
-      const updatedTask = updatedWorkspace.tasks.find(t => t.id === prev.id)
-      return updatedTask || prev
-    })
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-const addTask = async(e)=>{
-  setAddingTask(true)
-  e.preventDefault()
-  setError('')
-  try {
-     await api.post(`/task/${workspaceId}`,{
-        title,
-        content,
-        priority,
-        status,
-        dueDate:dueDate ? new Date(dueDate).toISOString() : undefined,
-        assignedToId:assignedToId ? parseInt(assignedToId) : undefined,
-     })
-  await fetchWorkspace()
-       setOpenAddTask(false)
-  setTitle("")
-  setContent("")
-  setPriority("medium")
-  setStatus("todo")
-  setdueDate("")
-  setAssignedToId("")
-   setError("")
-
-  } catch (err) {
-     setError(err?.response?.data?.message || 'Task creation failed')
-  }finally{
-     setAddingTask(false)
-  }
-}
-
-const overdueCount = workspace?.tasks?.filter(task =>
-  task.dueDate &&
-  new Date(task.dueDate) < new Date() &&
-  task.status !== "done"
-).length || 0
-
-const unassignedCount = workspace?.tasks?.filter(task =>
-  !task.assignedTo
-).length || 0
-
-
-const totalTasks = workspace?.tasks?.length || 0
-
-const completedTasks = workspace?.tasks?.filter(task=>task.status==='done').length || 0
-
-const completedPercentage = totalTasks > 0 ? Math.round((completedTasks/totalTasks)*100):0
-
-
-const handleEdit =(task)=>{
-  seteditMode(true)
-  setSelectedTask(task)
-}
-
-const handleClose =()=>{
-  seteditMode(false)
-  setSelectedTask(null)
-}
-
-const handleDelete = async (task) => {
-  try {
-    await api.delete(`/task/${workspaceId}/${task.id}`)
-
-    await fetchWorkspace()
-
-    setopenTaskMenuId(null)
-
-    if (selectedTask?.id === task.id) {
-      setSelectedTask(null)
+    try {
+      const response = await api.get(`/workspace/${workspaceId}`);
+      setWorkspace(response.data.data);
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+      setLoading(false);
     }
+  };
 
-  } catch (err) {
-    console.log(err)
-  }
-}
+  useEffect(() => {
+    fetchWorkspace();
+  }, []);
 
-const handleStatus = async (taskId,status) => {
-  try {
-    await api.put(`/task/${workspaceId}/${taskId}`, {
-      status
-    })
+  const refreshWorkspace = async () => {
+    try {
+      const response = await api.get(`/workspace/${workspaceId}`);
+      const updatedWorkspace = response.data.data;
+      setWorkspace(updatedWorkspace);
 
-    await refreshWorkspace()
+      // selectedTask ko bhi fresh data se sync kiya isme
+      setSelectedTask((prev) => {
+        if (!prev) return prev;
+        const updatedTask = updatedWorkspace.tasks.find(
+          (t) => t.id === prev.id,
+        );
+        return updatedTask || prev;
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  } catch (err) {
-    console.log(err)
-  }
-}
+  const overdueCount =
+    workspace?.tasks?.filter(
+      (task) =>
+        task.dueDate &&
+        new Date(task.dueDate) < new Date() &&
+        task.status !== "done",
+    ).length || 0;
 
-const myAssignedTasks =
-  workspace?.tasks?.filter(
-    task => task.assignedToId === user?.id
-  ) || [];
+  const unassignedCount =
+    workspace?.tasks?.filter((task) => !task.assignedTo).length || 0;
 
-const myCompletedTasks =
-  myAssignedTasks.filter(
-    task => task.status === "done"
+  const totalTasks = workspace?.tasks?.length || 0;
+
+  const completedTasks =
+    workspace?.tasks?.filter((task) => task.status === "done").length || 0;
+
+  const completedPercentage =
+    totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+  const handleEdit = (task) => {
+    seteditMode(true);
+    setSelectedTask(task);
+  };
+
+  const handleClose = () => {
+    seteditMode(false);
+    setSelectedTask(null);
+  };
+
+  const handleDelete = async (task) => {
+    try {
+      await api.delete(`/task/${workspaceId}/${task.id}`);
+
+      await fetchWorkspace();
+
+      setopenTaskMenuId(null);
+
+      if (selectedTask?.id === task.id) {
+        setSelectedTask(null);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleStatus = async (taskId, status) => {
+    try {
+      await api.put(`/task/${workspaceId}/${taskId}`, {
+        status,
+      });
+
+      await refreshWorkspace();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const myAssignedTasks =
+    workspace?.tasks?.filter((task) => task.assignedToId === user?.id) || [];
+
+  const myCompletedTasks = myAssignedTasks.filter(
+    (task) => task.status === "done",
   ).length;
 
   // searchdata-----------
 
- const searchData = [
-  ...(workspace?.tasks?.map(task => ({
-    id: task.id,
-    type: "task",
-    name: task.title
-  })) || []),
+  const searchData = [
+    ...(workspace?.tasks?.map((task) => ({
+      id: task.id,
+      type: "task",
+      name: task.title,
+    })) || []),
 
-  ...(workspace?.members?.map(member => ({
-    id: member.user.id,
-    type: "member",
-    name: member.user.name
-  })) || [])
-]
+    ...(workspace?.members?.map((member) => ({
+      id: member.user.id,
+      type: "member",
+      name: member.user.name,
+    })) || []),
+  ];
 
-const taskSelect = (taskId)=>{
-   const task = workspace.tasks.find(
-      t => t.id === taskId
-    )
+  const taskSelect = (taskId) => {
+    const task = workspace.tasks.find((t) => t.id === taskId);
 
     if (task) {
-      setSelectedTask(task)
-      setSelectedMember(null)
+      setSelectedTask(task);
+      setSelectedMember(null);
     }
-}
-const memberSelect=(memberId)=>{
-  const member = workspace.members.find(
-    m => m.user.id ===memberId
-  )
-  if(member){
-    setSelectedMember(member)
-    setSelectedTask(null)
-  }
-}
+  };
+  const memberSelect = (memberId) => {
+    const member = workspace.members.find((m) => m.user.id === memberId);
+    if (member) {
+      setSelectedMember(member);
+      setSelectedTask(null);
+    }
+  };
 
-const priorityStyles = {
-  low: "border-emerald-500/20 bg-emerald-500/10 text-emerald-400",
-  medium: "border-amber-500/20 bg-amber-500/10 text-amber-400",
-  high: "border-red-500/20 bg-red-500/10 text-red-400",
-};
+  const priorityStyles = {
+    low: "border-emerald-500/20 bg-emerald-500/10 text-emerald-400",
+    medium: "border-amber-500/20 bg-amber-500/10 text-amber-400",
+    high: "border-red-500/20 bg-red-500/10 text-red-400",
+  };
 
-const statusStyles = {
-  todo: "border-zinc-600/30 bg-zinc-600/10 text-zinc-400",
-  inprogress: "border-blue-500/20 bg-blue-500/10 text-blue-400",
-  done: "border-emerald-500/20 bg-emerald-500/10 text-emerald-400",
-};
+  const statusStyles = {
+    todo: "border-zinc-600/30 bg-zinc-600/10 text-zinc-400",
+    inprogress: "border-blue-500/20 bg-blue-500/10 text-blue-400",
+    done: "border-emerald-500/20 bg-emerald-500/10 text-emerald-400",
+  };
 
-  if(loading) return <Loader text = "Loading your workspace"/>
+  if (loading) return <Loader text="Loading your workspace" />;
 
   return (
     <>
-    <div className='h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col'>
-    <Navbar searchData ={searchData} searchType="workspace-page" onTaskSelect={taskSelect} onMemberSelect={memberSelect}/>
-      {/* header section */}
+      <div className="h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col">
+        <Navbar
+          searchData={searchData}
+          searchType="workspace-page"
+          onTaskSelect={taskSelect}
+          onMemberSelect={memberSelect}
+        />
+        {/* header section */}
 
-    <div className="mb-5 flex items-center justify-between border-b border-zinc-800 bg-zinc-950/40 px-5 py-4">
+        <div className="mb-5 flex items-center justify-between border-b border-zinc-800 bg-zinc-950/40 px-5 py-4">
+          {/* Left Side */}
+          <div className="flex flex-col gap-2">
+            {/* Workspace Info */}
+            <div className="flex gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-orange-400 to-cyan-500 text-xl font-medium text-zinc-950">
+                {workspace.name?.charAt(0).toUpperCase()}
+              </div>
 
-  {/* Left Side */}
-  <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
+                <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">
+                  {workspace?.name}
+                </h1>
 
-    {/* Workspace Info */}
-    <div className="flex gap-4">
+                {/* <div className="h-5 w-px bg-zinc-800" /> */}
 
+                <div className="flex gap-2">
+                  <span className="flex items-center justify-center py-1 gap-1.5 rounded-full border border-zinc-800 px-3 bg-[#1b1b1b]  text-zinc-400 text-xs">
+                    <Users size={12} /> {workspace?.members?.length || 0}{" "}
+                    Members
+                  </span>
 
-       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-orange-400 to-cyan-500 text-xl font-medium text-zinc-950">
-                    {workspace.name?.charAt(0).toUpperCase()}
+                  <span className="flex items-center justify-center py-1 gap-1.5 rounded-full border border-zinc-800 px-3 bg-[#1b1b1b] text-zinc-400 text-xs">
+                    <SquareCheckBig size={12} /> {workspace?.tasks?.length || 0}{" "}
+                    Tasks
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setopenInviteModal(true)}
+              className="flex items-center gap-1.5 rounded-lg border border-zinc-800 px-4 py-2 text-sm font-medium text-zinc-300 transition-all hover:bg-zinc-800 hover:text-zinc-100 cursor-pointer"
+            >
+              <UserPlus size={14} />
+              Invite Member
+            </button>
+
+            <button
+              onClick={() => {
+                setOpenAddTask(true);
+                setError("");
+              }}
+              className="flex items-center gap-1.5 rounded-lg bg-orange-400 px-4 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-orange-500 cursor-pointer"
+            >
+              <Plus size={14} />
+              Add Task
+            </button>
+
+            {isAdmin && (
+              <div className="relative">
+                <button
+                  onClick={() => setisOpenWorkspaceSettings((prev) => !prev)}
+                  className="text-zinc-400 hover:text-zinc-100 transition-colors p-2 hover:bg-zinc-400/30 rounded-lg border border-zinc-500"
+                >
+                  <Settings size={17} />
+                </button>
+                {isOpenWorkspaceSettings && (
+                  <>
+                    <WorkspaceSettingsModal
+                      isOpen={isOpenWorkspaceSettings}
+                      onClose={() => setisOpenWorkspaceSettings(false)}
+                      workspace={workspace}
+                      onDone={fetchWorkspace}
+                    />
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+     
+        {openInviteModal && (
+          <InviteModal
+            workspaceId={workspaceId}
+            onClose={() => setopenInviteModal(false)}
+            onInviteSuccess={fetchWorkspace}
+          />
+        )}
+
+        {/* ------------------------------ */}
+        {/* Main Content  */}
+        {/* ------------------------------ */}
+
+        <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-y-auto px-4 pb-4 custom-scrollbar lg:grid-cols-12 lg:overflow-hidden lg:px-5">
+          {/* LEFT SIDE — TASKS */}
+          <section className="flex min-h-[420px] min-w-0 flex-col lg:col-span-8 lg:min-h-0">
+            <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/60">
+              {/* Tasks Header */}
+              <div className="flex items-center justify-between gap-3 border-b border-zinc-800 px-4 py-4 sm:px-5">
+                <div className="min-w-0">
+                  <h2 className="text-base font-semibold text-zinc-100">
+                    Tasks
+                  </h2>
+                  <p className="mt-0.5 text-xs text-zinc-500 sm:text-sm">
+                    Manage all workspace tasks
+                  </p>
+                </div>
+
+                {workspace.tasks.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setShowFilters(!showFilters)}
+                    aria-expanded={showFilters}
+                    className={`flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-colors sm:text-sm ${
+                      showFilters
+                        ? "border-orange-500/30 bg-orange-500/10 text-orange-400"
+                        : "border-zinc-800 bg-zinc-950/40 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800/70"
+                    }`}
+                  >
+                    <SlidersHorizontal size={14} />
+                    Filters
+                  </button>
+                )}
+
+                {/* Filters Dropdown */}
+                {showFilters && (
+                  <div className="absolute right-4 top-[4.25rem] z-40 w-56 space-y-3 rounded-xl border border-zinc-800 bg-zinc-950 p-4 shadow-2xl shadow-black/30">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-semibold text-zinc-100">
+                        Filter tasks
+                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => setShowFilters(false)}
+                        className="rounded-md p-1 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200"
+                        aria-label="Close filters"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+
+                    {/* Status */}
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-zinc-400">
+                        Status
+                      </label>
+                      <select
+                        value={filters.status}
+                        onChange={(e) =>
+                          setFilters((prev) => ({
+                            ...prev,
+                            status: e.target.value,
+                          }))
+                        }
+                        className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-orange-500/50"
+                      >
+                        <option value="">All statuses</option>
+                        <option value="todo">Todo</option>
+                        <option value="inprogress">In Progress</option>
+                        <option value="done">Done</option>
+                      </select>
+                    </div>
+
+                    {/* Priority */}
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-zinc-400">
+                        Priority
+                      </label>
+                      <select
+                        value={filters.priority}
+                        onChange={(e) =>
+                          setFilters((prev) => ({
+                            ...prev,
+                            priority: e.target.value,
+                          }))
+                        }
+                        className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-orange-500/50"
+                      >
+                        <option value="">All priorities</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                      </select>
+                    </div>
+
+                    {/* Assignee */}
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-zinc-400">
+                        Assignee
+                      </label>
+                      <select
+                        value={filters.assignedToId}
+                        onChange={(e) =>
+                          setFilters((prev) => ({
+                            ...prev,
+                            assignedToId: e.target.value,
+                          }))
+                        }
+                        className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-200 outline-none focus:border-orange-500/50"
+                      >
+                        <option value="">All members</option>
+                        {workspace?.members?.map((member) => (
+                          <option key={member.user.id} value={member.user.id}>
+                            {member.user.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          status: "",
+                          priority: "",
+                          assignedToId: "",
+                          overdue: false,
+                          unassigned: false,
+                        }))
+                      }
+                      className="w-full rounded-lg border border-zinc-800 py-2 text-xs font-medium text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-zinc-100"
+                    >
+                      Clear all filters
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Tasks List */}
+              <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3 custom-scrollbar sm:p-4">
+                {workspace.tasks.length === 0 ? (
+                  <div className="flex min-h-[260px] flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 px-4 py-10 text-center">
+                    <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl border border-orange-500/15 bg-orange-500/10 text-orange-400">
+                      <CheckSquare size={21} />
+                    </div>
+
+                    <p className="text-sm font-medium text-zinc-200">
+                      No tasks yet
+                    </p>
+                    <p className="mt-1 max-w-xs text-xs leading-5 text-zinc-500 sm:text-sm">
+                      Create your first task to get this workspace moving.
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpenAddTask(true);
+                        setError("");
+                      }}
+                      className="mt-4 inline-flex items-center gap-2 rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-zinc-950 transition-colors hover:bg-orange-400"
+                    >
+                      <Plus size={15} />
+                      Add Task
+                    </button>
+                  </div>
+                ) : filteredTasks.length === 0 ? (
+                  <div className="flex min-h-[220px] flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800 px-4 py-10 text-center">
+                    <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-800/80 text-zinc-400">
+                      <Search size={18} />
+                    </div>
+                    <p className="text-sm font-medium text-zinc-200">
+                      No tasks match your filters
+                    </p>
+                    <p className="mt-1 text-xs text-zinc-500">
+                      Try adjusting or clearing your filters.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          status: "",
+                          priority: "",
+                          assignedToId: "",
+                          overdue: false,
+                          unassigned: false,
+                        }))
+                      }
+                      className="mt-3 text-xs font-medium text-orange-400 hover:text-orange-300"
+                    >
+                      Clear filters
+                    </button>
+                  </div>
+                ) : (
+                  filteredTasks.map((t, index) => {
+                    const isNearBottom =
+                      filteredTasks.length > 3 &&
+                      index >= filteredTasks.length - 2;
+
+                    const isCreator = t.user?.id === user?.id;
+                    const canEditTask = isAdmin || isCreator;
+
+                    const priorityAccent = {
+                      low: "border-l-emerald-500",
+                      medium: "border-l-orange-500",
+                      high: "border-l-rose-500",
+                    };
+
+                    const statusDot = {
+                      todo: "bg-zinc-400",
+                      inprogress: "bg-blue-400",
+                      done: "bg-emerald-400",
+                    };
+
+                    const priorityLabel = {
+                      low: "Low",
+                      medium: "Medium",
+                      high: "High",
+                    };
+
+                    const statusLabel = {
+                      todo: "Todo",
+                      inprogress: "In Progress",
+                      done: "Completed",
+                    };
+
+                    return (
+                      <div
+                        key={t.id}
+                        onClick={() => setSelectedTask(t)}
+                        className={`group cursor-pointer rounded-lg border border-zinc-800/90 border-l-2 ${
+                          priorityAccent[t.priority] || "border-l-zinc-600"
+                        } bg-zinc-950/40 px-3 py-3 transition-colors hover:border-zinc-700 hover:bg-zinc-950/80 sm:px-4`}
+                      >
+                        {/* Task title and actions */}
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0 flex-1">
+                            <h3 className="truncate text-sm font-medium text-zinc-100">
+                              {t.title}
+                            </h3>
+                            <p className="mt-1 line-clamp-1 text-xs text-zinc-500 sm:text-sm">
+                              {t.content || "No description"}
+                            </p>
+                          </div>
+
+                          {canEditTask && (
+                            <div className="relative shrink-0">
+                              <button
+                                type="button"
+                                aria-label={`Actions for ${t.title}`}
+                                aria-expanded={openTaskMenuId === t.id}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setopenTaskMenuId(
+                                    openTaskMenuId === t.id ? null : t.id,
+                                  );
+                                }}
+                                className={`rounded-lg p-1.5 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-200 ${
+                                  openTaskMenuId === t.id
+                                    ? "bg-zinc-800 text-zinc-200"
+                                    : "opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:focus-visible:opacity-100"
+                                }`}
+                              >
+                                <MoreVertical size={17} />
+                              </button>
+
+                              {openTaskMenuId === t.id && (
+                                <div
+                                  onClick={(e) => e.stopPropagation()}
+                                  className={`absolute right-0 z-50 w-40 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950 py-1 shadow-xl ${
+                                    isNearBottom
+                                      ? "bottom-full mb-1"
+                                      : "top-full mt-1"
+                                  }`}
+                                >
+                                  <button
+                                    type="button"
+                                    onClick={() => handleEdit(t)}
+                                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-zinc-100"
+                                  >
+                                    <Pencil size={14} />
+                                    Edit task
+                                  </button>
+
+                                  <div className="border-y border-zinc-800/80 px-3 py-2">
+                                    <label className="mb-1 block text-[10px] font-medium uppercase tracking-wider text-zinc-500">
+                                      Change status
+                                    </label>
+                                    <select
+                                      value={newStatus}
+                                      onChange={(e) =>
+                                        handleStatus(t.id, e.target.value)
+                                      }
+                                      className="w-full rounded-md border border-zinc-800 bg-zinc-900 px-2 py-1.5 text-xs text-zinc-200 outline-none focus:border-orange-500/50"
+                                    >
+                                      <option value="todo">Todo</option>
+                                      <option value="inprogress">
+                                        In Progress
+                                      </option>
+                                      <option value="done">Completed</option>
+                                    </select>
+                                  </div>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      handleDelete(t);
+                                      setopenTaskMenuId(null);
+                                    }}
+                                    className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-rose-400 transition-colors hover:bg-rose-500/10"
+                                  >
+                                    <Trash2 size={14} />
+                                    Delete task
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Priority, status, assignee and due date */}
+                        <div className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span
+                              className={`rounded-md border px-2 py-1 text-[10px] font-medium sm:text-xs ${
+                                priorityStyles[t.priority]
+                              }`}
+                            >
+                              {priorityLabel[t.priority] || t.priority}
+                            </span>
+
+                            <span className="inline-flex items-center gap-1.5 rounded-md border border-zinc-800 bg-zinc-900 px-2 py-1 text-[10px] text-zinc-400 sm:text-xs">
+                              <span
+                                className={`h-1.5 w-1.5 rounded-full ${
+                                  statusDot[t.status] || "bg-zinc-500"
+                                }`}
+                              />
+                              {statusLabel[t.status] || t.status}
+                            </span>
+                          </div>
+
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-zinc-500 sm:text-xs">
+                            <span className="inline-flex items-center gap-1.5">
+                              <Users size={12} />
+                              {t.assignedTo?.name || "Unassigned"}
+                            </span>
+                            <span className="inline-flex items-center gap-1.5">
+                              <Clock3 size={12} />
+                              {t.dueDate
+                                ? new Date(t.dueDate).toLocaleDateString(
+                                    "en-IN",
+                                    {
+                                      day: "numeric",
+                                      month: "short",
+                                      year: "numeric",
+                                    },
+                                  )
+                                : "No Due Date"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          </section>
+
+          {/* TASK DETAILS MODAL — existing functionality preserved */}
+          {selectedTask && (
+            <TaskCard
+              task={selectedTask}
+              workspace={workspace}
+              onClose={handleClose}
+              onTaskUpdate={refreshWorkspace}
+              startInEditMode={editMode}
+            />
+          )}
+
+          {/* RIGHT SIDE — STATS + MEMBERS */}
+          <section className="flex min-w-0 flex-col gap-4 lg:col-span-4 lg:min-h-0">
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              {/* Overdue */}
+              <button
+                type="button"
+                onClick={() =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    overdue: !prev.overdue,
+                    unassigned: false,
+                  }))
+                }
+                aria-pressed={filters.overdue}
+                className={`min-w-0 rounded-xl border p-3 text-left transition-colors ${
+                  filters.overdue
+                    ? "border-rose-500/40 bg-rose-500/10"
+                    : "border-zinc-800 bg-zinc-900/60 hover:border-rose-500/30"
+                }`}
+              >
+                <div className="flex items-center justify-between gap-1">
+                  <p className="truncate text-[10px] text-zinc-500 sm:text-xs">
+                    Overdue
+                  </p>
+                  <Clock3 size={15} className="shrink-0 text-rose-400" />
+                </div>
+                <h3 className="mt-2 text-xl font-bold tabular-nums text-rose-400 sm:text-2xl">
+                  {overdueCount}
+                </h3>
+              </button>
+
+              {/* Unassigned */}
+              <button
+                type="button"
+                onClick={() =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    unassigned: !prev.unassigned,
+                    overdue: false,
+                  }))
+                }
+                aria-pressed={filters.unassigned}
+                className={`min-w-0 rounded-xl border p-3 text-left transition-colors ${
+                  filters.unassigned
+                    ? "border-orange-500/40 bg-orange-500/10"
+                    : "border-zinc-800 bg-zinc-900/60 hover:border-orange-500/30"
+                }`}
+              >
+                <div className="flex items-center justify-between gap-1">
+                  <p className="truncate text-[10px] text-zinc-500 sm:text-xs">
+                    Unassigned
+                  </p>
+                  <UserX size={15} className="shrink-0 text-orange-400" />
+                </div>
+                <h3 className="mt-2 text-xl font-bold tabular-nums text-orange-400 sm:text-2xl">
+                  {unassignedCount}
+                </h3>
+              </button>
+
+              {/* Completed */}
+              <div className="min-w-0 rounded-xl border border-zinc-800 bg-zinc-900/60 p-3">
+                <div className="flex items-center justify-between gap-1">
+                  <p className="truncate text-[10px] text-zinc-500 sm:text-xs">
+                    Completed
+                  </p>
+                  <CheckCircle2
+                    size={15}
+                    className="shrink-0 text-emerald-400"
+                  />
+                </div>
+                <h3 className="mt-2 text-xl font-bold tabular-nums text-emerald-400 sm:text-2xl">
+                  {completedPercentage}%
+                </h3>
+              </div>
+            </div>
+
+            {/* Members */}
+            <div className="flex min-h-[220px] flex-col overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/60 lg:min-h-0 lg:flex-1">
+              <div className="border-b border-zinc-800 px-4 py-4 sm:px-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-base font-semibold text-zinc-100">
+                      Members
+                    </h2>
+                    <p className="mt-0.5 text-xs text-zinc-500 sm:text-sm">
+                      Workspace collaborators
+                    </p>
                   </div>
 
-    <div className='flex flex-col gap-1'>
-      <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">
-        {workspace?.name}
-      </h1>
-
-      {/* <div className="h-5 w-px bg-zinc-800" /> */}
-
-      <div className="flex gap-2">
-
-        <span className="flex items-center justify-center py-1 gap-1.5 rounded-full border border-zinc-800 px-3 bg-[#1b1b1b]  text-zinc-400 text-xs">
-         <Users size={12}/> {workspace?.members?.length || 0} Members
-        </span>
-
-        <span className="flex items-center justify-center py-1 gap-1.5 rounded-full border border-zinc-800 px-3 bg-[#1b1b1b] text-zinc-400 text-xs">
-          <SquareCheckBig size={12}/> {workspace?.tasks?.length || 0} Tasks
-        </span>
-
-      </div>
-
-          </div>
-
-
-    </div>
-
-  </div>
-
-  {/* Right Side */}
-  <div className="flex items-center gap-3">
-
-    <button
-    onClick={()=>setopenInviteModal(true)}
-      className="rounded-xl border border-zinc-800 px-4 py-2 text-sm font-medium text-zinc-300 transition-all hover:bg-zinc-800 hover:text-zinc-100 cursor-pointer"
-    >
-      Invite Member
-    </button>
-
-    <button onClick={()=>{
-      setOpenAddTask(true)
-      setError("")
-    } }
-      className="rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-white cursor-pointer"
-    >
-      Add Task
-    </button>
-
-{isAdmin&&(
-<div className='relative'>
-  <button onClick={()=>setisOpenWorkspaceSettings(prev=>!prev)}
-  className='text-zinc-400 hover:text-zinc-100 transition-colors p-2 hover:bg-zinc-400/30 rounded-xl'>
-  <Bolt size={18}/>
-</button>
-{isOpenWorkspaceSettings&&(
-  <>
-     <WorkspaceSettingsModal 
-     isOpen={isOpenWorkspaceSettings}
-     onClose={()=>setisOpenWorkspaceSettings(false)}
-     workspace={workspace}
-     onDone={fetchWorkspace}
-     />
-  </>
-)}
-</div>
-)}
-
-  </div>
-
-</div>
-
-
-{/* <div className="mb-2 h-px bg-gradient-to-r from-orange-500/20 via-zinc-800 to-transparent" />divider */}
-{openInviteModal&&(
-  <InviteModal
-  workspaceId={workspaceId}
-  onClose={()=>setopenInviteModal(false)}
-  onInviteSuccess={fetchWorkspace}
-  />
-)}
-
-
-{/* stats section  */}
-<div className="grid grid-cols-12 gap-5 px-5 pb-5 flex-1 min-h-0">
-
-  {/* LEFT SIDE - TASKS */}
-  <section className="col-span-8 h-full min-h-0">
-    <div className="rounded-3xl border border-zinc-800 bg-zinc-950/40 h-full overflow-hidden flex flex-col relative">
-
-      {/* Section Header */}
-      <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-4">
-        <div>
-          <h2 className="text-lg font-semibold text-zinc-100">
-            Tasks
-          </h2>
-          <p className="text-sm text-zinc-500">
-            Manage all workspace tasks
-          </p>
-        </div>
-{workspace.tasks.length ===0?null:(
-        <button onClick={()=> setShowFilters(!showFilters)}
-        className="rounded-xl border border-zinc-800 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-800 cursor-pointer">
-          Filters
-        </button>
-
-)}
-
-        {showFilters && (
-  <div className="absolute right-5 top-20 w-40 rounded-2xl border border-zinc-800 bg-zinc-950 p-4 shadow-xl space-y-2">
-
-  {/* Status */}
-  <div>
-    <label className="mb-1 block text-xs text-zinc-500">
-      Status
-    </label>
-
-    <select
-      value={filters.status}
-      onChange={(e) =>
-        setFilters((prev) => ({
-          ...prev,
-          status: e.target.value,
-        }))
-      }
-      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-2 py-1 text-sm"
-    >
-      <option value="">All</option>
-      <option value="todo">Todo</option>
-      <option value="inprogress">In Progress</option>
-      <option value="done">Done</option>
-    </select>
-  </div>
-
-  {/* Priority */}
-  <div>
-    <label className="mb-1 block text-xs text-zinc-500">
-      Priority
-    </label>
-
-    <select
-      value={filters.priority}
-      onChange={(e) =>
-        setFilters((prev) => ({
-          ...prev,
-          priority: e.target.value,
-        }))
-      }
-      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-2 py-1 text-sm"
-    >
-      <option value="">All</option>
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
-  </div>
-
-  {/* Assignee */}
-  <div>
-    <label className="mb-1 block text-xs text-zinc-500">
-      Assignee
-    </label>
-
-    <select
-      value={filters.assignedToId}
-      onChange={(e) =>
-        setFilters((prev) => ({
-          ...prev,
-          assignedToId: e.target.value,
-        }))
-      }
-      className="w-full rounded-xl border border-zinc-800 bg-zinc-900 px-2 py-1 text-sm"
-    >
-      <option value="">All</option>
-
-      {workspace?.members?.map((member) => (
-        <option
-          key={member.user.id}
-          value={member.user.id}
-        >
-          {member.user.name}
-        </option>
-      ))}
-    </select>
-  </div>
-
-</div>
-)}
-      </div>
-
-      {console.log(
-  workspace.tasks.map(t => ({
-    title: t.title,
-    updatedAt: t.updatedAt
-  }))
-)}
-      {/* Tasks Area */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-5 space-y-2 custom-scrollbar">
-        {workspace.tasks.length===0?(
-           <div className="flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-zinc-800 text-center py-12">
-      <div className="rounded-full bg-orange-500/10 p-3 text-orange-400">
-        <CheckSquare size={22} />
-      </div>
-      <div>
-        <p className="font-medium text-zinc-200">
-          {workspace?.tasks?.length === 0 ? "No tasks yet" : "No tasks match your filters"}
-        </p>
-        <p className="mt-1 text-sm text-zinc-500">
-          {workspace?.tasks?.length === 0
-            ? "Create your first task to get this workspace moving."
-            : "Try adjusting or clearing your filters."}
-        </p>
-      </div>
-      {workspace?.tasks?.length === 0 && (
-        <button
-          onClick={() => {
-            setOpenAddTask(true)
-            setError("")
-          }}
-          className="mt-1 rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-white cursor-pointer"
-        >
-          Add Task
-        </button>
-      )}
-    </div>
-        ):(
-          <>
- {filteredTasks.map((t, index) => {
-    const isNearBottom =
-      filteredTasks.length > 3 && index >= filteredTasks.length - 2
-
-    const isCreator = t.user?.id === user?.id;
-    const canEditTask = isAdmin || isCreator;
-
-    const priorityAccent = {
-      low: "border-l-emerald-500",
-      medium: "border-l-amber-500",
-      high: "border-l-red-500",
-    };
-
-    const statusDot = {
-      todo: "bg-zinc-500",
-      inprogress: "bg-blue-500",
-      done: "bg-emerald-500",
-    };
-
-    return (
-      <div
-        key={t.id}
-        onClick={() => setSelectedTask(t)}
-        className={`rounded-2xl border border-zinc-800 border-l-[3px] ${priorityAccent[t.priority]} bg-zinc-900/30 p-4 transition-all hover:border-zinc-700 hover:bg-zinc-900/50 hover:scale-[1.01] cursor-pointer`}
-      >
-        {/* Top Row */}
-        <div className="flex items-start justify-between">
-          <div>
-            <h3 className="font-medium text-zinc-100">
-              {t.title}
-            </h3>
-            <p className="mt-1 text-sm text-zinc-500 line-clamp-1">
-              {t.content || "No description"}
-            </p>
-          </div>
-
-          {canEditTask && (
-            <div className='relative'>
-              <button onClick={(e) => {
-                e.stopPropagation()
-                setopenTaskMenuId(openTaskMenuId === t.id ? null : t.id)
-              }}
-                className="text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/60 p-2 rounded-2xl cursor-pointer">
-                ⋮
-              </button>
-              {openTaskMenuId === t.id && (
-                <div className={`absolute right-0 z-50 w-40 overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl ${isNearBottom ? "bottom-8" : "top-8"}`}>
-                  <button onClick={() => handleEdit(t)}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800">
-                    <Pencil size={14} />
-                    Edit
-                  </button>
-                  <select onClick={(e) => e.stopPropagation()} value={newStatus}
-                    onChange={(e) => handleStatus(t.id, e.target.value)}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800">
-                    <option value="todo">Todo</option>
-                    <option value="inprogress">Inprogress</option>
-                    <option value="done">Done</option>
-                  </select>
-                  <button onClick={(e) => { e.stopPropagation(); handleDelete(t) }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-zinc-800">
-                    <Trash2 size={14} />
-                    Delete
-                  </button>
+                  <span className="rounded-md border border-zinc-800 bg-zinc-950/60 px-2 py-1 text-xs tabular-nums text-zinc-400">
+                    {workspace?.members?.length || 0}
+                  </span>
                 </div>
-              )}
+              </div>
+
+              <div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-3 custom-scrollbar sm:p-4">
+                {workspace?.members?.length > 0 ? (
+                  workspace.members.map((member) => (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedMember(member)}
+                      key={member.id}
+                      className="flex w-full items-center justify-between gap-3 rounded-lg border border-zinc-800/80 bg-zinc-950/40 px-3 py-3 text-left transition-colors hover:border-zinc-700 hover:bg-zinc-950/80"
+                    >
+                      <div className="flex min-w-0 items-center gap-3">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-orange-500/15 bg-orange-500/10 text-sm font-semibold text-orange-400">
+                          {member?.user?.name?.charAt(0)?.toUpperCase() || "U"}
+                        </div>
+
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium text-zinc-200">
+                            {member?.user?.name || "Unknown user"}
+                          </p>
+                          <p className="mt-0.5 text-xs capitalize text-zinc-500">
+                            {member?.role || "Member"}
+                          </p>
+                        </div>
+                      </div>
+
+                      <span
+                        className={`shrink-0 rounded-md px-2 py-1 text-[10px] font-medium sm:text-xs ${
+                          member?.role === "admin"
+                            ? "bg-orange-500/10 text-orange-400"
+                            : "bg-zinc-800 text-zinc-400"
+                        }`}
+                      >
+                        {member?.role === "admin" ? "Owner" : "Member"}
+                      </span>
+                    </button>
+                  ))
+                ) : (
+                  <div className="flex min-h-[150px] flex-col items-center justify-center text-center">
+                    <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-800/70 text-zinc-500">
+                      <Users size={18} />
+                    </div>
+                    <p className="text-sm text-zinc-300">No members found</p>
+                    <p className="mt-1 text-xs text-zinc-500">
+                      Workspace members will appear here.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-          )}
+          </section>
         </div>
 
-        {/* Bottom Row */}
-        <div className="mt-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className={`rounded-full border px-2 py-1 text-xs ${priorityStyles[t.priority]}`}>
-              {t.priority.charAt(0).toUpperCase() + t.priority.slice(1)}
-            </span>
-
-            <span className="flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-800/50 px-2 py-1 text-xs text-zinc-300">
-              <span className={`h-1.5 w-1.5 rounded-full ${statusDot[t.status]}`} />
-              {t.status.charAt(0).toUpperCase() + t.status.slice(1)}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-4 text-xs text-zinc-500">
-            <span>{t.assignedTo?.name || "Unassigned"}</span>
-            <span>
-              {t.dueDate
-                ? new Date(t.dueDate).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })
-                : "No Due Date"}
-            </span>
-          </div>
-        </div>
-      </div>
-    )
-  })}
-          </>
+        {/* member card  */}
+        {selectedMember && (
+          <MemberCard
+            member={selectedMember}
+            workspace={workspace}
+            onClose={() => setSelectedMember(null)}
+            onMemberUpdate={fetchWorkspace}
+          />
         )}
- 
-</div>
-    </div>
-  </section>
 
-  {/* taskcard modal  */}
-  {selectedTask && (
-  <TaskCard
-    task={selectedTask}
-    workspace={workspace}
-    onClose={handleClose}
-    onTaskUpdate={refreshWorkspace}
-    startInEditMode={editMode}
-  />
-)}
-{/* ----------- */}
+        {/*  */}
+        {openAddTask && (
+        <AddTaskModal 
+        isOpen={openAddTask} 
+        workspace={workspace} 
+        onDone={fetchWorkspace}
+        onClose={()=>setOpenAddTask(false)}
+        />
 
-
-
-
-
-  {/* RIGHT SIDE */}
-  <section className="col-span-4 flex flex-col gap-5 min-h-0">
-
-    {/* Stats */}
-    <div className="rounded-3xl border border-zinc-800 bg-zinc-950/40 p-4">
-
-  <div className="grid grid-cols-3 gap-3">
-     {/* Overdue */}
-    <div onClick={()=>setFilters(prev=>({...prev,overdue:!prev.overdue}))}
-    className="rounded-2xl border border-red-500/10 bg-zinc-900/30 p-3 hover:border-red-500/20 transition-all cursor-pointer">
-      <div className="flex items-center justify-between">
-        <p className="text-[11px] text-zinc-500">Overdue</p>
-        <div className="rounded-lg p-2"><Clock3 size={18} className='text-red-500'/></div>
+        )}
       </div>
+    </>
+  );
+};
 
-      <h2 className="mt-2 text-2xl font-bold text-red-400">{overdueCount}</h2>
-    </div>
-
-    {/* UnAssigned */}
-    <div onClick={()=>setFilters(prev=>({...prev,unassigned: !prev.unassigned}))}
-    className="rounded-2xl border border-orange-500/10 bg-zinc-900/30 p-3 hover:border-orange-500/20 transition-all cursor-pointer">
-      <div className="flex items-center justify-between">
-        <p className="text-[11px] text-zinc-500">Unassigned</p>
-        <div className="rounded-lg  p-2"><UserX size={18} className='text-orange-500'/></div>
-      </div>
-
-      <h2 className="mt-2 text-2xl font-bold text-orange-400">{unassignedCount}</h2>
-    </div>
-
-    {/* Completed */}
-    <div 
-    className="rounded-2xl border border-emerald-500/10 bg-zinc-900/30 p-3 hover:border-emerald-500/20 transition-all cursor-pointer">
-      <div className="flex items-center justify-between">
-        <p className="text-[11px] text-zinc-500">Completed</p>
-        <div className="rounded-lg  p-2"><CheckCircle2 size={18} className='text-emerald-500'/></div>
-      </div>
-
-      <h2 className="mt-2 text-2xl font-bold text-emerald-400">{completedPercentage}%</h2>
-    </div>
-
-  </div>
-
-</div>
-
-    {/* Members */}
-    <div className="rounded-3xl border border-zinc-800 bg-zinc-950/40 flex flex-col flex-1 min-h-0 overflow-hidden">
-
-      <div className="border-b border-zinc-800 px-5 py-4">
-        <h2 className="text-lg font-semibold text-zinc-100">
-          Members
-        </h2>
-
-        <p className="text-sm text-zinc-500">
-          Workspace collaborators
-        </p>
-      </div>
-
-      <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-            
-            {/* member card  */}
-            {workspace?.members?.map(member=>(
-        <div onClick={()=>setSelectedMember(member)} key={member.id} className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900/30 p-3 cursor-pointer hover:border-zinc-600/60">
-          <div className="flex items-center gap-3">
-            {/* <div className="h-10 w-10 rounded-full bg-orange-500/20" /> */}
-            <div className="h-10 w-10 rounded-full bg-green-800/20 flex items-center justify-center text-sm font-semibold text-white">
-  {member.user.name.charAt(0).toUpperCase()}
-</div>
-            <div>
-              <p className="text-sm font-medium">{member?.user?.name}</p>
-              <p className="text-xs text-zinc-500">{member?.role}</p>
-            </div>
-          </div>
-
-          <span className={`rounded-full  px-3 py-1 text-xs  ${member?.role==='admin'?'text-red-400 bg-red-500/10':'text-cyan-400 bg-cyan-500/10'}`}>
-            {member?.role ==='admin'?"Owner":"Member"}
-          </span>
-        </div>
-
-            ))}
-
-      </div>
-
-    </div>
-
-  </section>
-
-</div>
-
-{/* member card  */}
-{selectedMember &&(
-  <MemberCard
-  member={selectedMember}
-  workspace={workspace}
-  onClose={()=>setSelectedMember(null)}
-  onMemberUpdate={fetchWorkspace}
-  />
-)}
-
-{/*  */}
-    {openAddTask &&(
-      <div  className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-        <div className='w-full max-w-lg rounded-3xl border border-zinc-800 shadow-2xl backdrop-blur-lg'>
-
-        
-      <div className="flex items-center justify-between border-b  border-zinc-800  px-5 py-4">
-          <div> 
-            <h2 className="text-xl font-semibold text-zinc-100"> 
-                     Create Task
-           </h2>
-    <p className="mt-1 text-sm text-zinc-500">
-      Add a new task to this workspace
-    </p>
-  </div>
-     
-  <button
- onClick={() => {
-  setOpenAddTask(false)
-  setError("")
- }}
- className="rounded-xl p-2 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200"
- >
-    ✕
-  </button>
-      </div>
-
-      <form onSubmit={addTask} className="space-y-4 p-5">
-        <div>
-  <label className="mb-2 block text-sm text-zinc-400">Title</label>
-   <input
-    type="text"
-    value={title}
-    onChange={(e) => setTitle(e.target.value)}
-    placeholder="Fix authentication bug"
-    className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none focus:border-zinc-600"
-  />
-</div>
-<div>
-  <label className="mb-2 block text-sm text-zinc-400">
-    Description
-  </label>
-
-  <textarea
-    rows={3}
-    value={content}
-    onChange={(e) => setContent(e.target.value)}
-    placeholder="Describe task..."
-    className="w-full resize-none rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none focus:border-zinc-600"
-  />
-</div>
-{/* assignie row  */}
-<div className="grid grid-cols-2 gap-4">
-  {/* priority */}
-<div>
-  <label className="mb-2 block text-sm text-zinc-400">
-    Priority
-  </label>
-<div className='relative'>
-  <select
-    value={priority}
-    onChange={(e) => setPriority(e.target.value)}
-    className="w-full appearance-none rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none"
-  >
-    <option value="low">Low</option>
-    <option value="medium">Medium</option>
-    <option value="high">High</option>
-  </select>
-       <ChevronDown
-    size={18}
-    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500"
-  />
-</div>
-</div>
-   {/* assignedto  */}
-     <div>
-  <label className="mb-2 block text-sm text-zinc-400">
-    Assignee
-  </label>
-<div className='relative'>
-  <select
-    value={assignedToId}
-    onChange={(e) => setAssignedToId(e.target.value)}
-    className="w-full rounded-2xl appearance-none border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none"
-  >
-    <option value="">
-      Unassigned
-    </option>
-
-    {workspace?.members?.map((m) => (
-      <option
-        key={m.user.id}
-        value={m.user.id}
-      >
-        {m.user.name}
-      </option>
-    ))}
-  </select>
-
-    <ChevronDown
-    size={18}
-    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500"
-  />
-
-</div>
-</div>
-</div>
-
-{/* dueDate  */}
-   <div>
-  <label className="mb-2 block text-sm text-zinc-400">
-    Due Date
-  </label>
-
-  <input
-    type="date"
-    value={dueDate}
-    onChange={(e) => setdueDate(e.target.value)}
-    className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm outline-none"
-  />
-</div>
-<div className="h-5">
-  {error && (
-    <p className="text-sm text-red-400">
-      {error}
-    </p>
-  )}
-</div>
-     {/* footer  */}
-<div className="flex justify-end gap-3 border-t border-zinc-800 px-6 py-5">
-
-<button
-  type="button"
-  onClick={() => setOpenAddTask(false)}
-  className="rounded-xl border border-zinc-800 px-5 py-2.5 text-sm text-zinc-300 hover:bg-zinc-800"
->
-  Cancel
-</button>
-
- <button
-  type="submit"
-  disabled={addingTask}
-  className="rounded-xl bg-zinc-100 px-5 py-2.5 text-sm font-medium text-zinc-900 hover:bg-white cursor-pointer disabled:opacity-50
-disabled:cursor-not-allowed"
->
- { addingTask? 'Creating...':'Create'}
-</button>
-
-</div>
-
-      </form>
- 
-
-
-</div>
-      </div>
-    )}
-
-    </div>
-     </>
-  )
-}
-
-export default Workspace
+export default Workspace;
