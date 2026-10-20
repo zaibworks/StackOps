@@ -9,6 +9,14 @@ import LeaveWorkspaceModal from "../components/workspace/LeaveWorkspaceModal.jsx
 import Navbar from "../components/major/Navbar.jsx";
 import Sidebar from "../components/major/Sidebar.jsx";
 import Loader from "../components/Loader.jsx"
+import {
+  CheckCircle2,
+  UserPlus,
+  MessageSquare,
+  Rocket,
+} from "lucide-react";
+import StatsCards from "../components/dashboard/StatsCards.jsx";
+
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
@@ -162,170 +170,356 @@ const lastOpenedWorkspace = async (workspaceId)=>{
 
 
  <main className="flex-1 p-8 overflow-y-auto main-scrollbar">
-  <div className="flex items-center justify-between px-2 mb-8">
+  <div className="mb-5 flex items-center justify-between px-1">
      <div>
-       <h1 className="text-3xl font-semibold tracking-tight text-zinc-100">
+       <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">
            Dashboard
        </h1>
-       <p className="mt-2 text-sm text-zinc-500">
+       <p className="mt-1 text-sm text-zinc-500">
         Manage you workspaces and track your activity
        </p>
      </div>
 <button  onClick={()=>setshowCreateModal(true)}
-className=" flex items-center justify-between gap-2 pl-3 rounded-xl bg-zinc-300 px-6 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-zinc-300/90 cursor-pointer"><Plus size={16}/> Create</button>
+className=" flex cursor-pointer items-center gap-2 rounded-lg bg-orange-400 px-4 py-2 text-sm font-medium text-zinc-900 transition-colors hover:bg-orange-500">
+<Plus size={16}/> 
+Create
+</button>
   </div>
 
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 rounded-2xl border border-zinc-700">
-  <div className="rounded-2xl p-5">
-    <p className="text-sm text-zinc-500"><FolderKanban size={18}/>Workspaces</p>
-    <h2 className="mt-2 text-3xl font-semibold">
-      {mystats.totalWorkspaces}
-    </h2>
-  </div>
 
-  <div className="rounded-2xl p-5">
-    <p className="text-sm text-zinc-500"><Users size={18}/>Owned</p>
-    <h2 className="mt-2 text-3xl font-semibold">{mystats.ownedWorkspaces}</h2>
-  </div>
+  {/* Stats Section  */}
 
-  <div className="rounded-2xl p-5">
-    <p className="text-sm text-zinc-500"><CheckSquare size={18}/>Assigned Tasks</p>
-    <h2 className="mt-2 text-3xl font-semibold">{mystats.assignedTasks}</h2>
-  </div>
+<StatsCards mystats={mystats}/>
 
-  <div className="rounded-2xl p-5">
-    <p className="text-sm text-zinc-500"><Activity size={18}/>Activity</p>
-    <h2 className="mt-2 text-3xl font-semibold">{mystats.totalActivities}</h2>
-  </div>
-</div>
 
-{/* Recent Workspaces */}
-<div className="mt-8 relative">
-  <div className="mb-4 flex items-center justify-between">
-    <h2 className="text-xl font-semibold text-zinc-100">
-      Recent Workspaces
-    </h2>
-  </div>
-   <div className="h-[240px] overflow-visible scrollbar-hide space-y-3 pr-2">
-    {workspaces.length === 0 ? (
-    <div className="flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-zinc-800 text-center">
-      <div className="rounded-full bg-orange-500/10 p-3 text-orange-400">
-        <FolderKanban size={22} />
-      </div>
-      <div>
-        <p className="font-medium text-zinc-200">No workspaces yet</p>
-        <p className="mt-1 text-sm text-zinc-500">
-          Create your first workspace to start organizing tasks.
-        </p>
-      </div>
+
+{
+/* 
+------------------------------
+Recent Workspaces ------------
+------------------------------
+*/}
+
+<div className="mt-5 grid min-h-0 grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(220px,0.95fr)]">
+
+  {/* ==================== RECENT WORKSPACES ==================== */}
+  <div className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-6">
+
+    {/* Header */}
+    <div className="mb-6 flex items-center justify-between">
+      <h2 className="text-xl font-semibold text-zinc-100">
+        Recent Workspaces
+      </h2>
+
       <button
-        onClick={() => setshowCreateModal(true)}
-        className="mt-1 flex items-center gap-2 rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-white cursor-pointer"
+        onClick={() => navigate("/dashboard/workspaces")}
+        className="text-sm font-medium text-orange-500 transition-colors hover:text-orange-400"
       >
-        <Plus size={16} />
-        Create Workspace
+        View all
       </button>
     </div>
-  ) : (
-    <>
-     {workspaces.slice(0, 3).map((workspace,index) => {
-      const isNearBottom = index>= workspaces.slice(0, 3).length - 2 
-      return(
-      <div
-        key={workspace.id}
-        onClick={(e) => {
-          navigate(`/workspace/${workspace.id}`)
-          lastOpenedWorkspace(workspace.id)
-          console.log("lastOpenedWorkspace called with:", workspace.id)
-        }}
-        className="flex relative w-full items-center justify-between  border-y border-zinc-600 bg-zinc-950/40 py-4.5 px-5 text-left transition-all hover:bg-zinc-900/70 hover:border-orange-500/30 cursor-pointer"
-      >
-        <div className="flex items-center gap-10">
-         <h3 className="truncate font-semibold text-base text-zinc-100">
-          {workspace.name}
-        </h3>
-       <div className="flex items-center gap-4 text-xs text-zinc-500">
-      <span>{workspace.members?.[0]?.role?.charAt(0).toUpperCase()+workspace.members?.[0]?.role?.slice(1)}</span>
-      <span>•</span>
-      <span>{`${workspace._count.members} ${workspace._count.members<2?'Member':'Members'}`}</span>
-      <span>•</span>
-      <span>{`Updated at ${formatDate(workspace.updatedAt)}`}</span>
-    </div>
+
+    {/* Workspace Content */}
+    <div className="min-h-[240px]">
+
+      {workspaces.length === 0 ? (
+
+        /* ==================== EMPTY STATE ==================== */
+        <div className="flex h-[240px] flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-zinc-800 text-center">
+          <div className="rounded-full bg-orange-500/10 p-3 text-orange-400">
+            <FolderKanban size={22} />
+          </div>
+
+          <div>
+            <p className="font-medium text-zinc-200">
+              No workspaces yet
+            </p>
+
+            <p className="mt-1 text-sm text-zinc-500">
+              Create your first workspace to start organizing tasks.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setshowCreateModal(true)}
+            className="mt-1 flex cursor-pointer items-center gap-2 rounded-xl bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 transition-all hover:bg-white"
+          >
+            <Plus size={16} />
+            Create Workspace
+          </button>
         </div>
 
-        <button onClick={(e)=>{
-          e.stopPropagation();
-          setOpenMenuId(openMenuId === workspace.id ? null :workspace.id)
-        }}
-  className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300 cursor-pointer"
->
- <MoreVertical size={18}/>
-</button>
-{
-  openMenuId === workspace.id &&(
-    <div className={`absolute right-15 z-200 w-40 text-xs rounded-xl border border-zinc-800 bg-zinc-900 shadow-xl ${
-      isNearBottom
-        ? "bottom-10"
-        : "top-10"
-    }`}>
-{workspace.members?.[0]?.role === 'admin'?(
-<>
-    <button
-  type="button"
-  onClick={(e) => {
-    e.stopPropagation()
-    setSelectedWorkspace(workspace)
-    setshowUpdateModal(true)
-  }}
-    className="w-full px-2 py-2 text-left hover:bg-zinc-800 rounded-t-xl flex items-center gap-x-2">
-      <Pencil size={10}/>
-      Rename
-    </button>
+      ) : (
 
-    <button type="button"
-    onClick={(e)=>{
-      e.stopPropagation()
-      setSelectedWorkspace(workspace)
-        setShowDeleteModal(true)
-    }}
-    className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-x-xl flex items-center gap-x-2">
-      <Trash2 size={10}/>
-      Delete
-    </button>
+        /* ==================== WORKSPACES ==================== */
+        <div className="space-y-2">
 
-<button
-    onClick={(e) => {
-  e.stopPropagation();
-  setSelectedWorkspace(workspace);
-  setShowLeaveModal(true);
-}}
-    className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-b-xl flex items-center gap-x-2">
-      <LogOut size={10}/>
-      Leave
-    </button>
-</>
-):(
-  <>
-   <button 
-     onClick={(e) => {
-  e.stopPropagation();
-  setSelectedWorkspace(workspace);
-  setShowLeaveModal(true);
-}}
-   className="w-full px-2 py-2 text-left text-red-400 hover:bg-zinc-800 rounded-xl flex items-center gap-x-2">
-      <LogOut size={10}/>
-      Leave
-    </button>
-  </>
-)}
+          {workspaces.slice(0, 3).map((workspace, index) => {
+
+            const isNearBottom =
+              index >= workspaces.slice(0, 3).length - 2;
+
+            return (
+              <div
+                key={workspace.id}
+                onClick={() => {
+                  navigate(`/workspace/${workspace.id}`);
+                  lastOpenedWorkspace(workspace.id);
+                }}
+                className="group relative flex cursor-pointer items-center justify-between rounded-xl border border-transparent px-3 py-3 transition-all duration-200 hover:border-zinc-800 hover:bg-zinc-900/70"
+              >
+
+                {/* Left */}
+                <div className="flex min-w-0 items-center gap-4">
+
+                  {/* Workspace Avatar */}
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-orange-400 to-cyan-500 text-xl font-medium text-zinc-950">
+                    {workspace.name?.charAt(0).toUpperCase()}
+                  </div>
+
+                  {/* Workspace Info */}
+                  <div className="min-w-0">
+
+                    <h3 className="truncate text-base font-semibold text-zinc-100">
+                      {workspace.name}
+                    </h3>
+
+                    <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs text-zinc-500">
+
+                      <span className="rounded-full bg-zinc-800 px-2 py-0.5 font-medium text-zinc-300">
+                        {workspace.members?.[0]?.role
+                          ?.charAt(0)
+                          .toUpperCase() +
+                          workspace.members?.[0]?.role?.slice(1)}
+                      </span>
+
+                      <span>•</span>
+
+                      <span>
+                        {workspace._count.members}{" "}
+                        {workspace._count.members < 2
+                          ? "Member"
+                          : "Members"}
+                      </span>
+
+                      <span>•</span>
+
+                      <span>
+                        Updated {formatDate(workspace.updatedAt)}
+                      </span>
+
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right */}
+                <div className="flex shrink-0 items-center gap-5">
+
+                  {/* Progress Circle */}
+                  <div
+                    className="relative flex h-14 w-14 items-center justify-center rounded-full"
+                    style={{
+                      background:
+                        "conic-gradient(#f97316 0deg 234deg, #27272a 234deg 360deg)",
+                    }}
+                  >
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-950">
+                      <span className="text-xs font-semibold text-zinc-200">
+                        65%
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Menu */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      setOpenMenuId(
+                        openMenuId === workspace.id
+                          ? null
+                          : workspace.id
+                      );
+                    }}
+                    className="cursor-pointer rounded-lg p-2 text-zinc-500 opacity-0 transition-all hover:bg-zinc-800 hover:text-zinc-300 group-hover:opacity-100"
+                  >
+                    <MoreVertical size={18} />
+                  </button>
+
+                  {/* Dropdown */}
+                  {openMenuId === workspace.id && (
+                    <div
+                      className={`absolute right-4 z-[200] w-40 rounded-xl border border-zinc-800 bg-zinc-900 text-xs shadow-xl ${
+                        isNearBottom
+                          ? "bottom-12"
+                          : "top-12"
+                      }`}
+                    >
+
+                      {workspace.members?.[0]?.role === "admin" ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedWorkspace(workspace);
+                              setshowUpdateModal(true);
+                            }}
+                            className="flex w-full items-center gap-2 rounded-t-xl px-3 py-2.5 text-left hover:bg-zinc-800"
+                          >
+                            <Pencil size={12} />
+                            Rename
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedWorkspace(workspace);
+                              setShowDeleteModal(true);
+                            }}
+                            className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-red-400 hover:bg-zinc-800"
+                          >
+                            <Trash2 size={12} />
+                            Delete
+                          </button>
+
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedWorkspace(workspace);
+                              setShowLeaveModal(true);
+                            }}
+                            className="flex w-full items-center gap-2 rounded-b-xl px-3 py-2.5 text-left text-red-400 hover:bg-zinc-800"
+                          >
+                            <LogOut size={12} />
+                            Leave
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedWorkspace(workspace);
+                            setShowLeaveModal(true);
+                          }}
+                          className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left text-red-400 hover:bg-zinc-800"
+                        >
+                          <LogOut size={12} />
+                          Leave
+                        </button>
+                      )}
+
+                    </div>
+                  )}
+                </div>
+
+              </div>
+            );
+          })}
+
+        </div>
+      )}
+
     </div>
-  )
-}
-      </div>
-    )})}
-    </>
-  )}
   </div>
+
+
+  {/* ==================== RECENT ACTIVITY ==================== */}
+  <div className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-6">
+
+    {/* Header */}
+    <div className="mb-6">
+      <h2 className="text-xl font-semibold text-zinc-100">
+        Recent Activity
+      </h2>
+    </div>
+
+    {/* Activities */}
+    <div className="space-y-5">
+
+      {/* Activity 1 */}
+      <div className="flex items-start gap-4">
+
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+          <CheckCircle2 size={17} />
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-sm font-medium leading-5 text-zinc-200">
+            Task 'Configure DNS' marked done
+          </p>
+
+          <p className="mt-1 text-xs text-zinc-500">
+            3h ago
+          </p>
+        </div>
+
+      </div>
+
+
+      {/* Activity 2 */}
+      <div className="flex items-start gap-4">
+
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-500/10 text-orange-400">
+          <UserPlus size={17} />
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-sm font-medium leading-5 text-zinc-200">
+            You created workspace HostingZaib
+          </p>
+
+          <p className="mt-1 text-xs text-zinc-500">
+            2d ago
+          </p>
+        </div>
+
+      </div>
+
+
+      {/* Activity 3 */}
+      <div className="flex items-start gap-4">
+
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
+          <MessageSquare size={17} />
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-sm font-medium leading-5 text-zinc-200">
+            New comment on 'Setup billing'
+          </p>
+
+          <p className="mt-1 text-xs text-zinc-500">
+            2d ago
+          </p>
+        </div>
+
+      </div>
+
+
+      {/* Activity 4 */}
+      <div className="flex items-start gap-4">
+
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
+          <Rocket size={17} />
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-sm font-medium leading-5 text-zinc-200">
+            Workspace deployed to production
+          </p>
+
+          <p className="mt-1 text-xs text-zinc-500">
+            3d ago
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
 </div>
  </main>
       </div>
