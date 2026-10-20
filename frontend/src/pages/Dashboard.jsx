@@ -200,7 +200,7 @@ Recent Workspaces ------------
 ------------------------------
 */}
 
-<div className="mt-5 grid min-h-0 grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(220px,0.95fr)]">
+<div className="mt-5 grid min-h-0 grid-cols-1 gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(210px,0.95fr)]">
 
   {/* ==================== RECENT WORKSPACES ==================== */}
   <div className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-6">
@@ -220,7 +220,7 @@ Recent Workspaces ------------
     </div>
 
     {/* Workspace Content */}
-    <div className="min-h-[240px]">
+    <div className="min-h-[210px]">
 
       {workspaces.length === 0 ? (
 
@@ -467,51 +467,11 @@ Recent Workspaces ------------
 
         <div className="min-w-0">
           <p className="text-sm font-medium leading-5 text-zinc-200">
-            You created workspace HostingZaib
+            You renamed workspace HostingZaib 
           </p>
 
           <p className="mt-1 text-xs text-zinc-500">
             2d ago
-          </p>
-        </div>
-
-      </div>
-
-
-      {/* Activity 3 */}
-      <div className="flex items-start gap-4">
-
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
-          <MessageSquare size={17} />
-        </div>
-
-        <div className="min-w-0">
-          <p className="text-sm font-medium leading-5 text-zinc-200">
-            New comment on 'Setup billing'
-          </p>
-
-          <p className="mt-1 text-xs text-zinc-500">
-            2d ago
-          </p>
-        </div>
-
-      </div>
-
-
-      {/* Activity 4 */}
-      <div className="flex items-start gap-4">
-
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan-500/10 text-cyan-400">
-          <Rocket size={17} />
-        </div>
-
-        <div className="min-w-0">
-          <p className="text-sm font-medium leading-5 text-zinc-200">
-            Workspace deployed to production
-          </p>
-
-          <p className="mt-1 text-xs text-zinc-500">
-            3d ago
           </p>
         </div>
 

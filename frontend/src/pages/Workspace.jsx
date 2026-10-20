@@ -10,7 +10,9 @@ import {
   Pencil,
   Trash2,
   Bolt,
-  CheckSquare
+  CheckSquare,
+  Users,
+  SquareCheckBig
 } from "lucide-react";
 import Navbar from '../components/major/Navbar.jsx'
 import InviteModal from '../components/workspace/InviteModal.jsx'
@@ -283,31 +285,41 @@ const statusStyles = {
     <div className='h-screen bg-zinc-950 text-zinc-100 overflow-hidden flex flex-col'>
     <Navbar searchData ={searchData} searchType="workspace-page" onTaskSelect={taskSelect} onMemberSelect={memberSelect}/>
       {/* header section */}
+
     <div className="mb-5 flex items-center justify-between border-b border-zinc-800 bg-zinc-950/40 px-5 py-4">
 
   {/* Left Side */}
   <div className="flex flex-col gap-2">
 
     {/* Workspace Info */}
-    <div className="flex items-center gap-4">
+    <div className="flex gap-4">
 
+
+       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 via-orange-400 to-cyan-500 text-xl font-medium text-zinc-950">
+                    {workspace.name?.charAt(0).toUpperCase()}
+                  </div>
+
+    <div className='flex flex-col gap-1'>
       <h1 className="text-2xl font-semibold tracking-tight text-zinc-100">
         {workspace?.name}
       </h1>
 
       {/* <div className="h-5 w-px bg-zinc-800" /> */}
 
-      <div className="flex items-center gap-2 text-xs">
+      <div className="flex gap-2">
 
-        <span className="rounded-full border border-zinc-800 px-3 py-1 text-zinc-400">
-          {workspace?.members?.length || 0} Members
+        <span className="flex items-center justify-center py-1 gap-1.5 rounded-full border border-zinc-800 px-3 bg-[#1b1b1b]  text-zinc-400 text-xs">
+         <Users size={12}/> {workspace?.members?.length || 0} Members
         </span>
 
-        <span className="rounded-full border border-zinc-800 px-3 py-1 text-zinc-400">
-          {workspace?.tasks?.length || 0} Tasks
+        <span className="flex items-center justify-center py-1 gap-1.5 rounded-full border border-zinc-800 px-3 bg-[#1b1b1b] text-zinc-400 text-xs">
+          <SquareCheckBig size={12}/> {workspace?.tasks?.length || 0} Tasks
         </span>
 
       </div>
+
+          </div>
+
 
     </div>
 
