@@ -1,20 +1,20 @@
-import { Navigate } from "react-router-dom";
+
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Loader from "./Loader";
 
-type ProviderType = {
-  children: React.ReactNode;
-};
+const ProtectedRoute = () => {
+  const { user, loading } = useAuth();
 
-const ProtectedRoute = ({ children }: ProviderType) => {
-  const { user} = useAuth();
+  if (loading) {
+    return <Loader text="Verifying your session..." />;
+  }
 
-  // Auth check complete + user nahi mila
   if (!user) {
     return <Navigate to="/" replace />;
   }
 
-  // User authenticated
-  return children;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

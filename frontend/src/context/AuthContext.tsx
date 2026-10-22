@@ -1,48 +1,53 @@
+
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../api/axios.js";
 
-type AuthProvideProps={
-  children:React.ReactNode
+type AuthProvideProps = {
+  children: React.ReactNode;
+};
+
+interface userType {
+  id: number;
+  email: string;
+  name: string;
 }
 
-interface userType{
-  id:number
-  email:string
-  name:string
-}
-interface AuthContextType{
-  user: userType | null
-  setUser: React.Dispatch<React.SetStateAction<userType | null>>
+interface AuthContextType {
+  user: userType | null;
+  setUser: React.Dispatch<React.SetStateAction<userType | null>>;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthProvider = ({ children }:AuthProvideProps) => {
- const [user, setUser] = useState<userType | null>(null);
+export const AuthProvider = ({ children }: AuthProvideProps) => {
+  const [user, setUser] = useState<userType | null>(null);
+  const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  const fetchUser = async () => {
-    try {
-      const response = await api.get("/user/me");
-      setUser(response.data);
-    } catch (err) {
-      console.log(err);
-      setUser(null);
-    }
-  };
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await api.get("/user/me");
+        setUser(response.data);
+      } catch (err) {
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchUser();
-}, []);
+    fetchUser();
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
- const context = useContext(AuthContext);
+  const context = useContext(AuthContext);
 
   if (!context) {
     throw new Error("useAuth must be used within AuthProvider");

@@ -1,6 +1,6 @@
 import Navbar from "../components/major/Navbar.jsx";
 import Sidebar from "../components/major/Sidebar.jsx";
-import { CheckSquare, Clock3, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { CheckSquare, Clock3, AlertTriangle, CheckCircle2,ChevronDown,Folder,Circle } from "lucide-react";
 import { useState,useEffect } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import {useWorkspace} from '../context/WorkspaceContext.jsx'
@@ -70,9 +70,15 @@ console.log({
   }, [page,filter,status,workspaceId])
 
   const priorityColors = {
-  low: 'text-yellow-400',
-  medium: 'text-orange-400',
-  high: 'text-red-500'
+  low: 'text-yellow-400 bg-yellow-500/10',
+  medium: 'text-orange-400 bg-orange-500/10',
+  high: 'text-red-500 bg-red-500/10'
+}
+
+const statusColors={
+  todo:"bg-yellow-700",
+  inprogress:"bg-blue-700",
+  done:"bg-green-700"
 }
 
 const hasActiveFilters = filter !== 'all' || status !== '' || workspaceId !== '';
@@ -114,44 +120,44 @@ return (
     <main className="flex-1 flex flex-col overflow-hidden p-6">
 
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-semibold tracking-tight">
+      <div >
+        <h1 className="text-2xl font-semibold tracking-tight">
           My Tasks
         </h1>
 
-        <p className="mt-2 text-sm text-zinc-500">
+        <p className="mt-2 text-xs text-zinc-500">
           Track all tasks assigned to you across workspaces
         </p>
       </div>
 
       {/* Filters */}
-      <div className="mt-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="mt-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
         <div className="flex gap-2 flex-wrap">
 
           <button  onClick={() => setFilter('all')}
-          className={`rounded-xl border px-5 py-2 text-sm ${
+          className={`rounded-lg border px-4 py-1.5 text-sm  ${
     filter === 'all'
-    ? 'border-orange-500 bg-orange-500/10'
-    : 'border-zinc-800 hover:bg-zinc-900'
+    ? 'border-orange-500 bg-orange-500/10 text-orange-400'
+    : 'border-zinc-800 hover:bg-zinc-900 text-zinc-400'
   }`}>
             All
           </button>
 
           <button onClick={() => setFilter('createdByMe')}
-          className={`rounded-xl border px-7 py-2 text-sm ${
+          className={`rounded-lg border px-4 py-1.5 text-sm ${
     filter === 'createdByMe'
-    ? 'border-orange-500 bg-orange-500/10'
-    : 'border-zinc-800 hover:bg-zinc-900'
+    ? 'border-orange-500 bg-orange-500/10 text-orange-400 '
+    : 'border-zinc-800 hover:bg-zinc-900 text-zinc-400'
   }`}>
             CreatedByMe
           </button>
 
           <button onClick={() => setFilter('assignedToMe')}
-          className={`rounded-xl border px-7 py-2 text-sm ${
+          className={`rounded-lg border px-4 py-1.5 text-sm ${
     filter === 'assignedToMe'
-    ? 'border-orange-500 bg-orange-500/10'
-    : 'border-zinc-800 hover:bg-zinc-900'
+    ? 'border-orange-500 bg-orange-500/10 text-orange-400'
+    : 'border-zinc-800 hover:bg-zinc-900 text-zinc-400'
   }`}>
              AssignedToMe
           </button>
@@ -160,10 +166,14 @@ return (
 
 <div className="flex gap-2 flex-wrap">
 
+ <div className="relative">
   <select
     value={status}
-    onChange={(e) => { setStatus(e.target.value); setpage(1) }}
-    className="rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2 text-sm text-zinc-400 hover:bg-zinc-900 cursor-pointer outline-none"
+    onChange={(e) => {
+      setStatus(e.target.value);
+      setpage(1);
+    }}
+    className="cursor-pointer appearance-none rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5 text-sm text-zinc-400 outline-none hover:bg-zinc-900"
   >
     <option value="">Status</option>
     <option value="todo">Todo</option>
@@ -171,23 +181,38 @@ return (
     <option value="done">Done</option>
   </select>
 
+  <ChevronDown
+    size={16}
+    strokeWidth={1.8}
+    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500"
+  />
+</div>
+
+
+<div className="relative">
   <select
     value={workspaceId}
     onChange={(e) => { setWorkspaceId(e.target.value); setpage(1) }}
-    className="rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2 text-sm text-zinc-400 hover:bg-zinc-900 cursor-pointer outline-none"
-  >
+    className="cursor-pointer appearance-none rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5  pr-8 text-sm text-zinc-400 outline-none hover:bg-zinc-900"
+    >
     <option value="">Workspace</option>
     {workspaces?.map(w => (
       <option key={w.id} value={w.id}>{w.name}</option>
     ))}
   </select>
+  <ChevronDown
+    size={16}
+    strokeWidth={1.8}
+    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500"
+  />
 
+    </div>
 </div>
 
       </div>
 
       {/* Task Cards */}
-      <div className="mt-8 flex-1 min-h-0 overflow-y-auto px-2 p-4 space-y-2 custom-scrollbar">
+      <div className="mt-5 flex-1 min-h-0 overflow-y-auto px-2 p-4 space-y-2 custom-scrollbar">
           {tasks.length === 0 ? (
     <div className="flex h-full flex-col items-center justify-center gap-3 py-16 text-center">
       <div className="rounded-full bg-orange-500/10 p-3 text-orange-400">
@@ -208,7 +233,7 @@ return (
      {tasks?.map(t=>(
 
   <div  key={t.id} onClick={() => handleTaskClick(t)}
-  className="cursor-pointer rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 py-3 transition-all hover:border-zinc-800 hover:bg-zinc-900/40">
+  className="cursor-pointer rounded-lg border border-zinc-800 bg-zinc-900/70 px-4 py-3 transition-all hover:border-zinc-800 hover:bg-zinc-900/40">
 
   <div className="flex items-center justify-between">
 
@@ -223,11 +248,17 @@ return (
   navigate(`/workspace/${t.workspace.id}`) 
   lastOpenedWorkspace(t.workspace.id)
 }}
-        className="font-medium hover:text-zinc-300">📁 {t.workspace.name}</span>
+        className="font-medium flex items-center gap-1 hover:text-zinc-300"><Folder color="orange" size={12}/> {t.workspace.name}
+        </span>
 
-        <span>•</span>
+         <span>•</span>
 
+<div className="flex items-center gap-1">
+
+        <span className={`h-2 w-2 rounded-full ${statusColors[t.status]}`}/>
         <span>{t.status}</span>
+</div>
+
 
         <span>•</span>
 
@@ -235,7 +266,7 @@ return (
       </div>
     </div>
 
-  <span className={`px-2 py-1 text-[11px] font-medium ${priorityColors[t.priority] || 'text-zinc-400'}`}>
+  <span className={`px-2 py-1 text-[11px] font-medium rounded-full ${priorityColors[t.priority] || 'text-zinc-400'}`}>
   {t.priority}
 </span>
 

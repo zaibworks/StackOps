@@ -266,6 +266,11 @@ const Workspace = () => {
             </div>
           </div>
 
+          
+
+          
+ 
+
           {/* Right Side */}
           <div className="flex items-center gap-3">
             <button
@@ -310,6 +315,7 @@ const Workspace = () => {
           </div>
         </div>
 
+
      
         {openInviteModal && (
           <InviteModal
@@ -351,7 +357,7 @@ const Workspace = () => {
                   >
                     <SlidersHorizontal size={14} />
                     Filters
-                  </button>
+                  </button> 
                 )}
 
                 {/* Filters Dropdown */}

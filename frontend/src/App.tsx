@@ -15,24 +15,19 @@ function App() {
       <WorkspaceProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/activity" element={<Activity />} />
-            <Route path="/mytasks" element={<MyTasks />} />
-            <Route path="/settings" element={<Settings />} />
             <Route path="/" element={<Home/>}/>
-            <Route path="/dashboard" element={
-             
-                <Dashboard />
-           
-              }/>
 
-            <Route
-              path="/workspace/:workspaceId"
-              element={
-                <ProtectedRoute>
-                  <Workspace />
-                </ProtectedRoute>
-              }
-            />
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/workspace/:workspaceId"element={<Workspace />}/>
+              <Route path="/activity" element={<Activity />} />
+              <Route path="/mytasks" element={<MyTasks />} />
+              <Route path="/settings" element={<Settings />} />
+            </Route>
+
+
+
           </Routes>
         </BrowserRouter>
       </WorkspaceProvider>
