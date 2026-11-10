@@ -1,67 +1,119 @@
-import { createContext,useContext,useState,useEffect} from "react";
+
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
+
 import api from "../api/axios.js";
+import { useAuth } from "./AuthContext";
 
-type WorkspaceProvideProps={
-  children:React.ReactNode
+type WorkspaceProvideProps = {
+  children: React.ReactNode;
+};
+
+type memberType = {
+  role: string;
+};
+
+type taskType = {
+  assignedToId: number | null;
+  status: string;
+};
+
+type workspaceCount = {
+  members: number;
+  tasks: number;
+};
+
+interface workspaceType {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  members: memberType[];
+  tasks: taskType[];
+  _count: workspaceCount;
 }
 
-type memberType={
-  role:string
+interface WorkspaceContextType {
+  workspaces: workspaceType[] | null;
+  setWorkspaces: React.Dispatch<
+    React.SetStateAction<workspaceType[] | null>
+  >;
+  loading: boolean;
 }
 
-type taskType={
-  assignedToId:number | null
-  status:string
-}
+const WorkspaceContext =
+  createContext<WorkspaceContextType | null>(null);
 
-type worksapceCount={
-  members:number
-  tasks:number
-}
+export const WorkspaceProvider = ({
+  children,
+}: WorkspaceProvideProps) => {
+  const { user, loading: authLoading } = useAuth();
 
-interface workspaceType{
-  id:number
-  name:string
-  createdAt:string
-  updatedAt:string
-  members:memberType[]
-  tasks:taskType[]
-  _count: worksapceCount
-}
-interface WorkspaceContextType{
-  workspaces: workspaceType | null
-  setWorkspaces: React.Dispatch<React.SetStateAction<workspaceType | null>>
-  loading:boolean
-}
+  const [workspaces, setWorkspaces] =
+    useState<workspaceType[] | null>(null);
 
-const WorkspaceContext = createContext<WorkspaceContextType | null>(null)
+  const [loading, setLoading] = useState(true);
 
-export const WorkspaceProvider =({children}:WorkspaceProvideProps)=>{
-    const [workspaces, setWorkspaces] = useState<workspaceType | null>(null)
-    const [loading, setLoading] = useState<boolean>(true)
+  useEffect(() => {
+    if (authLoading) return;
 
-   useEffect(() => {
-    const fetchWorkspaces = async () => {
-      try {
-        const response = await api.get('/workspace')
-        setWorkspaces(response.data)
-        console.log(response.data)
-      } catch (e) {
-        console.log(e)
-      }finally{
-        setLoading(false)
-      }
+    if (!user) {
+      setWorkspaces(null);
+      setLoading(false);
+      return;
     }
-    fetchWorkspaces()
-  }, [])
-    
-return(
-<WorkspaceContext.Provider value={{workspaces,setWorkspaces,loading}}>
-       {children}
-</WorkspaceContext.Provider>
-)
-}
 
-export const useWorkspace = ()=>{
-    return useContext(WorkspaceContext)
-}
+    let cancelled = false;
+
+    const fetchWorkspaces = async () => {
+      setLoading(true);
+
+      try {
+        const response = await api.get("/workspace");
+
+        if (!cancelled) {
+          setWorkspaces(response.data);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error("Workspace fetch failed:", error);
+          setWorkspaces(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchWorkspaces();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user, authLoading]);
+
+  return (
+    <WorkspaceContext.Provider
+      value={{ workspaces, setWorkspaces, loading }}
+    >
+      {children}
+    </WorkspaceContext.Provider>
+  );
+};
+
+export const useWorkspace = () => {
+  const context = useContext(WorkspaceContext);
+
+  if (!context) {
+    throw new Error(
+      "useWorkspace must be used within WorkspaceProvider"
+    );
+  }
+
+  return context;
+};

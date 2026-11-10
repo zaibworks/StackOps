@@ -7,14 +7,28 @@ const authMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
+
+
+   console.log("Incoming cookies:", req.cookies);
+
+  const token = req.cookies?.token;
+
+  console.log(
+    "JWT status:",
+    token ? "TOKEN FOUND" : "TOKEN MISSING"
+  );
+
+  if (!token) {
+    return res.status(401).json({
+      message: "Token missing",
+    });
+  }
+  
   try {
     const authHeader = req.headers.authorization;
 
     // Prefer the existing Bearer token; otherwise use the Google auth cookie.
-    const token =
-      authHeader?.startsWith("Bearer ")
-        ? authHeader.slice(7)
-        : req.cookies?.token;
+    const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : req.cookies?.token;
 
     if (!token) {
       return res.status(401).json({ message: "No token provided" });

@@ -25,19 +25,24 @@ export const AuthProvider = ({ children }: AuthProvideProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await api.get("/user/me");
-        setUser(response.data);
-      } catch (err) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchUser = async () => {
+    console.log("Checking authentication...");
 
-    fetchUser();
-  }, []);
+    try {
+      const response = await api.get("/user/me");
+
+      console.log("Authenticated user:", response.data);
+      setUser(response.data);
+    } catch (error) {
+      console.log("Authentication failed:", error);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchUser();
+}, []);
 
   return (
     <AuthContext.Provider value={{ user, setUser, loading }}>
