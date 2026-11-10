@@ -26,9 +26,10 @@ const authMiddleware = (
   
   try {
     const authHeader = req.headers.authorization;
-
-    // Prefer the existing Bearer token; otherwise use the Google auth cookie.
-    const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : req.cookies?.token;
+    
+// use the Google auth cookie not anything else.
+   
+    const token = req.cookies?.token;
 
     if (!token) {
       return res.status(401).json({ message: "No token provided" });
