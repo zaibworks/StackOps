@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import api from "../../api/axios";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 
 function GoogleLogo({ className = "h-5 w-5" }) {
@@ -51,6 +52,7 @@ export default function LoginForm({ onSignup }) {
 
 
   const { setUser } = useAuth();
+  const navigate = useNavigate()
 
 const handleSubmit = async (e) => {
   e.preventDefault();
