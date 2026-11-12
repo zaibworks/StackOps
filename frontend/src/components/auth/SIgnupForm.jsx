@@ -2,6 +2,7 @@ import React from 'react'
 import { Mail,User,Lock,ArrowRight,Check,Eye,EyeOff} from 'lucide-react'
 import { useState } from 'react';
 import api from '../../api/axios';
+import { useAuth } from '../../context/AuthContext';
 
 function GoogleLogo({ className = "h-5 w-5" }) {
   return (
@@ -42,24 +43,36 @@ const SignupForm = ({onLogin}) => {
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
-    const handleSignup = async (e)=>{
-       e.preventDefault()
-       setLoading(true)
-       setError('')
-       try{
-        const response = await api.post('/auth/signup',{
-          name,
-          email,
-          password
-        })
-        localStorage.setItem('token',response.token)
-          navigate('/dashboard')
-       }catch(e){
-       setError(e.response?.data?.error?.[0]?.message)
-       }finally{
-        setLoading(false)
-       }
+
+  const {setUser} = useAuth();
+
+   const handleSignup = async (e) => {
+  e.preventDefault();
+
+  setLoading(true);
+  setError('');
+
+  try {
+    const response = await api.post('/auth/signup', {
+      name,
+      email,
+      password,
+    });
+
+    setUser(response.data.user);
+    await onLogin()
+
+  } catch (e) {
+    setError(
+      e.response?.data?.error?.[0]?.message ||
+      e.response?.data?.message ||
+      'Signup failed'
+    );
+  } finally {
+    setLoading(false);
   }
+};
+
 
  const handleGoogleAuth = () => {
   window.location.href = 'http://localhost:5001/auth/google';
@@ -143,13 +156,30 @@ const SignupForm = ({onLogin}) => {
                {error && <p className="text-xs font-sm text-[#af1f1f]">{error}</p>}
 
               {/* Continue */}
-              <button 
-              onClick={handleSignup}
-              className=" mt-3 group flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 cursor-pointer">
-                Continue
-
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </button>
+             <button 
+                          disabled={loading}
+                          onClick={handleSignup}
+                          className={`group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-orange-500/25 transition-all duration-200
+                ${loading
+                  ? "cursor-not-allowed opacity-70"
+                  : "cursor-pointer hover:shadow-orange-500/40 active:scale-[0.98]"
+                }`}
+                >
+                  {loading?
+                  <>
+                  Signing Up.....
+                  </>
+                  :(
+                    <>
+                    
+                            Continue
+            
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    </>
+                  )
+                  
+                  }
+                          </button>
             </div>
 
             {/* Login */}

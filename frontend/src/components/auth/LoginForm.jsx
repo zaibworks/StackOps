@@ -9,6 +9,8 @@ import {
   EyeOff
 } from "lucide-react";
 import api from "../../api/axios";
+import { useAuth } from "../../context/AuthContext";
+
 
 function GoogleLogo({ className = "h-5 w-5" }) {
   return (
@@ -48,24 +50,30 @@ export default function LoginForm({ onSignup }) {
   const [error, setError] = useState('')
 
 
-  const handleSubmit = async(e)=>{
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-    try{
-      const response = await api.post('/auth/login',{
-        email,
-        password
-      })
-      const token = response.data.token
-        localStorage.setItem('token', token)
-         navigate('/dashboard')
-    }catch(e){
-      setError(e.response?.data?.message ||'Login failed')
-    }finally{
-      setLoading(false)
-    }
+  const { setUser } = useAuth();
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
+
+  try {
+    const response = await api.post('/auth/login', {
+      email,
+      password,
+    });
+
+    setUser(response.data.user);
+    navigate('/dashboard', { replace: true });
+
+  } catch (e) {
+    setError(
+      e.response?.data?.message || 'Login failed'
+    );
+  } finally {
+    setLoading(false);
   }
+};
 
    const handleGoogleAuth = () => {
   window.location.href = 'http://localhost:5001/auth/google';
@@ -135,11 +143,29 @@ export default function LoginForm({ onSignup }) {
 
 
               {/* Continue */}
-              <button onClick={handleSubmit}
-              className="group flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 cursor-pointer">
+              <button 
+              disabled={loading}
+              onClick={handleSubmit}
+              className={`group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400 py-3 text-sm font-semibold text-zinc-950 shadow-lg shadow-orange-500/25 transition-all duration-200
+    ${loading
+      ? "cursor-not-allowed opacity-70"
+      : "cursor-pointer hover:shadow-orange-500/40 active:scale-[0.98]"
+    }`}
+    >
+      {loading?
+      <>
+      Loging In.....
+      </>
+      :(
+        <>
+        
                 Continue
 
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+        </>
+      )
+      
+      }
               </button>
             </div>
 

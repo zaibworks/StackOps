@@ -18,7 +18,19 @@ const signupController =async(req:Request,res:Response)=>{
 const loginController = async (req:Request, res:Response) => {
   try {
    const result = await login(req.body)
-   res.json(result)
+   
+   res.cookie("token", result.token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+  path: "/"
+});
+
+return res.status(200).json({
+  success: true,
+  message: result.message,
+  user: result.user
+});
 
   } catch (error) {
     if(error instanceof Error){

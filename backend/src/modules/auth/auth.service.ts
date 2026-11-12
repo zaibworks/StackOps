@@ -74,6 +74,11 @@ const token = generateAuthToken(user.id)
 
       return {
     message: "Login successful",
+     user: {
+    id: user.id,
+    name: user.name,
+    email: user.email
+  },
     token
   }
 }
