@@ -242,13 +242,6 @@ Recent Workspaces ------------
       <h2 className="text-xl font-semibold text-zinc-100">
         Recent Workspaces
       </h2>
-
-      <button
-        onClick={() => navigate("/dashboard/workspaces")}
-        className="text-sm font-medium text-orange-500 transition-colors hover:text-orange-400"
-      >
-        View all
-      </button>
     </div>
 
     {/* Workspace Content */}
@@ -460,10 +453,17 @@ Recent Workspaces ------------
   <div className="rounded-2xl border  border-zinc-800 bg-zinc-950/50 p-6">
 
     {/* Header */}
-    <div className="mb-6">
+    <div className="mb-6 flex justify-between">
       <h2 className="text-xl font-semibold text-zinc-100">
         Recent Activity
       </h2>
+
+      <button
+        onClick={() => navigate("/activity")}
+        className="text-sm font-medium text-orange-500 transition-colors hover:text-orange-400"
+      >
+        View all
+      </button>
     </div>
 
     {/* Activities */}
