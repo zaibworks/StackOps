@@ -39,7 +39,22 @@ const Dashboard = () => {
   totalActivities: 0
 });
 
+
   const navigate = useNavigate()
+
+
+  const progresssion =(w)=>{
+
+   const donetasks =  w?.tasks?.filter(
+    (task) => task.status === "done",
+  ).length;
+
+   const totalTasks =  w?.tasks?.length;
+
+  const result = Math.round((donetasks*100)/totalTasks)
+
+  return result
+  }
   
 
  useEffect(() => {
@@ -319,13 +334,12 @@ Recent Workspaces ------------
                   <div
                     className="relative flex h-14 w-14 items-center justify-center rounded-full"
                     style={{
-                      background:
-                        "conic-gradient(#f97316 0deg 234deg, #27272a 234deg 360deg)",
+                        background: `conic-gradient(#f97316 ${progresssion(workspace) * 3.6}deg, #27272a ${progresssion(workspace) * 3.6}deg 360deg)`,
                     }}
-                  >
+                    >
                     <div className="flex h-11 w-11 items-center justify-center rounded-full bg-zinc-950">
                       <span className="text-xs font-semibold text-zinc-200">
-                        65%
+                        {progresssion(workspace)}%
                       </span>
                     </div>
                   </div>

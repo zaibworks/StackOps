@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence,motion } from "motion/react";
+import { useAuth } from "../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
 const STEPS = [
   { n: 1, text: "Create your account", active: true },
@@ -20,8 +22,17 @@ const STEPS = [
 import LoginForm from "../components/auth/LoginForm";
 import SignupForm from "../components/auth/SIgnupForm";
 
+
 export default function Home() {
   const [mode, setMode] = useState('signup')
+
+  const {user} = useAuth()
+
+if (user) {
+  return <Navigate to="/dashboard" replace />;
+}
+
+
 
   return (
     <div className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-zinc-950 p-4 text-zinc-100 sm:p-6">
