@@ -9,6 +9,7 @@ import {
 import ProfileDropdown from "../ProfileDropdown.jsx";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext.js";
+import api from "../../api/axios.js";
 
 function NavbarNew(){
   return(
@@ -34,11 +35,17 @@ const Navbar = ({
   const navigate = useNavigate();
   const {user,setUser} = useAuth()
 
-  const userLogout = () => {
-  localStorage.removeItem('token');
-  setUser(null);
-  // setWorkspaces([]);
-  navigate('/login');
+const handleLogout = async () => {
+  try {
+    await api.post("/user/logout");
+
+    window.location.replace("/dashboard");
+    setUser(null);
+    setWorkspaces([]);
+
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
 };
 
 const filteredResults =
@@ -155,7 +162,7 @@ const filteredResults =
     {showProfile && (
     <ProfileDropdown
       user={user}
-      onLogout={userLogout}
+      onLogout={handleLogout}
       onSettings={() => navigate("/settings")}
     />
   )}

@@ -91,7 +91,7 @@ console.log("isAdmin:", isAdmin)
 
       <button
         onClick={onClose}
-        className="absolute right-5 top-5 rounded-lg p-2 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200"
+        className="absolute right-5 top-5 rounded-lg p-2 text-zinc-500 hover:text-zinc-200"
       >
         ✕
       </button>

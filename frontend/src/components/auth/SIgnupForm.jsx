@@ -58,8 +58,6 @@ const SignupForm = ({onLogin}) => {
       email,
       password,
     });
-
-    setUser(response.data.user);
     await onLogin()
 
   } catch (e) {

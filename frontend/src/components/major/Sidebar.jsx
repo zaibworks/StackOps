@@ -4,24 +4,26 @@ import { FolderKanban, CheckSquare, Activity, LogOut,ChevronDown } from "lucide-
 import api from "../../api/axios"
 
 const Sidebar = ({ user, workspaces}) => {
-  const navigate = useNavigate()
   const [shoWorkspace, setshoWorkspace] = useState(false)
   
-const lastOpenedWorkspace = async (workspaceId)=>{
-  console.log("Hitting API with:", workspaceId)
+  const lastOpenedWorkspace = async (workspaceId)=>{
+    console.log("Hitting API with:", workspaceId)
     const res = await api.patch(`/workspace/${workspaceId}/open`);
     console.log("Response:", res.data)
-  return res.data;
-}
+    return res.data;
+  }
+  const navigate = useNavigate()
 
 const handleLogout = async () => {
   try {
-    await api.post('/user/logout');
-    setUser(null);~
+    await api.post("/user/logout");
+
+    window.location.replace("/dashboard");
+    setUser(null);
     setWorkspaces([]);
-    navigate('/');
+
   } catch (error) {
-    console.log(error);
+    console.error("Logout failed:", error);
   }
 };
 

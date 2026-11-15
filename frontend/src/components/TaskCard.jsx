@@ -2,6 +2,7 @@ import React, { useEffect, useEffectEvent } from "react";
 import api from "../api/axios.js";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
+import { motion } from "motion/react";
 
 import { X, Calendar, User, Flag, PencilIcon, Trash2 } from "lucide-react";
 
@@ -125,6 +126,11 @@ const TaskCard = ({task,workspace,onClose,onTaskUpdate,startInEditMode,
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-sm">
+          <motion.div
+  initial={{ opacity: 0, x: 20 }}
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.2 }}
+>
       <div className="h-full w-[42%] min-w-[550px] border-l border-zinc-800 bg-zinc-950 shadow-2xl">
         {/* HEADER */}
 
@@ -493,6 +499,7 @@ custom-scrollbar
           </button>
         </div>
       </div>
+      </motion.div>
     </div>
   );
 };

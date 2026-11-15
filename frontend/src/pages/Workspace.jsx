@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../api/axios.js";
 import TaskCard from "../components/TaskCard.jsx";
+import { AnimatePresence,motion } from "motion/react";
 import {
   UserX,
   Clock3,
@@ -698,13 +699,15 @@ const Workspace = () => {
 
           {/* TASK DETAILS MODAL — existing functionality preserved */}
           {selectedTask && (
-            <TaskCard
-              task={selectedTask}
-              workspace={workspace}
-              onClose={handleClose}
-              onTaskUpdate={refreshWorkspace}
-              startInEditMode={editMode}
-            />
+        
+
+  <TaskCard
+    task={selectedTask}
+    workspace={workspace}
+    onClose={handleClose}
+    onTaskUpdate={refreshWorkspace}
+    startInEditMode={editMode}
+  />
           )}
 
           {/* RIGHT SIDE — STATS + MEMBERS */}
