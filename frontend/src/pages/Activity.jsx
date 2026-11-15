@@ -14,8 +14,6 @@ const [loading, setLoading] = useState(true);
 const { user, setUser } = useAuth();
 const {workspaces} = useWorkspace();
 
-console.log(activities)
-
 useEffect(() => {
 const fetchActivities = async () => {
 try {

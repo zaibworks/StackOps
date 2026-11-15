@@ -20,6 +20,7 @@ import StatsCards from "../components/dashboard/StatsCards.jsx";
 
 const Dashboard = () => {
   const [workspaces, setWorkspaces] = useState([])
+  const [activities, setActivities] = useState([])
   const [loading, setLoading] = useState(true)
   const [userLoading, setuserLoading] = useState(true)       
   const [error, setError] = useState('')
@@ -101,7 +102,23 @@ const Dashboard = () => {
   name: w.name
 }))
 
-  console.log(user)
+
+useEffect(() => {
+const fetchActivities = async () => {
+try {
+const response = await api.get("/activities");
+
+    setActivities(response.data);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+fetchActivities();
+
+}, []);
 
 
 const handleLogout = async () => {
@@ -440,7 +457,7 @@ Recent Workspaces ------------
 
 
   {/* ==================== RECENT ACTIVITY ==================== */}
-  <div className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-6">
+  <div className="rounded-2xl border  border-zinc-800 bg-zinc-950/50 p-6">
 
     {/* Header */}
     <div className="mb-6">
@@ -450,48 +467,33 @@ Recent Workspaces ------------
     </div>
 
     {/* Activities */}
-    <div className="space-y-5">
-
-      {/* Activity 1 */}
-      <div className="flex items-start gap-4">
-
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
-          <CheckCircle2 size={17} />
-        </div>
-
-        <div className="min-w-0">
-          <p className="text-sm font-medium leading-5 text-zinc-200">
-            Task 'Configure DNS' marked done
-          </p>
-
-          <p className="mt-1 text-xs text-zinc-500">
-            3h ago
-          </p>
-        </div>
-
+   <div className="space-y-5 max-h-[210px] overflow-y-scroll scrollbar-none">
+  {activities.slice(0, 4).map((activity) => (
+    <div
+      key={activity.id}
+      className="flex items-start gap-4"
+    >
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+        <CheckCircle2 size={17} />
       </div>
 
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium leading-5 text-zinc-200">
+          {activity.action}
+        </p>
 
-      {/* Activity 2 */}
-      <div className="flex items-start gap-4">
+        <p className="mt-1 text-xs text-zinc-500">
+          {activity.workspace.name}
+        </p>
 
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-500/10 text-orange-400">
-          <UserPlus size={17} />
-        </div>
-
-        <div className="min-w-0">
-          <p className="text-sm font-medium leading-5 text-zinc-200">
-            You renamed workspace HostingZaib 
-          </p>
-
-          <p className="mt-1 text-xs text-zinc-500">
-            2d ago
-          </p>
-        </div>
-
+        <p className="mt-1 text-xs text-zinc-500">
+          {new Date(activity.createdAt).toLocaleString()}
+        </p>
       </div>
-
     </div>
+  ))}
+</div>
+
   </div>
 
 </div>
