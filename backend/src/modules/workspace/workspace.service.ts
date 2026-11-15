@@ -2,6 +2,7 @@ import prisma from '../../db.js';
 import createActivity from '../../utils/createActivity.js';
 import type { CreateWorkspaceInput,UpdateWorksapceInput } from './workspace.schema.js';
 import { Role } from '@prisma/client';
+import crypto from "node:crypto";
 
 export const createWorkspace = async (name:string, userId:number) => {
   const existingWorkspace =await prisma.workspace.findFirst({
@@ -402,7 +403,9 @@ const updated = await prisma.membership.update({
 
 }
 
-export const createInvitation = async(invitedBy:number,workspaceId:number,role:Role,email:string,tokenHash:string,expiresAt:Date)=>{
+export const createInvitation = async(invitedBy:number,workspaceId:number,role:Role,email:string)=>{
+
+  const normalizedEmail = email.trim().toLowerCase();
 
 const workspace = await prisma.workspace.findUnique({
   where: {
@@ -426,7 +429,7 @@ if (!member || member.role !== "admin") {
 
  const invitedUser = await prisma.user.findUnique({
        where:{
-        email
+        email:normalizedEmail
        }
      })
      if (!invitedUser) {
@@ -448,7 +451,7 @@ if (existingMember) {
 const existingInvitation = await prisma.workspaceInvite.findFirst({
   where: {
     workspaceId,
-    email,
+    email:normalizedEmail,
     status: "PENDING",
   },
 });
@@ -457,12 +460,24 @@ if (existingInvitation) {
   throw new Error("Invitation already pending");
 }
 
+const token = crypto.randomBytes(32).toString("hex")
+const tokenHash = crypto.createHash("sha256").update(token).digest("hex")
+
+const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+const frontendUrl = process.env.FRONTEND_URL;
+
+if (!frontendUrl) {
+  throw new Error("FRONTEND_URL is not configured");
+}
+
+const invitationUrl = `${frontendUrl}/invitations/accept?token=${token}`;
 
 
 const invitation = await prisma.workspaceInvite.create({
   data:{
     workspaceId,
-    email,
+    email:normalizedEmail,
     invitedBy,
     role,
     tokenHash,
@@ -470,6 +485,16 @@ const invitation = await prisma.workspaceInvite.create({
   },
 })
 
-return invitation
+
+return {
+  invitation: {
+    id: invitation.id,
+    email: invitation.email,
+    role: invitation.role,
+    status: invitation.status,
+    expiresAt: invitation.expiresAt,
+  },
+  invitationUrl,
+};
 
 }
