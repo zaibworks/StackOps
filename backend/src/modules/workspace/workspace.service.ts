@@ -401,3 +401,75 @@ const updated = await prisma.membership.update({
 });
 
 }
+
+export const createInvitation = async(invitedBy:number,workspaceId:number,role:Role,email:string,tokenHash:string,expiresAt:Date)=>{
+
+const workspace = await prisma.workspace.findUnique({
+  where: {
+    id: workspaceId,
+  },
+});
+if(!workspace){
+  throw new Error('Cannot invite in current workspace')
+}
+const member = await prisma.membership.findUnique({
+  where: {
+    userId_workspaceId: {
+      userId: invitedBy,
+      workspaceId,
+    },
+  },
+});
+if (!member || member.role !== "admin") {
+  throw new Error("Only workspace admins can send invitations");
+}
+
+ const invitedUser = await prisma.user.findUnique({
+       where:{
+        email
+       }
+     })
+     if (!invitedUser) {
+  throw new Error("User do not exist")
+}
+
+const existingMember = await prisma.membership.findUnique({
+  where:{
+    userId_workspaceId:{
+      userId:invitedUser.id,
+      workspaceId
+    }
+  }
+})
+if (existingMember) {
+ throw new Error("User is already a member")
+}
+
+const existingInvitation = await prisma.workspaceInvite.findFirst({
+  where: {
+    workspaceId,
+    email,
+    status: "PENDING",
+  },
+});
+
+if (existingInvitation) {
+  throw new Error("Invitation already pending");
+}
+
+
+
+const invitation = await prisma.workspaceInvite.create({
+  data:{
+    workspaceId,
+    email,
+    invitedBy,
+    role,
+    tokenHash,
+    expiresAt,
+  },
+})
+
+return invitation
+
+}

@@ -28,10 +28,6 @@ export default function Home() {
 
   const {user} = useAuth()
 
-if (user) {
-  return <Navigate to="/dashboard" replace />;
-}
-
 
 
   return (

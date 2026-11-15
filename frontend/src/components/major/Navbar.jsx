@@ -3,7 +3,8 @@ import {
   ArrowLeft,
   Settings,
   Search,
-  User
+  User,
+  Bell
 } from "lucide-react";
 
 import ProfileDropdown from "../ProfileDropdown.jsx";
@@ -150,8 +151,12 @@ const filteredResults =
 
   </div>
 
+
+
   {/* Right Section */}
-  <div className="ml-auto relative">
+  <div className="flex items-center gap-8 ml-auto relative">
+
+    <Bell strokeWidth={2} className="h-5 w-5 cursor-pointer"/>
 
     {/* Avatar */}
     <div  onClick={() => setShowProfile(prev => !prev)}
@@ -168,9 +173,9 @@ const filteredResults =
   )}
 
 
-
-
   </div>
+
+
 
 </header>
    

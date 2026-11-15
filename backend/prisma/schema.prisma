@@ -23,6 +23,8 @@ model User {
   memberships Membership[]
   comments Comment[]
   activities Activity[]
+  invitations WorkspaceInvite[]
+
 
 }
 enum Priority{
@@ -74,6 +76,7 @@ model Workspace{
   updatedAt DateTime @default(now()) @updatedAt
 
   activities Activity[]
+  invitations WorkspaceInvite[]
 }
 
 enum Role{
@@ -121,4 +124,39 @@ model Activity{
    createdAt DateTime @default(now())
 }
 
+enum  InvitationStatus{
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  REVOKED
+}
+
+model WorkspaceInvite{
+  id Int @id @default(autoincrement())
+
+  workspaceId Int
+  email String
+  invitedBy Int
+
+  role Role @default(member)
+  status InvitationStatus @default(PENDING)
+
+
+   tokenHash   String           @unique
+
+  expiresAt   DateTime
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+
+  workspace   Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  inviter     User             @relation(fields: [invitedBy], references: [id], onDelete: Cascade)
+
+  @@index([email, status])
+  @@index([workspaceId, status])
+  @@index([invitedBy])
+
+
+}
 
