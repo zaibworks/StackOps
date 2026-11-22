@@ -61,18 +61,10 @@ const allTasks =
         </p>
 
         <div className="mt-5 flex flex-col items-center">
-          <div
-            className="
-            flex h-20 w-20 items-center justify-center
-            rounded-full
-            border border-zinc-700
-            bg-zinc-900
-            text-4xl font-bold
-            text-orange-400
-            "
-          >
-            {user?.name?.charAt(0)?.toUpperCase()}
-          </div>
+          <div  onClick={() => setShowProfile(prev => !prev)}
+    className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-cyan-400 text-3xl font-medium text-zinc-950 cursor-pointer">
+       {user?.name?.charAt(0)?.toUpperCase()}
+    </div>
 
           <h2 className="mt-4 text-xl font-semibold text-zinc-100">
             {user?.name}
