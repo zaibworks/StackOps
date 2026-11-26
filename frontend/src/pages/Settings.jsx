@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar.jsx";
+import Navbar from "../components/major/Navbar.jsx";
 import AboutCard from "../components/settings/AboutCard.jsx";
 import ProfileCard from "../components/settings/ProfileCard.jsx";
 import QuickActionsCard from "../components/settings/QuickActionsCard.jsx";

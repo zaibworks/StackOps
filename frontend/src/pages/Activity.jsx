@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios.js";
-import Navbar from "../components/Navbar.jsx";
-import Sidebar from "../components/Sidebar.jsx";
+import Navbar from "../components/major/Navbar.jsx";
+import Sidebar from "../components/major/Sidebar.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { ActivityIcon } from "lucide-react";
 import { useWorkspace } from "../context/WorkspaceContext.jsx";
@@ -13,8 +13,6 @@ const [loading, setLoading] = useState(true);
 
 const { user, setUser } = useAuth();
 const {workspaces} = useWorkspace();
-
-console.log(activities)
 
 useEffect(() => {
 const fetchActivities = async () => {
@@ -33,11 +31,6 @@ fetchActivities();
 
 }, []);
 
-const handleLogout = () => {
-localStorage.removeItem("token");
-setUser(null);
-};
-
 if (loading) {
 return <Loader text={"Getting your activities"}/>;
 }
@@ -47,7 +40,7 @@ return (
 <Navbar />
 
   <div className="flex flex-1 overflow-hidden">
-    <Sidebar user={user} onLogout={handleLogout} workspaces={workspaces} />
+    <Sidebar user={user} workspaces={workspaces} />
 
     <main className="flex-1 p-8 overflow-hidden flex flex-col">
 

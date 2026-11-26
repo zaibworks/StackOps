@@ -1,6 +1,6 @@
 import { LogOut } from "lucide-react";
 import { useState } from "react";
-import api from "../api/axios.js";
+import api from "../../api/axios.js";
 
 const LeaveWorkspaceModal = ({
   isOpen,

@@ -1,5 +1,5 @@
 import React from 'react'
-import api from '../api/axios.js'
+import api from '../../api/axios'
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 

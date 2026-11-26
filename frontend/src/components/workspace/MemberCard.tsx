@@ -1,14 +1,22 @@
 import React from 'react'
 import { useState } from 'react'
 import { Settings,Pin,TrashIcon,Circle} from 'lucide-react'
-import { useAuth } from '../context/AuthContext.jsx'
-import api from '../api/axios.js'
+import { useAuth } from '../../context/AuthContext.js'
+import api from '../../api/axios.js'
 import LeaveWorkspaceModal from './LeaveWorkspaceModal.jsx'
 import { useNavigate } from 'react-router-dom'
+import type { Membership } from '../../types/membership.types.js'
+import type { Workspace } from '../../types/workspace.types.js'
+import type { User } from '../../types/user.types.js'
 
+interface MemberProps {
+  member: Membership;
+  workspace: Workspace;
+  onClose: () => void;
+  onMemberUpdate: () => void;
+}
 
-
-const MemberCard = ({member,workspace,onClose,onMemberUpdate}) => {
+const MemberCard = ({member,workspace,onClose,onMemberUpdate}:MemberProps) => {
 
   const {user} = useAuth()
   const navigate = useNavigate()
@@ -83,7 +91,7 @@ console.log("isAdmin:", isAdmin)
 
       <button
         onClick={onClose}
-        className="absolute right-5 top-5 rounded-lg p-2 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200"
+        className="absolute right-5 top-5 rounded-lg p-2 text-zinc-500 hover:text-zinc-200"
       >
         ✕
       </button>

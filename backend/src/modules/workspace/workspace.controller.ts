@@ -9,7 +9,8 @@ import { createWorkspace,
     leaveWorkspace,
     changeMemberRole,
     deleteWorkspace,
-    lastOpenedUpdated
+    lastOpenedUpdated,
+    createInvitation
     
  } from "./workspace.service.js";
  import type { Response,Request } from "express";
@@ -246,4 +247,31 @@ export const lastOpenedUpdatedController = async(req:Request,res:Response)=>{
         res.status(400).json({ message: e.message });
     }
 }
+}
+
+export const createInvitationController = async(req:Request,res:Response)=>{
+    try {
+        if (!req.user) {
+    throw new Error("Unauthorized");
+}
+const userId = req.user.userId
+const {workspaceId}  = req.params
+const {role,email}  = req.body
+
+ if(typeof workspaceId !=="number"){
+        throw new Error("WorkspaceID is invalid")
+    } 
+
+const result = await createInvitation(userId,workspaceId,role,email)
+
+return res.status(201).json({
+  message: "Invitation created successfully",
+  ...result,
+});
+        
+    } catch (e) {
+         if(e instanceof Error){
+        res.status(400).json({ message: e.message });
+    }
+    }
 }
