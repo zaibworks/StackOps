@@ -147,7 +147,7 @@ const googleCallbackController = async (
   sameSite: "lax",
 });
 
-res.redirect("http://localhost:5173/dashboard");
+res.redirect("https://stackops4.vercel.app/dashboard");
 
 return res;
 
