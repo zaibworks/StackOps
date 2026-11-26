@@ -13,7 +13,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.2.4",
     "axios": "^1.16.1",
-    "dotenv": "^18.0.5",
+    "dotenv": "^18.0.10",
     "lucide-react": "^1.17.0",
     "motion": "^14.1.0",
     "react": "^19.2.5",
