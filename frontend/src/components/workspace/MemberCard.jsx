@@ -5,18 +5,8 @@ import { useAuth } from '../../context/AuthContext.js'
 import api from '../../api/axios.js'
 import LeaveWorkspaceModal from './LeaveWorkspaceModal.jsx'
 import { useNavigate } from 'react-router-dom'
-import type { Membership } from '../../types/membership.types.js'
-import type { Workspace } from '../../types/workspace.types.js'
-import type { User } from '../../types/user.types.js'
 
-interface MemberProps {
-  member: Membership;
-  workspace: Workspace;
-  onClose: () => void;
-  onMemberUpdate: () => void;
-}
-
-const MemberCard = ({member,workspace,onClose,onMemberUpdate}:MemberProps) => {
+const MemberCard = ({member,workspace,onClose,onMemberUpdate}) => {
 
   const {user} = useAuth()
   const navigate = useNavigate()
