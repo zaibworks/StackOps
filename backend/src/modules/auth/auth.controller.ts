@@ -19,11 +19,11 @@ const loginController = async (req:Request, res:Response) => {
   try {
    const result = await login(req.body)
    
-   res.cookie("token", result.token, {
+ res.cookie("token", result.token, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
-  path: "/"
+  secure: true,
+  sameSite: "none",
+  path: "/",
 });
 
 return res.status(200).json({
