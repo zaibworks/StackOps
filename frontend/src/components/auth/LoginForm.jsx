@@ -78,7 +78,7 @@ const handleSubmit = async (e) => {
 };
 
    const handleGoogleAuth = () => {
-  window.location.href = 'http://localhost:5001/auth/google';
+  window.location.href = 'https://stackops4.vercel.app/auth/google';
 };
 
 
