@@ -73,7 +73,7 @@ const SignupForm = ({onLogin}) => {
 
 
  const handleGoogleAuth = () => {
-  window.location.href = 'https://stackops4.vercel.app/auth/google';
+window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
 };
 
   return (
