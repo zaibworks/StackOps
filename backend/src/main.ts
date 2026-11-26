@@ -10,6 +10,7 @@ import settingsRoutes from './modules/settings/settings.routes.js'
 import cors from 'cors'
 import type { CorsOptions } from 'cors'
 import cookieParser from 'cookie-parser'
+import { policytroubleshooter } from 'googleapis/build/src/apis/policytroubleshooter/index.js'
 
 const app = express()
 const PORT = Number(process.env.PORT)  || 3000
