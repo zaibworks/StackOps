@@ -26,7 +26,7 @@ import Navbar from "../components/major/Navbar.jsx";
 import InviteModal from "../components/workspace/InviteModal.jsx";
 import WorkspaceSettingsModal from "../components/WorkspaceSettingsModal.jsx";
 import Loader from "../components/Loader.jsx";
-import MemberCard from "../components/workspace/MemberCard.js";
+import MemberCard from "../components/workspace/MemberCard.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import AddTaskModal from "../components/workspace/AddTaskModal.jsx";
 import MemberListArea from "../components/workspace/MemberListArea.jsx";
