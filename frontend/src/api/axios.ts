@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 const api = axios.create({
-<<<<<<< HEAD
     baseURL: import.meta.env.VITE_API_URL || "http://localhost:5001"
 })
 
@@ -14,10 +13,6 @@ api.interceptors.request.use((config)=>{
         config.headers.Authorization = `Bearer ${token}`
     }
     return config
-=======
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5001",
-  withCredentials: true
->>>>>>> typescript
 })
 
 // Interceptors
