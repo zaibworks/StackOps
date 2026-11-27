@@ -8,6 +8,8 @@ import commentRoutes from './modules/comment/comment.routes.js';
 import activityRoutes from './modules/activity/activity.routes.js';
 import settingsRoutes from './modules/settings/settings.routes.js';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import { policytroubleshooter } from 'googleapis/build/src/apis/policytroubleshooter/index.js';
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 const allowedOrigins = [
@@ -36,6 +38,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 // Preflight ke liye
 app.use(express.json());
+app.use(cookieParser());
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/task', taskRoutes);

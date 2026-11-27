@@ -1,4 +1,3 @@
-import type { UpdateWorksapceInput } from './workspace.schema.js';
 import { Role } from '@prisma/client';
 export declare const createWorkspace: (name: string, userId: number) => Promise<{
     members: {
@@ -62,7 +61,7 @@ export declare const removeMember: (adminId: number, workspaceId: number, member
     createdAt: Date;
     lastOpenedAt: Date | null;
 }>;
-export declare const updateWorkspace: (adminId: number, workspaceId: number, { name }: UpdateWorksapceInput) => Promise<{
+export declare const updateWorkspace: (adminId: number, workspaceId: number, name: string) => Promise<{
     id: number;
     name: string;
     createdAt: Date;
@@ -137,4 +136,14 @@ export declare const deleteWorkspace: (workspaceId: number, userId: number) => P
     updatedAt: Date;
 }>;
 export declare const lastOpenedUpdated: (userId: number, workspaceId: number) => Promise<void>;
+export declare const createInvitation: (invitedBy: number, workspaceId: number, role: Role, email: string) => Promise<{
+    invitation: {
+        id: number;
+        email: string;
+        role: import("@prisma/client").$Enums.Role;
+        status: import("@prisma/client").$Enums.InvitationStatus;
+        expiresAt: Date;
+    };
+    invitationUrl: string;
+}>;
 //# sourceMappingURL=workspace.service.d.ts.map

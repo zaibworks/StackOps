@@ -5,4 +5,9 @@ export interface TokenPayload {
 export interface AuthenticatedReq extends Request {
     user: TokenPayload;
 }
+export type GoogleUserInput = {
+    googleId: string;
+    email: string;
+    name: string | null;
+};
 //# sourceMappingURL=auth.types.d.ts.map

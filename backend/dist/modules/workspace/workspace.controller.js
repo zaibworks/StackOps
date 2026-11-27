@@ -1,5 +1,5 @@
 import prisma from "../../db.js";
-import { createWorkspace, getMyWorkspace, inviteMember, getWorkspaceMembers, removeMember, updateWorkspace, getWorkspacebyId, leaveWorkspace, changeMemberRole, deleteWorkspace, lastOpenedUpdated } from "./workspace.service.js";
+import { createWorkspace, getMyWorkspace, inviteMember, getWorkspaceMembers, removeMember, updateWorkspace, getWorkspacebyId, leaveWorkspace, changeMemberRole, deleteWorkspace, lastOpenedUpdated, createInvitation } from "./workspace.service.js";
 export const createWorkspaceController = async (req, res) => {
     try {
         if (!req.user) {
@@ -210,6 +210,29 @@ export const lastOpenedUpdatedController = async (req, res) => {
         }
         await lastOpenedUpdated(userId, workspaceId);
         res.status(200).json({ message: "Workspace marked as opened" });
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            res.status(400).json({ message: e.message });
+        }
+    }
+};
+export const createInvitationController = async (req, res) => {
+    try {
+        if (!req.user) {
+            throw new Error("Unauthorized");
+        }
+        const userId = req.user.userId;
+        const { workspaceId } = req.params;
+        const { role, email } = req.body;
+        if (typeof workspaceId !== "number") {
+            throw new Error("WorkspaceID is invalid");
+        }
+        const result = await createInvitation(userId, workspaceId, role, email);
+        return res.status(201).json({
+            message: "Invitation created successfully",
+            ...result,
+        });
     }
     catch (e) {
         if (e instanceof Error) {

@@ -1,6 +1,7 @@
 import prisma from '../../db.js';
 import createActivity from '../../utils/createActivity.js';
 import { Role } from '@prisma/client';
+import crypto from "node:crypto";
 export const createWorkspace = async (name, userId) => {
     const existingWorkspace = await prisma.workspace.findFirst({
         where: {
@@ -170,7 +171,7 @@ export const removeMember = async (adminId, workspaceId, membershipId) => {
     });
     return deleteMember;
 };
-export const updateWorkspace = async (adminId, workspaceId, { name }) => {
+export const updateWorkspace = async (adminId, workspaceId, name) => {
     const admin = await prisma.membership.findFirst({
         where: {
             userId: adminId,
@@ -348,5 +349,84 @@ export const lastOpenedUpdated = async (userId, workspaceId) => {
             lastOpenedAt: new Date()
         }
     });
+};
+export const createInvitation = async (invitedBy, workspaceId, role, email) => {
+    const normalizedEmail = email.trim().toLowerCase();
+    const workspace = await prisma.workspace.findUnique({
+        where: {
+            id: workspaceId,
+        },
+    });
+    if (!workspace) {
+        throw new Error('Cannot invite in current workspace');
+    }
+    const member = await prisma.membership.findUnique({
+        where: {
+            userId_workspaceId: {
+                userId: invitedBy,
+                workspaceId,
+            },
+        },
+    });
+    if (!member || member.role !== "admin") {
+        throw new Error("Only workspace admins can send invitations");
+    }
+    const invitedUser = await prisma.user.findUnique({
+        where: {
+            email: normalizedEmail
+        }
+    });
+    if (!invitedUser) {
+        throw new Error("User do not exist");
+    }
+    const existingMember = await prisma.membership.findUnique({
+        where: {
+            userId_workspaceId: {
+                userId: invitedUser.id,
+                workspaceId
+            }
+        }
+    });
+    if (existingMember) {
+        throw new Error("User is already a member");
+    }
+    const existingInvitation = await prisma.workspaceInvite.findFirst({
+        where: {
+            workspaceId,
+            email: normalizedEmail,
+            status: "PENDING",
+        },
+    });
+    if (existingInvitation) {
+        throw new Error("Invitation already pending");
+    }
+    const token = crypto.randomBytes(32).toString("hex");
+    const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const frontendUrl = process.env.FRONTEND_URL;
+    if (!frontendUrl) {
+        throw new Error("FRONTEND_URL is not configured");
+    }
+    const invitationUrl = `${frontendUrl}/invitations/accept?token=${token}`;
+    const invitation = await prisma.workspaceInvite.create({
+        data: {
+            workspaceId,
+            email: normalizedEmail,
+            invitedBy,
+            role,
+            tokenHash,
+            expiresAt,
+        },
+    });
+    return {
+        invitation: {
+            id: invitation.id,
+            email: invitation.email,
+            role: invitation.role,
+            status: invitation.status,
+            expiresAt: invitation.expiresAt,
+        },
+        invitationUrl,
+    };
 };
 //# sourceMappingURL=workspace.service.js.map

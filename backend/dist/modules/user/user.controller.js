@@ -48,4 +48,14 @@ export const getMyStatsController = async (req, res) => {
         }
     }
 };
+export const userLogoutController = (req, res) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+    });
+    res.json({
+        message: "Logged out successfully",
+    });
+};
 //# sourceMappingURL=user.controller.js.map

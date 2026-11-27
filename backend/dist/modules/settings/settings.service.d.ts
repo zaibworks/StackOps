@@ -3,12 +3,14 @@ export declare const updateProfileName: (userId: number, name: string) => Promis
     email: string;
     name: string | null;
     password: string | null;
+    googleId: string | null;
 }>;
 export declare const updatePassword: (currentPassword: string, userId: number, newPassword: string) => Promise<{
     id: number;
     email: string;
     name: string | null;
     password: string | null;
+    googleId: string | null;
 }>;
 export declare const deleteSelectedWorkspaces: (userId: number, workspaceIds: number[]) => Promise<{
     deletedCount: number;
@@ -27,6 +29,7 @@ export declare const deleteUserAccount: (userId: number, currentPassword: string
     email: string;
     name: string | null;
     password: string | null;
+    googleId: string | null;
 }>;
 export declare const getOwnedWorkspaces: (userId: number) => Promise<{
     id: number;

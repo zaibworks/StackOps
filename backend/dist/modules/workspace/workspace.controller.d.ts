@@ -10,4 +10,5 @@ export declare const leaveWorkspaceController: (req: Request, res: Response) => 
 export declare const changeMemberRoleController: (req: Request, res: Response) => Promise<void>;
 export declare const deleteWorkspaceController: (req: Request, res: Response) => Promise<void>;
 export declare const lastOpenedUpdatedController: (req: Request, res: Response) => Promise<void>;
+export declare const createInvitationController: (req: Request, res: Response) => Promise<Response<any, Record<string, any>> | undefined>;
 //# sourceMappingURL=workspace.controller.d.ts.map
