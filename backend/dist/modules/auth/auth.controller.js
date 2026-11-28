@@ -1,5 +1,6 @@
 import { signup, login, continueWithGoogle } from './auth.service.js';
 import { googleOAuthClient } from './google.oauth.js';
+import cookieOptions from '../../utils/createCookie.js';
 const signupController = async (req, res) => {
     try {
         const result = await signup(req.body);
@@ -19,6 +20,10 @@ const loginController = async (req, res) => {
             secure: true,
             sameSite: "none",
             path: "/",
+        });
+        res.cookie("token", result.token, {
+            ...cookieOptions,
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         return res.status(200).json({
             success: true,
@@ -106,15 +111,8 @@ const googleCallbackController = async (req, res) => {
             name,
             emailVerified,
         });
-        //   res.cookie("token", token, {
-        //   httpOnly: true,
-        //   secure: false,
-        //   sameSite: "lax",
-        // });
         res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            ...cookieOptions,
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         res.redirect("https://stackops4.vercel.app/dashboard");

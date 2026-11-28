@@ -1,4 +1,5 @@
 import { getCurrentUser, getUserOverview, getMyStats } from "./user.service.js";
+import cookieOptions from "../../utils/createCookie.js";
 export const getMe = async (req, res) => {
     try {
         if (!req.user) {
@@ -49,11 +50,7 @@ export const getMyStatsController = async (req, res) => {
     }
 };
 export const userLogoutController = (req, res) => {
-    res.clearCookie("token", {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax",
-    });
+    res.clearCookie("token", cookieOptions);
     res.json({
         message: "Logged out successfully",
     });

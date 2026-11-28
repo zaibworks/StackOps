@@ -1,0 +1,1 @@
+{"version":3,"file":"createCookie.js","sourceRoot":"","sources":["../../src/utils/createCookie.ts"],"names":[],"mappings":"AAAA,MAAM,aAAa,GAAG;IACpB,QAAQ,EAAE,IAAI;IACd,MAAM,EAAE,OAAO,CAAC,GAAG,CAAC,QAAQ,KAAK,YAAY;IAC7C,QAAQ,EAAE,OAAO,CAAC,GAAG,CAAC,QAAQ,KAAK,YAAY;QAC7C,CAAC,CAAC,MAAe;QACjB,CAAC,CAAC,KAAc;IAClB,IAAI,EAAE,GAAG;CACV,CAAC;AAEF,eAAe,aAAa,CAAA"}
