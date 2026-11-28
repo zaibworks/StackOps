@@ -1,6 +1,7 @@
 import { signup, login,continueWithGoogle } from './auth.service.js';
 import type { Request,Response } from 'express';
 import { googleOAuthClient } from './google.oauth.js';
+import cookieOptions from '../../utils/createCookie.js';
 
 
 const signupController =async(req:Request,res:Response)=>{
@@ -25,6 +26,11 @@ const loginController = async (req:Request, res:Response) => {
   sameSite: "none",
   path: "/",
 });
+
+res.cookie("token",result.token,{
+  ...cookieOptions,
+   maxAge: 7 * 24 * 60 * 60 * 1000,
+})
 
 return res.status(200).json({
   success: true,
@@ -141,16 +147,8 @@ const googleCallbackController = async (
       emailVerified,
     });
 
-//   res.cookie("token", token, {
-//   httpOnly: true,
-//   secure: false,
-//   sameSite: "lax",
-// });
-
 res.cookie("token", token, {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+ ...cookieOptions,
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
 

@@ -1,6 +1,7 @@
 import {getCurrentUser,getUserOverview,getMyStats} from "./user.service.js";
 import type { AuthenticatedReq } from "../../types/auth.types.js";
 import type {Response ,Request} from "express";
+import cookieOptions from "../../utils/createCookie.js";
 
 export const getMe = async(req:Request,res:Response)=>{
     try{
@@ -57,12 +58,7 @@ export const getMyStatsController = async (req:Request, res:Response) => {
 };
 
 export const userLogoutController = (req:Request, res:Response) => {
- res.clearCookie("token", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    path: "/",
-  });
+ res.clearCookie("token",cookieOptions);
 
   res.json({
     message: "Logged out successfully",
